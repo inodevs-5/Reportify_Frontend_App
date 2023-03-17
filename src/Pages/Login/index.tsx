@@ -5,24 +5,52 @@
  * @format
  */
 
-import React from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking} from 'react-native';
-import {useNavigation} from '@react-navigation/native' 
+import React, { useState } from 'react';
+import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking,Alert} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import { propsStack } from '../../Routes/Stack/Models';
+import Icon from 'react-native-vector-icons/Ionicons'
+
 
 export const Login = () =>{
   const navigation = useNavigation<propsStack>()
+  const [input, setInput] = useState('');
+  const [hidepass,setHidepass] = useState(true);
   return (
        <View style={style.container}>
     <Text style={style.login}>Login</Text>
-     <TextInput style={style.input} placeholder='user@email.com.br'></TextInput>
-      <TextInput style={style.input} secureTextEntry={true} placeholder='senha' ></TextInput>
-      <TouchableOpacity style={style.button}>
-            <Text style={style.valeu}
-                 onPress={() => 
-                 navigation.navigate('Home')
-                 }
-            >Send</Text>
+     <TextInput 
+     style={style.input} 
+     placeholder='user@email.com.br'
+     ></TextInput>
+
+
+    <View style={style.input} >
+
+      <TextInput style={style.password}  placeholder='senha'  
+        value={input} 
+        onChangeText={(texto => setInput(texto))}
+        secureTextEntry={hidepass}>
+        </TextInput>
+       
+       
+        <TouchableOpacity name='eye'    
+        style={style.icon} 
+        onPress={() => setHidepass(!hidepass) }>
+        { hidepass ? 
+          <Icon name='eye' size={21} />
+         :      
+         <Icon name='eye-off' size={21} />
+         
+        }
+        </TouchableOpacity>
+    </View>
+
+      <TouchableOpacity style={style.button}
+       onPress={() => 
+        navigation.navigate('Home')
+        }>
+            <Text style={style.valeu}>Send</Text>
 </TouchableOpacity>
       <Text
             style={style.hyperlinkStyle}
@@ -38,9 +66,23 @@ export const Login = () =>{
 }
 
 const style = StyleSheet.create({
+
+  icon:{
+    color:'black',
+    paddingRight:6,
+  },
+
+  password:{
+    width:200,
+    height:40,
+    // backgroundColor:'red'
+  },
+
   input: {
-    display:'flex',
+    alignItems:'center',
+    flexDirection:'row',
     backgroundColor: '#ffff',
+    justifyContent:'space-between',
     margin:'auto',
     color: 'black',
     paddingLeft:6,
