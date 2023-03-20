@@ -47,11 +47,11 @@ export const Login = () =>{
     </View>
 
       <TouchableOpacity style={style.button}
-       onPress={() => 
+        onPress={() => 
         navigation.navigate('Home')
         }>
-            <Text style={style.valeu}>Send</Text>
-</TouchableOpacity>
+        <Text style={style.valeu}>Send</Text>
+      </TouchableOpacity>
       <Text
             style={style.hyperlinkStyle}
             onPress={() => {
