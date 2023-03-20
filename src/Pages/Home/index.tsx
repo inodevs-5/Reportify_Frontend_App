@@ -62,7 +62,6 @@ export const Home = () =>{
       </View>
 
     </View>
-    
   );
 }
 
@@ -75,13 +74,17 @@ const style = StyleSheet.create({
   // },
 
   iconNotif:{
-    flexDirection:'row',
+    flexDirection: 'row',
+    alignContent: 'space-between',
     color: 'white',
+    backgroundColor: 'red',
   },
   
   iconHome: {
     flexDirection:'row',
+    alignContent: 'space-between',
     color: 'white',
+    backgroundColor: 'red',
   },
 
   div: {
@@ -157,6 +160,7 @@ const style = StyleSheet.create({
   button:{
     alignItems: 'center',
     width: 300,
+    padding: 15,
     backgroundColor: '#72A2FA',
     marginBottom: 10,
     marginTop: 20,
@@ -164,8 +168,6 @@ const style = StyleSheet.create({
   },
   
   enterButton:{
-    textAlign: 'center',
-    paddingTop: 8,
     color: 'white',
     fontSize: 20,
   },
