@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking} from 'react-native';
+import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking, Picker} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
@@ -11,39 +11,33 @@ export const CadastroRO = () =>{
 
   return (
     <View style={style.container}>
-      <Text style={style.title}>Olá, Fulano!</Text>
-      <TextInput style={style.busca}  
-        placeholder='Buscar RO'  
+      <Text style={style.title1}>RO#004</Text>
+      
+      
+
+      <View style={style.view}>
+       
+        
+        <Text style={style.title}>Empresa Solicitante*
+        </Text><TextInput style={style.select}  
+        placeholder='Selecione'  
         value={input} 
         onChangeText={(texto => setInput(texto))}>
       </TextInput>
-      <Icon name='search' size={21} style={style.searchIcon}/>
-      <View style={style.bar}/> 
+      <Text style={style.title}>Título*</Text><TextInput style={style.select}/>
 
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('Home')
-        }>
-        <Text style={style.enterButton}>Registro de Ocorrência</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('Home')
-        }>
-        <Text style={style.enterButton}>Membros do Suporte</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('Home')
-        }>
-        <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('Home')
-        }>
-        <Text style={style.enterButton}>Administração do Sistema</Text>
-      </TouchableOpacity>
+      <Text style={style.title}>Descrição</Text><TextInput style={style.select}/>
+
+      <Text style={style.title}>Prioridade*</Text><TextInput style={style.select}/>
+
+      <Text style={style.title}>Contato do colaborador*</Text><TextInput style={style.select}></TextInput>
+
+      <Text style={style.title}>Arquivos</Text><TextInput style={style.select}/>
+
+      <Text style={style.title3}>(tamanho máximo 20 MB)</Text><TextInput style={style.select}/>
+      <Icon name='search' size={21} style={style.searchIcon}/>
+      </View>
+      
 
       <View style={style.div}>
         <TouchableOpacity style={style.enterButton}>
@@ -72,13 +66,14 @@ const style = StyleSheet.create({
     paddingBottom: 10,
   },
   
-  busca:{
+  select:{
     textAlign: 'left',
-    width: 300,
+    width: 200,
     height:40,
     marginBottom: -30,
     fontWeight: 'bold',
   },
+ 
 
   iconNotif:{
     paddingLeft: 70,
@@ -89,7 +84,13 @@ const style = StyleSheet.create({
     paddingLeft: 90,
     color: 'white',
   },
-
+  button:{
+    width:260,
+    borderRadius:300,
+    height: 40,
+    backgroundColor: '#72A2FA',
+    marginBottom:10,
+  },
   div: {
     position: 'relative',
     flexDirection: 'row',
@@ -103,7 +104,7 @@ const style = StyleSheet.create({
   },
 
   title:{
-    fontSize: 35,
+    fontSize: 15,
     marginTop: 30,
     marginRight: 115,
     textAlign: 'left',
@@ -111,6 +112,22 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
   },
 
+  title1:{
+    fontSize: 30,
+    marginTop: 30,
+    marginRight: 115,
+    textAlign: 'left',
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  title3:{
+    fontSize: 12,
+    marginTop: 30,
+    marginRight: 115,
+    textAlign: 'left',
+    color: 'black',
+    
+  },
   input: {
     flex: 1,
     alignItems:'center',
@@ -151,11 +168,11 @@ const style = StyleSheet.create({
     fontSize: 12
   },
 
-  button:{
+  view:{
     alignItems: 'center',
     width: 300,
     padding: 15,
-    backgroundColor: '#72A2FA',
+    backgroundColor: '#C3C9D0',
     marginBottom: 10,
     marginTop: 20,
     borderRadius: 7,
