@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 
-export const Home = () =>{
+export const CadastroRO = () =>{
   const navigation = useNavigation<propsStack>()
   const [input, setInput] = useState('');
 
@@ -34,7 +34,7 @@ export const Home = () =>{
       </TouchableOpacity>
       <TouchableOpacity style={style.button}
         onPress={() => 
-        navigation.navigate('CadastroRO')
+        navigation.navigate('Home')
         }>
         <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
       </TouchableOpacity>
@@ -60,7 +60,6 @@ export const Home = () =>{
             }/>
         </TouchableOpacity>
       </View>
-
     </View>
   );
 }
@@ -176,4 +175,4 @@ const style = StyleSheet.create({
 });
 
 
-export default Home;
+export default CadastroRO;
