@@ -114,79 +114,79 @@ export const CadastroRO = () =>{
       
       {/* Inicio da checkbox */}
       <View style={{ padding: 20 }}>
-      <View style={{ flexDirection: 'row' }}>
-        <CheckBox
-          value={hardwareChecked}
-          onValueChange={handleHardwareCheck}
-        />
-        <Text style={{ marginHorizontal: 10 }}>Hardware</Text>
-      </View>
-
-      {hardwareChecked && (
-        <View>
-          <Text style={{ marginTop: 10 }}>Equipamento:</Text>
-          <TextInput
-            style={{ borderWidth: 1, padding: 5 }}
-            value={equipamento}
-            onChangeText={setEquipamento}
+        <View style={{ flexDirection: 'row' }}>
+          <CheckBox
+            value={hardwareChecked}
+            onValueChange={handleHardwareCheck}
           />
+          <Text style={style.paragraph}>Hardware</Text>
+        </View>
 
-          <Text style={{ marginTop: 10 }}>Posição:</Text>
-          <TextInput
-            style={{ borderWidth: 1, padding: 5 }}
-            value={posicao}
-            onChangeText={setPosicao}
-          />
+        {hardwareChecked && (
+          <View style={style.check}>
+            <Text style={style.paragraph}>Equipamento:</Text>
+            <TextInput
+              style={style.input2}
+              value={equipamento}
+              onChangeText={setEquipamento}
+            />
 
-          <Text style={{ marginTop: 10 }}>Part Number:</Text>
-          <TextInput
-            style={{ borderWidth: 1, padding: 5 }}
-            value={partNumber}
-            onChangeText={setPartNumber}
-          />
+            <Text style={style.paragraph}>Posição:</Text>
+            <TextInput
+              style={style.input2}
+              value={posicao}
+              onChangeText={setPosicao}
+            />
 
-          <Text style={{ marginTop: 10 }}>Serial Number:</Text>
-          <TextInput
-            style={{ borderWidth: 1, padding: 5 }}
-            value={serialNumber}
-            onChangeText={setSerialNumber}
+            <Text style={style.paragraph}>Part Number:</Text>
+            <TextInput
+              style={style.input2}
+              value={partNumber}
+              onChangeText={setPartNumber}
+            />
+
+            <Text style={style.paragraph}>Serial Number:</Text>
+            <TextInput
+              style={style.input2}
+              value={serialNumber}
+              onChangeText={setSerialNumber}
+            />
+          </View>
+        )}
+
+        <View style={{ flexDirection: 'row', marginTop: 20 }}>
+          <CheckBox
+            value={softwareChecked}
+            onValueChange={handleSoftwareCheck}
           />
+          <Text style={style.paragraph}>Software</Text>
+        </View>
+
+        {softwareChecked && (
+          <View>
+            <Text style={style.paragraph}>Versão da base de dados:</Text>
+            <TextInput
+              style={style.input2}
+              value={versaoBaseDados}
+              onChangeText={setVersaoBaseDados}
+            />
+
+            <Text style={style.paragraph}>Versão do software:</Text>
+            <TextInput
+              style={style.input2}
+              value={versaoSoftware}
+              onChangeText={setVersaoSoftware}
+            />
+
+            <Text style={style.paragraph}>Logs anexados ao R.O:</Text>
+            <TextInput
+              style={style.input2}
+              value={logsAnexados}
+              onChangeText={setLogsAnexados}
+            />
         </View>
       )}
-
-      <View style={{ flexDirection: 'row', marginTop: 20 }}>
-        <CheckBox
-          value={softwareChecked}
-          onValueChange={handleSoftwareCheck}
-        />
-        <Text style={{ marginHorizontal: 10 }}>Software</Text>
       </View>
-
-      {softwareChecked && (
-        <View>
-          <Text style={{ marginTop: 10 }}>Versão da base de dados:</Text>
-          <TextInput
-            style={{ borderWidth: 1, padding: 5 }}
-            value={versaoBaseDados}
-            onChangeText={setVersaoBaseDados}
-          />
-
-          <Text style={{ marginTop: 10 }}>Versão do software:</Text>
-          <TextInput
-            style={{ borderWidth: 1, padding: 5 }}
-            value={versaoSoftware}
-            onChangeText={setVersaoSoftware}
-          />
-
-          <Text style={{ marginTop: 10 }}>Logs anexados ao R.O:</Text>
-          <TextInput
-            style={{ borderWidth: 1, padding: 5 }}
-            value={logsAnexados}
-            onChangeText={setLogsAnexados}
-          />
-        </View>
-      )}
-    </View>
       
       
 
@@ -343,16 +343,11 @@ export const CadastroRO = () =>{
 
 const style = StyleSheet.create({
 
-  viewcheck:{
+  check:{
+    backgroundColor:'E9EFF7',
     
   },
-  data:{
-   
-    
-    width: '64.5%',
-    backgroundColor:'white',
-    
-  },
+  
  
   campos:{
     flexDirection: 'row',
@@ -478,6 +473,8 @@ const style = StyleSheet.create({
     elevation: 4,
   },
   input2: {
+    
+    padding: 5,
     flex: 1,
     alignItems:'center',
     flexDirection:'row',
@@ -487,7 +484,7 @@ const style = StyleSheet.create({
     color: 'black',
     paddingLeft:6,
     paddingBottom:3,
-    width:140,
+    width:'100%',
     height:27,
     marginBottom: 3,
     borderRadius:300,
