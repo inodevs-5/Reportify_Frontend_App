@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "../../Pages/Home";
 import Login from "../../Pages/Login";
 import CadastroRO from "../../Pages/CadastroRO";
+import TabelaROs from "../../Pages/TabelaROs";
 import { propsNavigationStack } from "./Models";
 
 const { Navigator, Screen } = createNativeStackNavigator<propsNavigationStack>()
@@ -14,6 +15,7 @@ export default function () {
             <Screen name="Home" component={Home}/>
             <Screen name="Login" component={Login}/>
             <Screen name="CadastroRO" component={CadastroRO}/>
+            <Screen name="TabelaROs" component={TabelaROs}/>
         </Navigator>
     )
 }

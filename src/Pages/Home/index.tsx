@@ -22,7 +22,7 @@ export const Home = () =>{
 
       <TouchableOpacity style={style.button}
         onPress={() => 
-        navigation.navigate('Home')
+        navigation.navigate('TabelaROs')
         }>
         <Text style={style.enterButton}>Registro de Ocorrência</Text>
       </TouchableOpacity>
