@@ -113,7 +113,7 @@ export const CadastroRO = () =>{
       
       
       {/* Inicio da checkbox */}
-      <View style={{ padding: 20 }}>
+      <View style={style.check}>
         <View style={{ flexDirection: 'row' }}>
           <CheckBox
             value={hardwareChecked}
@@ -124,33 +124,41 @@ export const CadastroRO = () =>{
 
         {hardwareChecked && (
           <View style={style.check}>
-            <Text style={style.paragraph}>Equipamento:</Text>
-            <TextInput
-              style={style.input2}
-              value={equipamento}
-              onChangeText={setEquipamento}
-            />
+            <View style={style.checkalinhar}>
+              <Text style={style.paragraph}>Equipamento:</Text>
+              <TextInput
+                style={style.input2}
+                value={equipamento}
+                onChangeText={setEquipamento}
+              />
+            </View>
 
-            <Text style={style.paragraph}>Posição:</Text>
-            <TextInput
-              style={style.input2}
-              value={posicao}
-              onChangeText={setPosicao}
-            />
+            <View style={style.checkalinhar}>
+              <Text style={style.paragraph}>Posição:</Text>
+              <TextInput
+                style={style.input2}
+                value={posicao}
+                onChangeText={setPosicao}
+              />
+            </View>
+            
+            <View style={style.checkalinhar}>
+              <Text style={style.paragraph}>Part Number:</Text>
+              <TextInput
+                style={style.input2}
+                value={partNumber}
+                onChangeText={setPartNumber}
+              />
+            </View>
 
-            <Text style={style.paragraph}>Part Number:</Text>
-            <TextInput
-              style={style.input2}
-              value={partNumber}
-              onChangeText={setPartNumber}
-            />
-
-            <Text style={style.paragraph}>Serial Number:</Text>
-            <TextInput
-              style={style.input2}
-              value={serialNumber}
-              onChangeText={setSerialNumber}
-            />
+            <View style={style.checkalinhar}>
+              <Text style={style.paragraph}>Serial Number:</Text>
+              <TextInput
+                style={style.input2}
+                value={serialNumber}
+                onChangeText={setSerialNumber}
+              />
+            </View>
           </View>
         )}
 
@@ -163,27 +171,35 @@ export const CadastroRO = () =>{
         </View>
 
         {softwareChecked && (
-          <View>
-            <Text style={style.paragraph}>Versão da base de dados:</Text>
-            <TextInput
-              style={style.input2}
-              value={versaoBaseDados}
-              onChangeText={setVersaoBaseDados}
-            />
+          <View style={style.check}>
 
-            <Text style={style.paragraph}>Versão do software:</Text>
-            <TextInput
-              style={style.input2}
-              value={versaoSoftware}
-              onChangeText={setVersaoSoftware}
-            />
+            <View style={style.checkalinhar}>
+              <Text style={style.paragraph}>Versão da base de dados:</Text>
+              <TextInput
+                style={style.input2}
+                value={versaoBaseDados}
+                onChangeText={setVersaoBaseDados}
+              />
+            </View>
+            
+            <View style={style.checkalinhar}>
+              <Text style={style.paragraph}>Versão do software:</Text>
+              <TextInput
+                style={style.input2}
+                value={versaoSoftware}
+                onChangeText={setVersaoSoftware}
+              />
+            </View>
 
-            <Text style={style.paragraph}>Logs anexados ao R.O:</Text>
-            <TextInput
-              style={style.input2}
-              value={logsAnexados}
-              onChangeText={setLogsAnexados}
-            />
+            <View style={style.checkalinhar}>
+              <Text style={style.paragraph}>Logs anexados ao R.O:</Text>
+              <TextInput
+                style={style.input2}
+                value={logsAnexados}
+                onChangeText={setLogsAnexados}
+              />
+            </View>
+
         </View>
       )}
       </View>
@@ -346,8 +362,14 @@ const style = StyleSheet.create({
   check:{
     backgroundColor:'E9EFF7',
     
+    
   },
-  
+  checkalinhar:{
+    marginBottom: 5,
+   
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
  
   campos:{
     flexDirection: 'row',
