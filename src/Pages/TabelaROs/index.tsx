@@ -1,18 +1,32 @@
-import React, { useState } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking,Alert} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, FlatList} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import { propsStack } from '../../Routes/Stack/Models';
-import Icon from 'react-native-vector-icons/Ionicons'
-
+import Icon from 'react-native-vector-icons/Ionicons';
+import api from '../../services/api';
+import { ScrollView } from 'react-native';
 
 export const TabelaROs = () =>{
     const navigation = useNavigation<propsStack>()
     const [input, setInput] = useState('');
 
-    
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [ros, setRos] = useState();
+
+    useEffect(() => {
+      (async () => {
+        try {
+          const response = await api.get('/ro');
+  
+          setRos(response.data);
+        } catch (response) {
+          setErrorMessage(response.data.msg);
+        }
+      })();
+    }, []);
+  
   return (
     <View style={style.container}>
-    <Text style={style.title}>Olá, Fulano!</Text>
     <TextInput style={style.busca}  
       placeholder='Buscar RO'  
       value={input} 
@@ -22,26 +36,20 @@ export const TabelaROs = () =>{
     <View style={style.bar}/> 
 
     <View style={style.squareContainer}>
-    <View style={style.square}>
-        <Text style={style.square}> #0001 
-            {'\n'} Título: Criar usuários 
-            {'\n'} Status: Sem tratamento 
-            {'\n'} Categoria: Normal
-        </Text>
-    </View>
-    <View style={style.square}>
-        <Text style={style.square}> #0002 
-            {'\n'} Título: Corrigir emails
-            {'\n'} Status: Sem tratamento 
-            {'\n'} Categoria: Normal
-        </Text>
-    </View>
-    <View style={style.square}>
-        <Text style={style.square}> #0003 
-            {'\n'} Título: Documentação
-            {'\n'} Status: Sem tratamento 
-            {'\n'} Categoria: Normal
-        </Text>
+    <View style={{height: 490}}>
+      <ScrollView style={style.scroll}>
+      {
+        ros && ros.map(ro => (
+        <View style={style.square}>
+          <Text style={style.square}> <Text style={style.bold}>#0000 </Text>
+              {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
+              {'\n'} <Text style={style.bold}>Status: </Text>{ro.fase}
+              {'\n'} <Text style={style.bold}>Categoria: </Text>Normal
+          </Text>
+          </View>
+        ))
+      }
+      </ScrollView>
     </View>
 
     <View style={style.div}>
@@ -51,7 +59,7 @@ export const TabelaROs = () =>{
         navigation.navigate('Login')
         }/>
     </TouchableOpacity>
-   
+        
     <TouchableOpacity style={style.enterButton}>
     <Icon name='notifications' size={27} style={style.iconNotif}
         onPress={() => 
@@ -66,10 +74,9 @@ export const TabelaROs = () =>{
 
 const style = StyleSheet.create({
 squareContainer: {
-    marginTop: 50,
+    marginTop: 20,
     flexDirection: 'column',
     alignItems: 'center',
-    
   },
   square: {
     width: 300,
@@ -106,14 +113,13 @@ squareContainer: {
   },
 
   div: {
-    position: 'relative',
+    position: 'absolute',
     flexDirection: 'row',
     alignItems: 'center',
     width: 300,
     height: 70,
     backgroundColor: '#2B3467',
-    marginBottom: 10,
-    marginTop: 40,
+    top: 500,
     borderRadius: 35,
   },
 
@@ -150,6 +156,7 @@ squareContainer: {
   },
 
   container: {
+    flex: 1,
     backgroundColor: '#F9FbFa',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -158,6 +165,7 @@ squareContainer: {
       android: { fontFamily: 'Roboto' }}),
     paddingRight: 10, 
     height: 1000,
+    paddingTop: 10
   },
 
   hyperlinkStyle: {
@@ -186,6 +194,15 @@ squareContainer: {
     width: 290,
     height: 2,
     marginTop: -10
+  },
+  scroll: { 
+    marginLeft: 10,
+    paddingRight: 10,
+
+  },
+  bold: {
+    fontWeight: 'bold',
+    color: '#000',
   }
 });
 
