@@ -24,7 +24,17 @@ export const TabelaROs = () =>{
         }
       })();
     }, []);
-  
+
+    async function pesquisar() {
+      try {
+        const response = await api.get('/ro/' + input);
+
+        setRos(response.data);
+      } catch (response) {
+        setErrorMessage(response.data.msg);
+      }
+    }
+
   return (
     <View style={style.container}>
     <TextInput style={style.busca}  
@@ -32,7 +42,9 @@ export const TabelaROs = () =>{
       value={input} 
       onChangeText={(texto => setInput(texto))}>
     </TextInput>
-    <Icon name='search' size={21} style={style.searchIcon}/>
+    <TouchableOpacity onPress={pesquisar}>
+      <Icon name='search' size={21} style={style.searchIcon}/>
+    </TouchableOpacity>
     <View style={style.bar}/> 
 
     <View style={style.squareContainer}>
