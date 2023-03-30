@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking, ScrollView, Button } from 'react-native';
+import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking, ScrollView, Button} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import CheckBox from '@react-native-community/checkbox';
+import DocumentPicker from 'react-native-document-picker';
 
 export const CadastroRO = () =>{
   const navigation = useNavigation<propsStack>()
   const [input, setInput] = useState('');
+  const [text, setText] = useState('');// area de texto
+  const [fileName, setFileName] = useState('');//da parte de anexar arquivos
 
-  
+  //abaixo itens da checkbox
     const [hardwareChecked, setHardwareChecked] = useState(false);
     const [softwareChecked, setSoftwareChecked] = useState(false);
     const [equipamento, setEquipamento] = useState('');
@@ -30,6 +33,28 @@ export const CadastroRO = () =>{
       setSoftwareChecked(!softwareChecked);
       setHardwareChecked(false);
     };
+ //Abaixo para anexar aquivos
+    const pickDocument = async () => {
+      try {
+        const result = await DocumentPicker.pick({
+          type: [DocumentPicker.types.allFiles],
+        });
+        setFileName(result.name);
+        console.log(
+          result.uri,
+          result.type, 
+          result.name,
+          result.size
+        );
+      } catch (err) {
+        if (DocumentPicker.isCancel(err)) {
+          // User cancelled the picker
+        } else {
+          console.log(err);
+        }
+      }
+    };
+    
   
 
   
@@ -40,10 +65,12 @@ export const CadastroRO = () =>{
   
    
       //Abaixo o titulo do RO
-    <><Text style={style.title}>RO#004</Text>
+    <><Text style={style.title}></Text>
+
      {/* ScrollView = parte rolavel */}
     <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}> 
       <Text style={style.title2}>Registro de Ocorrência</Text>
+      {/*Cada view alinha um titulo de campo e um input*/}
 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
@@ -59,7 +86,7 @@ export const CadastroRO = () =>{
           Fase*
         </Text>
         <TextInput style={style.input} 
-        placeholder='...'
+        placeholder=''
         ></TextInput>
       </View>
 
@@ -68,50 +95,55 @@ export const CadastroRO = () =>{
           Orgão*
         </Text>
         <TextInput style={style.input} 
-        placeholder='Orgão'
+        placeholder=''
         ></TextInput>
       </View>
 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
-          Relator:
+          Relator*
         </Text>
         <TextInput style={style.input} 
-        placeholder='Joel Costa'
+        placeholder=''
         ></TextInput>
       </View>
 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
-          POS./GRAD:
+          POS./GRAD*
         </Text>
         <TextInput style={style.input} 
-        placeholder='...'
+        placeholder=''
         ></TextInput>
       </View>
 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
-          Surpevisor/{'\n'}Responsável{'\n'}do centro:
+          Responsável/Surpevisor do centro*
         </Text>
-        <TextInput style={style.input} 
-        placeholder='Jonas SILVA'
+      </View>
+      <View style={style.campos3}>
+        <TextInput style={style.input2} 
+        placeholder=''
         ></TextInput>
       </View>
       
       <View style={style.campos2}>
         <Text style={style.paragraph}>
-          POS./GRAD:
+          POS./GRAD*
         </Text>
         <TextInput style={style.input} 
-        placeholder='...'
+        placeholder=''
         ></TextInput>
       </View>
 
       <Text style={style.title2}>Classificação em Campo</Text>
 
-      
-      
+      {/* "titulo" da checkbox */}
+      <Text style={style.paragraph}>
+          Defeito*
+      </Text>
+
       {/* Inicio da checkbox */}
       <View style={style.check}>
         <View style={{ flexDirection: 'row' }}>
@@ -125,7 +157,7 @@ export const CadastroRO = () =>{
         {hardwareChecked && (
           <View style={style.check}>
             <View style={style.checkalinhar}>
-              <Text style={style.paragraph}>Equipamento:</Text>
+              <Text style={style.paragraph}>Equipamento*</Text>
               <TextInput
                 style={style.input2}
                 value={equipamento}
@@ -134,7 +166,7 @@ export const CadastroRO = () =>{
             </View>
 
             <View style={style.checkalinhar}>
-              <Text style={style.paragraph}>Posição:</Text>
+              <Text style={style.paragraph}>Posição*</Text>
               <TextInput
                 style={style.input2}
                 value={posicao}
@@ -143,7 +175,7 @@ export const CadastroRO = () =>{
             </View>
             
             <View style={style.checkalinhar}>
-              <Text style={style.paragraph}>Part Number:</Text>
+              <Text style={style.paragraph}>Part Number*</Text>
               <TextInput
                 style={style.input2}
                 value={partNumber}
@@ -151,8 +183,9 @@ export const CadastroRO = () =>{
               />
             </View>
 
+
             <View style={style.checkalinhar}>
-              <Text style={style.paragraph}>Serial Number:</Text>
+              <Text style={style.paragraph}>Serial Number*</Text>
               <TextInput
                 style={style.input2}
                 value={serialNumber}
@@ -161,6 +194,8 @@ export const CadastroRO = () =>{
             </View>
           </View>
         )}
+
+        {/* Segunda opção da checkbox*/}
 
         <View style={{ flexDirection: 'row', marginTop: 20 }}>
           <CheckBox
@@ -173,8 +208,9 @@ export const CadastroRO = () =>{
         {softwareChecked && (
           <View style={style.check}>
 
-            <View style={style.checkalinhar}>
-              <Text style={style.paragraph}>Versão da base de dados:</Text>
+
+              <Text style={style.paragraph}>Versão da base de dados*</Text>
+              <View style={style.checkalinhar}>
               <TextInput
                 style={style.input2}
                 value={versaoBaseDados}
@@ -182,163 +218,70 @@ export const CadastroRO = () =>{
               />
             </View>
             
-            <View style={style.checkalinhar}>
-              <Text style={style.paragraph}>Versão do software:</Text>
-              <TextInput
-                style={style.input2}
-                value={versaoSoftware}
-                onChangeText={setVersaoSoftware}
-              />
-            </View>
+           
+              <Text style={style.paragraph}>Versão do software*</Text>
+              <View style={style.checkalinhar}>
+                <TextInput
+                  style={style.input2}
+                  value={versaoSoftware}
+                  onChangeText={setVersaoSoftware}
+                />
+              </View>
 
-            <View style={style.checkalinhar}>
-              <Text style={style.paragraph}>Logs anexados ao R.O:</Text>
-              <TextInput
-                style={style.input2}
-                value={logsAnexados}
-                onChangeText={setLogsAnexados}
-              />
-            </View>
-
+              <View style={style.checkalinhar}>
+                <Text style={style.paragraph}>Logs Anexos</Text>
+                
+                
+                  <TouchableOpacity style={style.button2} onPress={pickDocument}>
+                    <Text style={style.text}>Selecionar</Text>
+                  </TouchableOpacity>
+                  <Text style={style.fileName}>{fileName}</Text>
+          
+              </View>
+           
         </View>
       )}
       </View>
       
-      
-
-      
-
-      
-
-      
+      {/* acima o fim da checkbox */}
 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
-          Nome do{'\n'}Colaborador IACIT:
+          Titulo*
         </Text>
         <TextInput style={style.input} 
-        placeholder='Ana Santos'
+        placeholder=''
         ></TextInput>
       </View>
 
-      
-
-      <View style={style.campos2}>
+      <View style={style.campos}>
         <Text style={style.paragraph}>
-          Nº da Ocorrencia
+          Descrição
         </Text>
-        <TextInput style={style.input} 
-        placeholder='90309585'
-        ></TextInput>
       </View>
 
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Defeito Select:
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='90309585'
-        ></TextInput>
-      </View>
-      
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Versão Base de Dados:
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='90309585'
-        ></TextInput>
-      </View>
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Versão do software:
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='90309585'
-        ></TextInput>
-      </View>
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-           Logs Anexados ao R.O
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='90309585'
+      <View style={style.campos4}>
+        <TextInput style={style.input3} 
+        
+        multiline={true}
+        onChangeText={(text) => setText(text)}
+        value={text}
+        placeholder=''
         ></TextInput>
       </View>
 
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Equipamento:
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='90309585'
-        ></TextInput>
+      <View style={style.botaoalinha}>
+        <TouchableOpacity style={style.button}
+          onPress={() => 
+          navigation.navigate('')
+          }>
+          <Text style={style.cadastra}>Criar RO</Text>
+        </TouchableOpacity>
+
       </View>
-
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Posição:
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='90309585'
-        ></TextInput>
-      </View>
-
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Part Number:
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='90309585'
-        ></TextInput>
-      </View>
-
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Serial Number
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='90309585'
-        ></TextInput>
-      </View>
-
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Titulo da Ocorrência
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='90309585'
-        ></TextInput>
-      </View>
-
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Descrição da Ocorrência
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='90309585'
-        ></TextInput>
-      </View>
-
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Procedimentos Adotados{'\n'} Pelos Tecnicos Para Resolução{'\n'} da Ocorrência
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='90309585'
-        ></TextInput>
-      </View>
-
-
-      
-      
-      
-      
-      
-      
-      
       
     </ScrollView>
+    {/* Fim da parte de rolagem */}
 
     <View style={style.div}>
 
@@ -359,6 +302,49 @@ export const CadastroRO = () =>{
 
 const style = StyleSheet.create({
 
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button2: {
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  text: {
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  fileName: {
+    color: '#999',
+    fontSize: 16,
+  },
+
+  botaoalinha:{
+
+    marginLeft:'40%',
+  },
+
+  button:{
+    
+    width:160,
+    borderRadius:300,
+    height: 40,
+    backgroundColor: '#72A2FA',
+    marginTop:10,
+    marginBottom:10
+    
+  },
+
+  cadastra:{
+    textAlign:'center',
+   paddingTop:8,
+   color:'white'
+  },
+
   check:{
     backgroundColor:'E9EFF7',
     
@@ -367,7 +353,7 @@ const style = StyleSheet.create({
   checkalinhar:{
     marginBottom: 5,
    
-    flexDirection: 'row',
+   
     alignItems: 'center',
   },
  
@@ -386,8 +372,15 @@ const style = StyleSheet.create({
   campos3:{
     //flexDirection: 'row',
     alignItems: 'center',
-    marginRight: '5%',
+    marginRight: '3%',
     
+  },
+
+  campos4:{
+    //flexDirection: 'row',
+    alignItems: 'center',
+     //marginRight: '30%',
+
   },
   viewinput:{
     marginTop:'-9%',
@@ -419,24 +412,16 @@ const style = StyleSheet.create({
   },
 
   
-  title:{
-    fontSize: 30,
-    marginTop: 30,
-    marginRight: 115,
+  title2:{
+    fontSize: 24,
+    marginTop: 0,
+    
     textAlign: 'left',
-    marginLeft:16,
+    
     color: 'black',
     fontWeight: 'bold',
   },
 
-  title2:{
-    fontSize: 20,
-    marginTop: 10,
-    marginBottom: 10,
-    textAlign: 'center',
-    color: 'black',
-    fontWeight: 'bold',
-  },
 
   enterButton:{
     color: 'white',
@@ -506,7 +491,7 @@ const style = StyleSheet.create({
     color: 'black',
     paddingLeft:6,
     paddingBottom:3,
-    width:'100%',
+    width:'97%',
     height:27,
     marginBottom: 3,
     borderRadius:300,
@@ -518,6 +503,31 @@ const style = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
+  },
+ 
+  // abaixo o input da area de texto descrição
+  input3: { 
+     flex: 1,
+    
+    backgroundColor: '#ffff',
+   
+     width:'96%',
+     height:170,
+    
+     borderRadius:30,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+   
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    textAlignVertical: 'top', // Define a posição do texto como início da caixa
   },
 
   
