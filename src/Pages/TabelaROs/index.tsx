@@ -26,21 +26,21 @@ export const TabelaROs = () =>{
         <Text style={style.square}> #0001 
             {'\n'} Título: Criar usuários 
             {'\n'} Status: Sem tratamento 
-            {'\n'} Situação: Normal
+            {'\n'} Categoria: Normal
         </Text>
     </View>
     <View style={style.square}>
         <Text style={style.square}> #0002 
             {'\n'} Título: Corrigir emails
             {'\n'} Status: Sem tratamento 
-            {'\n'} Situação: Normal
+            {'\n'} Categoria: Normal
         </Text>
     </View>
     <View style={style.square}>
         <Text style={style.square}> #0003 
             {'\n'} Título: Documentação
             {'\n'} Status: Sem tratamento 
-            {'\n'} Situação: Normal
+            {'\n'} Categoria: Normal
         </Text>
     </View>
 
