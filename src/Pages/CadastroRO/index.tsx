@@ -156,7 +156,7 @@ export const CadastroRO = () =>{
 
         {hardwareChecked && (
           <View style={style.check}>
-            <View style={style.checkalinhar}>
+           <View style={style.campos2}>
               <Text style={style.paragraph}>Equipamento*</Text>
               <TextInput
                 style={style.input2}
@@ -165,7 +165,7 @@ export const CadastroRO = () =>{
               />
             </View>
 
-            <View style={style.checkalinhar}>
+            <View style={style.campos2}>
               <Text style={style.paragraph}>Posição*</Text>
               <TextInput
                 style={style.input2}
@@ -174,7 +174,7 @@ export const CadastroRO = () =>{
               />
             </View>
             
-            <View style={style.checkalinhar}>
+            <View style={style.campos2}>
               <Text style={style.paragraph}>Part Number*</Text>
               <TextInput
                 style={style.input2}
@@ -184,7 +184,7 @@ export const CadastroRO = () =>{
             </View>
 
 
-            <View style={style.checkalinhar}>
+            <View style={style.campos2}>
               <Text style={style.paragraph}>Serial Number*</Text>
               <TextInput
                 style={style.input2}
@@ -228,7 +228,7 @@ export const CadastroRO = () =>{
                 />
               </View>
 
-              <View style={style.checkalinhar}>
+              <View style={style.campos2}>
                 <Text style={style.paragraph}>Logs Anexos</Text>
                 
                 
@@ -312,6 +312,7 @@ const style = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 5,
+    marginTop:10,
     marginBottom: 10,
   },
   text: {
@@ -373,6 +374,7 @@ const style = StyleSheet.create({
     //flexDirection: 'row',
     alignItems: 'center',
     marginRight: '3%',
+    marginBottom:8,
     
   },
 
