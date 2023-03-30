@@ -307,11 +307,12 @@ const style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  button2: {
+  
+  button2: {  //estilo do botão selecionar anexo
     backgroundColor: 'white',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
+    paddingHorizontal: 15,
+    paddingVertical: 7,
+    borderRadius: 300,
     marginTop:10,
     marginBottom: 10,
   },
@@ -340,7 +341,7 @@ const style = StyleSheet.create({
     
   },
 
-  cadastra:{
+  cadastra:{   //texto do botão de criar RO
     textAlign:'center',
    paddingTop:8,
    color:'white'
@@ -370,25 +371,21 @@ const style = StyleSheet.create({
     marginRight: '3%',
 
   },
-  campos3:{
-    //flexDirection: 'row',
+  campos3:{ //estilo do alinhamento input de responsável/supervisor
+    
     alignItems: 'center',
     marginRight: '3%',
     marginBottom:8,
     
   },
 
-  campos4:{
-    //flexDirection: 'row',
+  campos4:{//estilo do alinhamento do input caixa de texto
+    
     alignItems: 'center',
-     //marginRight: '30%',
+   
+  },
 
-  },
-  viewinput:{
-    marginTop:'-9%',
-    alignItems: 'center',
-    marginRight: '5%',
-  },
+ 
   paragraph: {
     margin: 10,
     fontSize:15,
@@ -405,7 +402,7 @@ const style = StyleSheet.create({
     backgroundColor: '#C3C9D0',
     borderRadius: 9,
   },
-  contentContainer: {
+  contentContainer: {  //Faz parte do estilo da scrollview
     justifyContent: 'center',
     
     backgroundColor: '#C3C9D0',
@@ -414,7 +411,7 @@ const style = StyleSheet.create({
   },
 
   
-  title2:{
+  title2:{ //titulos das divisões dos campos
     fontSize: 24,
     marginTop: 0,
     
@@ -442,7 +439,7 @@ const style = StyleSheet.create({
     color: 'white',
   },
 
-  div: {
+  div: { //estilo e alinhamento dos botões e menu
     
     position: 'absolute',
     flexDirection: 'row',
