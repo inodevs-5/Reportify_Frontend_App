@@ -3,7 +3,7 @@ import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, FlatList} fro
 import {useNavigation} from '@react-navigation/native';
 import { propsStack } from '../../Routes/Stack/Models';
 import Icon from 'react-native-vector-icons/Ionicons';
-import api from '../../services/api';
+import api from '../../service/api';
 import { ScrollView } from 'react-native';
 
 export const TabelaROs = () =>{
@@ -36,16 +36,37 @@ export const TabelaROs = () =>{
     }
 
   return (
-    <View style={style.container}>
-    <TextInput style={style.busca}  
-      placeholder='Buscar RO'  
-      value={input} 
-      onChangeText={(texto => setInput(texto))}>
-    </TextInput>
-    <TouchableOpacity onPress={pesquisar}>
+    // <View style={style.container}>
+    // <TextInput style={style.busca}  
+    //   placeholder='Buscar RO'  
+    //   value={input} 
+    //   onChangeText={(texto => setInput(texto))}>
+    // </TextInput> 
+    // <TouchableOpacity onPress={pesquisar}>
+    //   <Icon name='search' size={21} style={style.searchIcon}/>
+    // </TouchableOpacity>
+    // <View style={style.bar}/> 
+<View style={style.container}>
+    <View style={style.containerbusca}>
+        <View style={style.container12}>
+          <TextInput style={style.busca}
+           placeholder='Buscar RO'  
+           value={input} 
+           onChangeText={(texto => setInput(texto))}>
+          </TextInput>
+          <TouchableOpacity onPress={pesquisar}>
+          <Icon name='search' size={21} style={style.searchIcon}/>
+           </TouchableOpacity>
+        </View>
+      </View>
+
+     {/* <TextInput style={style.busca}  
+        placeholder='Buscar RO'  
+        value={input} 
+        onChangeText={(texto => setInput(texto))}>
+      </TextInput>
       <Icon name='search' size={21} style={style.searchIcon}/>
-    </TouchableOpacity>
-    <View style={style.bar}/> 
+      <View style={style.bar}/>  */}
 
     <View style={style.squareContainer}>
     <View style={{height: 490}}>
@@ -63,32 +84,62 @@ export const TabelaROs = () =>{
       }
       </ScrollView>
     </View>
-
-    <View style={style.div}>
-    <TouchableOpacity style={style.enterButton}>
-    <Icon name='home' size={27} style={style.iconHome}
-        onPress={() => 
-        navigation.navigate('Login')
-        }/>
-    </TouchableOpacity>
-        
-    <TouchableOpacity style={style.enterButton}>
-    <Icon name='notifications' size={27} style={style.iconNotif}
-        onPress={() => 
-        navigation.navigate('Login')
-        }/>
-    </TouchableOpacity>
-       </View>
+{/* <View style={fler}> */}
+    <View >
+      <View style={style.menu}>
+        <TouchableOpacity style={style.enterButton}>
+        <Icon name='home' size={27} style={style.iconHome}
+          onPress={() => 
+            navigation.navigate('Login')
+            }/>
+        </TouchableOpacity>
+   
+        <TouchableOpacity style={style.enterButton}>
+        <Icon name='notifications' size={27} style={style.iconNotif}
+          onPress={() => 
+            navigation.navigate('Login')
+            }/>
+        </TouchableOpacity>
+      </View>
+      </View>
+       {/* </View> */}
       </View>
     </View>
   );
 };
 
 const style = StyleSheet.create({
+  menu:{
+    display:'flex',
+    justifyContent:'space-around',
+    backgroundColor: '#2B3467',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width:300,
+    height:60,
+    borderRadius:20,
+    marginBottom:10,
+   },
+  containerbusca:{
+    display:'flex',
+    flexDirection:'column',
+    alignItems:'center',
+    marginTop: 6 ,
+    // backgroundColor:'red',
+  },
+  container12:{
+    flexDirection:'row',
+    width:300,
+    height:40,
+    margin:'auto',
+    alignItems:'center',
+    justifyContent:'space-between',
+    // backgroundColor:'yellow',
+  },
 squareContainer: {
     marginTop: 20,
     flexDirection: 'column',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   square: {
     width: 300,
@@ -102,15 +153,13 @@ squareContainer: {
 
   searchIcon:{
     color: 'black',
-    paddingLeft: 330,
-    paddingBottom: 10,
   },
   
   busca:{
     textAlign: 'left',
     width: 300,
     height:40,
-    marginBottom: -30,
+    // marginBottom: -30,
     fontWeight: 'bold',
   },
 
@@ -120,7 +169,7 @@ squareContainer: {
   },
   
   iconHome: {
-    paddingLeft: 90,
+    // paddingLeft: 90,
     color: 'white',
   },
 
@@ -128,6 +177,7 @@ squareContainer: {
     position: 'absolute',
     flexDirection: 'row',
     alignItems: 'center',
+    margin:"auto",
     width: 300,
     height: 70,
     backgroundColor: '#2B3467',
@@ -169,15 +219,14 @@ squareContainer: {
 
   container: {
     flex: 1,
-    backgroundColor: '#F9FbFa',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
     ...Platform.select({
       ios: { fontFamily: 'Arial', }, 
-      android: { fontFamily: 'Roboto' }}),
-    paddingRight: 10, 
-    height: 1000,
-    paddingTop: 10
+      android: { fontFamily: 'Roboto' }}), 
+    display:'flex',
+    justifyContent: 'space-between',
+    margin:'auto',
+    alignItems: 'center',
+    flexDirection: 'column',
   },
 
   hyperlinkStyle: {
