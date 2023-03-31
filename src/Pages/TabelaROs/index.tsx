@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, FlatList} from 'react-native';
+import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import { propsStack } from '../../Routes/Stack/Models';
 import Icon from 'react-native-vector-icons/Ionicons';
-import api from '../../service/api';
+import api from '../../services/api';
 import { ScrollView } from 'react-native';
 
 export const TabelaROs = () =>{
-    const navigation = useNavigation<propsStack>()
+    const navigation = useNavigation<propsStack>();
     const [input, setInput] = useState('');
 
     const [errorMessage, setErrorMessage] = useState(null);
@@ -70,6 +70,7 @@ export const TabelaROs = () =>{
 
     <View style={style.squareContainer}>
     <View style={{height: 490}}>
+      {errorMessage && <Text style={{color: 'red', textAlign: 'center'}}>{errorMessage}</Text>}
       <ScrollView style={style.scroll}>
       {
         ros && ros.map(ro => (
@@ -77,7 +78,7 @@ export const TabelaROs = () =>{
           <Text style={style.square}> <Text style={style.bold}>#0000 </Text>
               {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
               {'\n'} <Text style={style.bold}>Status: </Text>{ro.fase}
-              {'\n'} <Text style={style.bold}>Categoria: </Text>Normal
+              {'\n'} <Text style={style.bold}>Atribuído para: </Text>{ro.nomeResponsavel}
           </Text>
           </View>
         ))

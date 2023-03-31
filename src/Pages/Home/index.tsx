@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking} from 'react-native';
+import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../contexts/auth';
 
 export const Home = () =>{
+  const { usuario, signOut } = useAuth();
+
   const navigation = useNavigation<propsStack>()
   const [input, setInput] = useState('');
 
   return (
     <View style={style.container}>
-      <Text style={style.title}>Olá, Fulano!</Text>
+      <Text style={style.title}>Olá, {usuario.nome}!</Text>
+      <TouchableOpacity onPress={signOut} style={style.exitIcon} >
+        <Icon name='exit-outline' size={30} />
+      </TouchableOpacity>
       <View style={style.containerbusca}>
         <View style={style.container12}>
       <TextInput style={style.busca}  
@@ -230,6 +236,12 @@ const style = StyleSheet.create({
     width: 290,
     height: 2,
     // marginTop: -10
+  },
+
+  exitIcon: {
+    position: 'absolute',
+    right: 50,
+    top: 30
   }
 });
 

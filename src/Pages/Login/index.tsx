@@ -6,30 +6,44 @@
  */
 
 import React, { useState } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking,Alert} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import { propsStack } from '../../Routes/Stack/Models';
-import Icon from 'react-native-vector-icons/Ionicons'
-
+import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useAuth } from '../../contexts/auth';
 
 export const Login = () =>{
-  const navigation = useNavigation<propsStack>()
-  const [input, setInput] = useState('');
+
   const [hidepass,setHidepass] = useState(true);
+  
+  const { signIn } = useAuth();
+  
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  async function login() {
+    try {
+      await signIn(email, senha);
+    } catch (response) {
+      setErrorMessage(response.data.msg);
+    }
+  }
+
   return (
-       <View style={style.container}>
+    <View style={style.container}>
+    { !!errorMessage && <Text style={{color: "red", fontSize: 15, marginBottom: 20}}>{ errorMessage }</Text>}
     <Text style={style.login}>Login</Text>
      <TextInput 
      style={style.input} 
      placeholder='user@email.com.br'
+     onChangeText={texto => setEmail(texto)}
      ></TextInput>
 
 
     <View style={style.input} >
 
       <TextInput style={style.password}  placeholder='senha'  
-        value={input} 
-        onChangeText={(texto => setInput(texto))}
+        value={senha} 
+        onChangeText={(texto => setSenha(texto))}
         secureTextEntry={hidepass}>
         </TextInput>
        
@@ -46,10 +60,7 @@ export const Login = () =>{
         </TouchableOpacity>
     </View>
 
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('Home')
-        }>
+      <TouchableOpacity style={style.button} onPress={login}>
         <Text style={style.valeu}>Send</Text>
       </TouchableOpacity>
       <Text
