@@ -54,19 +54,12 @@ export const CadastroRO = () =>{
         }
       }
     };
+  
     
-  
-
-  
-  
-
-  
   return (
-  
-   
-      //Abaixo o titulo do RO
-    <><Text style={style.title}></Text>
 
+      //Abaixo o titulo do RO
+    <View style={style.container}><Text style={style.title}></Text>
      {/* ScrollView = parte rolavel */}
     <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}> 
       <Text style={style.title2}>Registro de Ocorrência</Text>
@@ -283,20 +276,24 @@ export const CadastroRO = () =>{
     </ScrollView>
     {/* Fim da parte de rolagem */}
 
-    <View style={style.div}>
-
+    <View >
+      <View style={style.menu}>
         <TouchableOpacity style={style.enterButton}>
-          <Icon name='home' size={27} style={style.iconHome}
-            onPress={() => navigation.navigate('Login')} />
+        <Icon name='home' size={27} style={style.iconHome}
+          onPress={() => 
+            navigation.navigate('Login')
+            }/>
         </TouchableOpacity>
-
+   
         <TouchableOpacity style={style.enterButton}>
-          <Icon name='notifications' size={27} style={style.iconNotif}
-            onPress={() => navigation.navigate('Login')} />
+        <Icon name='notifications' size={27} style={style.iconNotif}
+          onPress={() => 
+            navigation.navigate('Login')
+            }/>
         </TouchableOpacity>
-    </View></>
-
-    
+      </View>
+      </View>
+    </View>
   );
 }
 
@@ -435,7 +432,7 @@ const style = StyleSheet.create({
   },
   
   iconHome: {
-    paddingLeft: 90,
+    // paddingLeft: 90,
     color: 'white',
   },
 
@@ -444,12 +441,12 @@ const style = StyleSheet.create({
     position: 'absolute',
     flexDirection: 'row',
     alignItems: 'center',
+    margin: 'auto',
     width: 300,
     height: 70,
     backgroundColor: '#2B3467',
     marginBottom: 10,
-    marginLeft: '7.6%',
-    marginTop: 675,
+    top: 575,
     borderRadius: 35,
      },
 
@@ -529,17 +526,17 @@ const style = StyleSheet.create({
     textAlignVertical: 'top', // Define a posição do texto como início da caixa
   },
 
-  
-
-  
-
-  
- 
-  
-
-
- 
-  
+  menu:{
+    display:'flex',
+    justifyContent:'space-around',
+    backgroundColor: '#2B3467',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width:300,
+    height:60,
+    borderRadius:20,
+    marginBottom:10,
+   },
 });
 
 

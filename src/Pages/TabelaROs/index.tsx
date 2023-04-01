@@ -77,8 +77,8 @@ export const TabelaROs = () =>{
       <ScrollView style={style.scroll}>
       {
         ros && !loading ? ros.map(ro => (
-        <View style={style.square}>
-          <Text style={style.square}> <Text style={style.bold}>#0000 </Text>
+        <View key={ro.id_ro} style={style.square}>
+          <Text style={style.square}> <Text style={style.bold}>#{ro.id_ro} </Text>
               {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
               {'\n'} <Text style={style.bold}>Status: </Text>{ro.fase}
               {'\n'} <Text style={style.bold}>Atribuído para: </Text>{ro.nomeResponsavel}
