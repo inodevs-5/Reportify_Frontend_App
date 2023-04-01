@@ -8,7 +8,7 @@ import CheckBox from '@react-native-community/checkbox';
 import DocumentPicker from 'react-native-document-picker';
 
 export const CadastroRO = () =>{
-  const navigation = useNavigation<propsStack>()
+  const navigation = useNavigation<propsStack>();
   const [input, setInput] = useState('');
   const [text, setText] = useState('');// area de texto
   const [fileName, setFileName] = useState('');//da parte de anexar arquivos

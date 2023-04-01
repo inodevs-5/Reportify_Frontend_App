@@ -1,34 +1,44 @@
-
 import React, { useState } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking} from 'react-native';
+import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../contexts/auth';
 
 export const Home = () =>{
+  const { usuario, signOut } = useAuth();
+
   const navigation = useNavigation<propsStack>()
   const [input, setInput] = useState('');
 
   return (
     <View style={style.container}>
-      <Text style={style.title}>Olá, Fulano!</Text>
+      <Text style={style.title}>Olá, {usuario.nome}!</Text>
+      <TouchableOpacity onPress={signOut} style={style.exitIcon} >
+        <Icon name='exit-outline' size={30} />
+      </TouchableOpacity>
+      <View style={style.containerbusca}>
+        <View style={style.container12}>
       <TextInput style={style.busca}  
         placeholder='Buscar RO'  
         value={input} 
         onChangeText={(texto => setInput(texto))}>
       </TextInput>
       <Icon name='search' size={21} style={style.searchIcon}/>
+      </View>
       <View style={style.bar}/> 
-
+       </View>
+      
+     <View style={style.buttons}>
       <TouchableOpacity style={style.button}
         onPress={() => 
-        navigation.navigate('Home')
+        navigation.navigate('TabelaROs')
         }>
         <Text style={style.enterButton}>Registro de Ocorrência</Text>
       </TouchableOpacity>
       <TouchableOpacity style={style.button}
         onPress={() => 
-        navigation.navigate('Home')
+        navigation.navigate('Membro_suporte')
         }>
         <Text style={style.enterButton}>Membros do Suporte</Text>
       </TouchableOpacity>
@@ -40,12 +50,14 @@ export const Home = () =>{
       </TouchableOpacity>
       <TouchableOpacity style={style.button}
         onPress={() => 
-        navigation.navigate('Home')
+        navigation.navigate('Administra')
         }>
         <Text style={style.enterButton}>Administração do Sistema</Text>
       </TouchableOpacity>
+      </View>
 
-      <View style={style.div}>
+  <View style={style.containermenu}>
+      <View style={style.menu}>
         <TouchableOpacity style={style.enterButton}>
         <Icon name='home' size={27} style={style.iconHome}
           onPress={() => 
@@ -60,6 +72,7 @@ export const Home = () =>{
             }/>
         </TouchableOpacity>
       </View>
+      </View>
 
     </View>
   );
@@ -69,16 +82,63 @@ const style = StyleSheet.create({
 
   searchIcon:{
     color: 'black',
-    paddingLeft: 330,
-    paddingBottom: 10,
+    // backgroundColor: 'yellow',
   },
+
+  containermenu:{
+      // position: 'relative',
+      // alignItems: 'center',
+      // width: 300,
+      // height: 70,
+      // backgroundColor: '#2B3467',
+      // // marginBottom: -100,
+      // // marginTop: 160,
+      // borderRadius: 35,
+      // alignSelf: 'flex-end',
+  },
+
+  containerbusca:{
+    // backgroundColor:'yellow',
+    display:'flex',
+    flexDirection:'column',
+  },
+
+  container12:{
+    flexDirection:'row',
+    width: 300,
+    height:40,
+    margin:'auto',
+    alignItems:'center',
+    justifyContent:'space-between'
+  },
+  buttons:{
+    // backgroundColor:'red',
+    margin:'auto',
+    width:300
+  },
+  menu:{
+   display:'flex',
+   justifyContent:'space-around',
+   backgroundColor: '#2B3467',
+   alignItems: 'center',
+   flexDirection: 'row',
+   width:300,
+   height:60,
+   borderRadius:20,
+   marginBottom:10
+
+   
+  },
+  
   
   busca:{
     textAlign: 'left',
-    width: 300,
-    height:40,
-    marginBottom: -30,
+    width: 250,
+    height: 40,
+    // marginBottom: -30,
     fontWeight: 'bold',
+    paddingTop:10,
+    // backgroundColor:'red',
   },
 
   iconNotif:{
@@ -87,13 +147,12 @@ const style = StyleSheet.create({
   },
   
   iconHome: {
-    paddingLeft: 90,
+    // paddingLeft: 90,
     color: 'white',
   },
 
   div: {
     position: 'relative',
-    flexDirection: 'row',
     alignItems: 'center',
     width: 300,
     height: 70,
@@ -116,7 +175,7 @@ const style = StyleSheet.create({
     flex: 1,
     alignItems:'center',
     flexDirection:'row',
-    backgroundColor: '#ffff',
+    backgroundColor: '#2B3467',
     justifyContent:'space-between',
     margin:'auto',
     color: 'black',
@@ -136,14 +195,19 @@ const style = StyleSheet.create({
   },
 
   container: {
-    backgroundColor: '#F9FbFa',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    // backgroundColor: '#F9FbFa',
+    // display:'flex',
+    // margin:'auto',
+    // alignItems: 'center',
+    flex: 1,
     ...Platform.select({
       ios: { fontFamily: 'Arial', }, 
-      android: { fontFamily: 'Roboto' }}),
-    paddingRight: 10, 
-    height: 1000,
+      android: { fontFamily: 'Roboto' }}), 
+    display:'flex',
+    justifyContent: 'space-between',
+    margin:'auto',
+    alignItems: 'center',
+    flexDirection: 'column'
   },
 
   hyperlinkStyle: {
@@ -157,8 +221,8 @@ const style = StyleSheet.create({
     width: 300,
     padding: 15,
     backgroundColor: '#72A2FA',
-    marginBottom: 10,
-    marginTop: 20,
+    marginBottom: 20,
+    // marginTop: 20,
     borderRadius: 7,
   },
   
@@ -171,7 +235,13 @@ const style = StyleSheet.create({
     backgroundColor: '#68696C',
     width: 290,
     height: 2,
-    marginTop: -10
+    // marginTop: -10
+  },
+
+  exitIcon: {
+    position: 'absolute',
+    right: 50,
+    top: 30
   }
 });
 
