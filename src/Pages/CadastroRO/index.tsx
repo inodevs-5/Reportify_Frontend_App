@@ -6,7 +6,7 @@ import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 
 export const CadastroRO = () =>{
-  const navigation = useNavigation<propsStack>()
+  const navigation = useNavigation<propsStack>();
   const [input, setInput] = useState('');
 
   return (

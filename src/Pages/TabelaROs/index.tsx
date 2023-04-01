@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform} from 'react-native';
+import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import { propsStack } from '../../Routes/Stack/Models';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -12,6 +12,7 @@ export const TabelaROs = () =>{
 
     const [errorMessage, setErrorMessage] = useState(null);
     const [ros, setRos] = useState();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
       (async () => {
@@ -19,6 +20,7 @@ export const TabelaROs = () =>{
           const response = await api.get('/ro');
   
           setRos(response.data);
+          setLoading(false)
         } catch (response) {
           setErrorMessage(response.data.msg);
         }
@@ -27,9 +29,10 @@ export const TabelaROs = () =>{
 
     async function pesquisar() {
       try {
+        setLoading(true)
         const response = await api.get('/ro/' + input);
-
         setRos(response.data);
+        setLoading(false)
       } catch (response) {
         setErrorMessage(response.data.msg);
       }
@@ -73,7 +76,7 @@ export const TabelaROs = () =>{
       {errorMessage && <Text style={{color: 'red', textAlign: 'center'}}>{errorMessage}</Text>}
       <ScrollView style={style.scroll}>
       {
-        ros && ros.map(ro => (
+        ros && !loading ? ros.map(ro => (
         <View style={style.square}>
           <Text style={style.square}> <Text style={style.bold}>#0000 </Text>
               {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
@@ -81,7 +84,10 @@ export const TabelaROs = () =>{
               {'\n'} <Text style={style.bold}>Atribuído para: </Text>{ro.nomeResponsavel}
           </Text>
           </View>
-        ))
+        )) :
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator size="large" color="#666"/>
+      </View>
       }
       </ScrollView>
     </View>
