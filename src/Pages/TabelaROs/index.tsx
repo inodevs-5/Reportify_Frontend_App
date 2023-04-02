@@ -61,6 +61,7 @@ export const TabelaROs = () =>{
           <Icon name='search' size={21} style={style.searchIcon}/>
            </TouchableOpacity>
         </View>
+        <View style={style.bar}/>
       </View>
 
      {/* <TextInput style={style.busca}  
@@ -97,7 +98,7 @@ export const TabelaROs = () =>{
         <TouchableOpacity style={style.enterButton}>
         <Icon name='home' size={27} style={style.iconHome}
           onPress={() => 
-            navigation.navigate('Login')
+            navigation.navigate('Home')
             }/>
         </TouchableOpacity>
    
@@ -261,7 +262,7 @@ squareContainer: {
     backgroundColor: '#68696C',
     width: 290,
     height: 2,
-    marginTop: -10
+    marginTop: 0
   },
   scroll: { 
     marginLeft: 10,
