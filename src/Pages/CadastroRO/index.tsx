@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking, ScrollView, Button, Alert} from 'react-native';
+import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking, ScrollView, Button, Alert, ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
@@ -7,16 +7,19 @@ import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/d
 import CheckBox from '@react-native-community/checkbox';
 import DocumentPicker from 'react-native-document-picker';
 import api from '../../services/api';
+import { useAuth } from '../../contexts/auth';
 
 export const CadastroRO = () =>{
   const navigation = useNavigation<propsStack>();
+
+  const { usuario } = useAuth();
 
   const [text, setText] = useState('');
   const [fileName, setFileName] = useState('');//da parte de anexar arquivos
 
   //abaixo itens da checkbox
     const [contrato, setContrato] = useState('');
-    // const [fase, setFase] = useState('');
+    const [fase, setFase] = useState('');
     const [orgao, setOrgao] = useState('');
     const [relator, setRelator] = useState('');
     const [posGradRelator, setPosGradRelator] = useState('');
@@ -33,6 +36,8 @@ export const CadastroRO = () =>{
     const [descricao, setDescricao] = useState('');
     const [titulo, setTitulo] = useState('');
     const [logsAnexados, setLogsAnexados] = useState([]);
+
+    const [loading, setLoading] = useState(false);
 
     const handleHardwareCheck = () => {
       setHardwareChecked(!hardwareChecked);
@@ -68,11 +73,12 @@ export const CadastroRO = () =>{
     };
     
     async function cadastrarRO() {
+      setLoading(true);
       try {
         const data = new FormData();
 
         data.append('contrato', contrato);
-        // data.append('fase', fase);
+        data.append('fase', fase);
         data.append('orgao', orgao);
         data.append('nomeRelator', relator);
         data.append('posGradRelator', posGradRelator);
@@ -88,7 +94,7 @@ export const CadastroRO = () =>{
             data.append('anexo', l);
           });
 
-        } else {
+        } else if (hardwareChecked) {
           data.append('class_defeito', 'hardware');
           data.append('equipamento', equipamento);
           data.append('equipPosicao', posicao);
@@ -96,8 +102,11 @@ export const CadastroRO = () =>{
           data.append('partNumber', partNumber);
         }
 
-        data.append('descricaoOcorrencia', descricao);
+        if (descricao) {
+          data.append('descricaoOcorrencia', descricao);
+        }
         data.append('tituloOcorrencia', titulo);
+        data.append('colaboradorIACIT', usuario.nome);
         
         const response = await api.post('/ro', data, {headers: {'Content-Type': 'multipart/form-data'}});
       
@@ -107,6 +116,7 @@ export const CadastroRO = () =>{
       } catch (response) {
         Alert.alert(response.data.msg);
       }
+      setLoading(false);
     }
 
   return (
@@ -127,14 +137,14 @@ export const CadastroRO = () =>{
         ></TextInput>
       </View>
 
-      {/* <View style={style.campos2}>
+      <View style={style.campos2}>
         <Text style={style.paragraph}>
           Fase*
         </Text>
         <TextInput style={style.input} 
         placeholder='' onChangeText={texto => setFase(texto)}
         ></TextInput>
-      </View> */}
+      </View>
 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
@@ -281,7 +291,17 @@ export const CadastroRO = () =>{
                   <TouchableOpacity style={style.button2} onPress={pickDocument}>
                     <Text style={style.text}>Selecionar</Text>
                   </TouchableOpacity>
-                  <Text style={style.fileName}>{fileName}</Text>
+                  
+                    <Text style={style.fileName}>
+                      {
+                        logsAnexados && softwareChecked && logsAnexados.map(l => (
+                          <Text key={l.uri}>
+                              {l.name}  {'\n'}
+                          </Text>
+                        ))
+                      }
+                    </Text>
+                  
           
               </View>
            
@@ -314,12 +334,19 @@ export const CadastroRO = () =>{
         placeholder=''
         ></TextInput>
       </View>
-
       <View style={style.botaoalinha}>
-        <TouchableOpacity style={style.button}
-          onPress={cadastrarRO}>
-          <Text style={style.cadastra}>Criar RO</Text>
-        </TouchableOpacity>
+
+      {!loading ? (
+          <TouchableOpacity style={style.button}
+            onPress={cadastrarRO}>
+            <Text style={style.cadastra}>Criar RO</Text>
+          </TouchableOpacity>
+      ) : (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator size="large" color="#666"/>
+        </View>
+      )}
+
 
       </View>
       
@@ -331,14 +358,14 @@ export const CadastroRO = () =>{
         <TouchableOpacity style={style.enterButton}>
         <Icon name='home' size={27} style={style.iconHome}
           onPress={() => 
-            navigation.navigate('Login')
+            navigation.navigate('Home')
             }/>
         </TouchableOpacity>
    
         <TouchableOpacity style={style.enterButton}>
         <Icon name='notifications' size={27} style={style.iconNotif}
           onPress={() => 
-            navigation.navigate('Login')
+            navigation.navigate('Home')
             }/>
         </TouchableOpacity>
       </View>
@@ -368,7 +395,7 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
   },
   fileName: {
-    color: '#999',
+    marginLeft: 5,
     fontSize: 16,
   },
 
