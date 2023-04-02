@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking, ScrollView, Button} from 'react-native';
+import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking, ScrollView, Button, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import CheckBox from '@react-native-community/checkbox';
 import DocumentPicker from 'react-native-document-picker';
+import api from '../../services/api';
 
 export const CadastroRO = () =>{
   const navigation = useNavigation<propsStack>();
-  const [input, setInput] = useState('');
-  const [text, setText] = useState('');// area de texto
+
+  const [text, setText] = useState('');
   const [fileName, setFileName] = useState('');//da parte de anexar arquivos
 
   //abaixo itens da checkbox
+    const [contrato, setContrato] = useState('');
+    // const [fase, setFase] = useState('');
+    const [orgao, setOrgao] = useState('');
+    const [relator, setRelator] = useState('');
+    const [posGradRelator, setPosGradRelator] = useState('');
+    const [responsavel, setResponsavel] = useState('');
+    const [posGradResponsavel, setPosGradResponsavel] = useState('');
     const [hardwareChecked, setHardwareChecked] = useState(false);
     const [softwareChecked, setSoftwareChecked] = useState(false);
     const [equipamento, setEquipamento] = useState('');
@@ -22,8 +30,10 @@ export const CadastroRO = () =>{
     const [serialNumber, setSerialNumber] = useState('');
     const [versaoBaseDados, setVersaoBaseDados] = useState('');
     const [versaoSoftware, setVersaoSoftware] = useState('');
-    const [logsAnexados, setLogsAnexados] = useState('');
-  
+    const [descricao, setDescricao] = useState('');
+    const [titulo, setTitulo] = useState('');
+    const [logsAnexados, setLogsAnexados] = useState([]);
+
     const handleHardwareCheck = () => {
       setHardwareChecked(!hardwareChecked);
       setSoftwareChecked(false);
@@ -37,8 +47,10 @@ export const CadastroRO = () =>{
     const pickDocument = async () => {
       try {
         const result = await DocumentPicker.pick({
+          allowMultiSelection: true,
           type: [DocumentPicker.types.allFiles],
         });
+        setLogsAnexados(result)
         setFileName(result.name);
         console.log(
           result.uri,
@@ -48,14 +60,55 @@ export const CadastroRO = () =>{
         );
       } catch (err) {
         if (DocumentPicker.isCancel(err)) {
-          // User cancelled the picker
+          console.log("Cancelado!")
         } else {
           console.log(err);
         }
       }
     };
-  
     
+    async function cadastrarRO() {
+      try {
+        const data = new FormData();
+
+        data.append('contrato', contrato);
+        // data.append('fase', fase);
+        data.append('orgao', orgao);
+        data.append('nomeRelator', relator);
+        data.append('posGradRelator', posGradRelator);
+        data.append('nomeResponsavel', responsavel);
+        data.append('posGradResponsavel', posGradResponsavel);
+
+        if (softwareChecked) {
+          data.append('class_defeito', 'software');
+          data.append('versaoBaseDados', versaoBaseDados);
+          data.append('versaoSoftware', versaoSoftware);
+
+          logsAnexados.forEach((l) => {
+            data.append('anexo', l);
+          });
+
+        } else {
+          data.append('class_defeito', 'hardware');
+          data.append('equipamento', equipamento);
+          data.append('equipPosicao', posicao);
+          data.append('serialNumber', serialNumber);
+          data.append('partNumber', partNumber);
+        }
+
+        data.append('descricaoOcorrencia', descricao);
+        data.append('tituloOcorrencia', titulo);
+        
+        const response = await api.post('/ro', data, {headers: {'Content-Type': 'multipart/form-data'}});
+      
+        Alert.alert(response.data.msg)
+
+        navigation.navigate('Home')
+      } catch (response) {
+        Alert.alert(response.data.msg);
+      }
+    }
+
   return (
 
       //Abaixo o titulo do RO
@@ -70,25 +123,25 @@ export const CadastroRO = () =>{
           Contrato*
         </Text>
         <TextInput style={style.input} 
-        placeholder=''
+        placeholder='' onChangeText={texto => setContrato(texto)}
         ></TextInput>
       </View>
 
-      <View style={style.campos2}>
+      {/* <View style={style.campos2}>
         <Text style={style.paragraph}>
           Fase*
         </Text>
         <TextInput style={style.input} 
-        placeholder=''
+        placeholder='' onChangeText={texto => setFase(texto)}
         ></TextInput>
-      </View>
+      </View> */}
 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
           Orgão*
         </Text>
         <TextInput style={style.input} 
-        placeholder=''
+        placeholder='' onChangeText={texto => setOrgao(texto)}
         ></TextInput>
       </View>
 
@@ -97,7 +150,7 @@ export const CadastroRO = () =>{
           Relator*
         </Text>
         <TextInput style={style.input} 
-        placeholder=''
+        placeholder='' onChangeText={texto => setRelator(texto)}
         ></TextInput>
       </View>
 
@@ -106,7 +159,7 @@ export const CadastroRO = () =>{
           POS./GRAD*
         </Text>
         <TextInput style={style.input} 
-        placeholder=''
+        placeholder='' onChangeText={texto => setPosGradRelator(texto)}
         ></TextInput>
       </View>
 
@@ -117,7 +170,7 @@ export const CadastroRO = () =>{
       </View>
       <View style={style.campos3}>
         <TextInput style={style.input2} 
-        placeholder=''
+        placeholder='' onChangeText={texto => setResponsavel(texto)}
         ></TextInput>
       </View>
       
@@ -126,7 +179,7 @@ export const CadastroRO = () =>{
           POS./GRAD*
         </Text>
         <TextInput style={style.input} 
-        placeholder=''
+        placeholder='' onChangeText={texto => setPosGradResponsavel(texto)}
         ></TextInput>
       </View>
 
@@ -243,7 +296,7 @@ export const CadastroRO = () =>{
           Titulo*
         </Text>
         <TextInput style={style.input} 
-        placeholder=''
+        placeholder=''onChangeText={texto => setTitulo(texto)}
         ></TextInput>
       </View>
 
@@ -257,17 +310,14 @@ export const CadastroRO = () =>{
         <TextInput style={style.input3} 
         
         multiline={true}
-        onChangeText={(text) => setText(text)}
-        value={text}
+        onChangeText={(descricao) => setDescricao(descricao)}
         placeholder=''
         ></TextInput>
       </View>
 
       <View style={style.botaoalinha}>
         <TouchableOpacity style={style.button}
-          onPress={() => 
-          navigation.navigate('')
-          }>
+          onPress={cadastrarRO}>
           <Text style={style.cadastra}>Criar RO</Text>
         </TouchableOpacity>
 
