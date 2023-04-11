@@ -8,7 +8,7 @@ import { propsNavigationStack } from "./Models";
 
 const { Navigator, Screen } = createNativeStackNavigator<propsNavigationStack>()
 
-export default function AuthRoutes () {
+export default function AdminRoutes () {
     return(
         <Navigator initialRouteName="Home"  screenOptions={{headerShown : false}}>
             <Screen name="Home" component={Home}/>
@@ -16,9 +16,11 @@ export default function AuthRoutes () {
             <Screen name="TabelaROs" component={TabelaROs}/>
             {/* 
             <Screen name="EdicaoROs" component={EdicaoROs}/>
-            <Screen name="PerfilUsuario" component={PerfilUsuario}/>
             <Screen name="Chat" component={Chat}/>
-            <Screen name="Notificacoes" component={Notificacoes}/> 
+            <Screen name="Notificacoes" component={Notificacoes}/>
+            <Screen name="PerfilUsuario" component={PerfilUsuario}/>
+            <Screen name="TabelaUsuarios" component={TabelaUsuarios}/>
+            <Screen name="CadastroUsuario" component={CadastroUsuario}/> 
             */}
         </Navigator>
     )
