@@ -86,7 +86,7 @@ export const CadastroRO = () =>{
         data.append('posGradResponsavel', posGradResponsavel);
 
         if (softwareChecked) {
-          data.append('class_defeito', 'software');
+          data.append('classDefeito', 'software');
           data.append('versaoBaseDados', versaoBaseDados);
           data.append('versaoSoftware', versaoSoftware);
 
@@ -95,7 +95,7 @@ export const CadastroRO = () =>{
           });
 
         } else if (hardwareChecked) {
-          data.append('class_defeito', 'hardware');
+          data.append('classDefeito', 'hardware');
           data.append('equipamento', equipamento);
           data.append('equipPosicao', posicao);
           data.append('serialNumber', serialNumber);

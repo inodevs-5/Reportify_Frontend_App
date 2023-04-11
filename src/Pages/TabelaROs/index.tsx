@@ -5,9 +5,12 @@ import { propsStack } from '../../Routes/Stack/Models';
 import Icon from 'react-native-vector-icons/Ionicons';
 import api from '../../services/api';
 import { ScrollView } from 'react-native';
+import { useAuth } from '../../contexts/auth';
 
-export const TabelaROs = () =>{
+export const TabelaROs = ({ route }) =>{
     const navigation = useNavigation<propsStack>();
+    const { type } = route.params;
+    const { usuario } = useAuth();
     const [input, setInput] = useState('');
 
     const [errorMessage, setErrorMessage] = useState(null);
@@ -17,8 +20,16 @@ export const TabelaROs = () =>{
     useEffect(() => {
       (async () => {
         try {
-          const response = await api.get('/ro');
-  
+          let rota = "";
+          if (usuario.perfil == "suporte" && type == "specific") {
+            rota = "/responsavel/" + usuario._id
+          } else if (usuario.perfil == "cliente") {
+            rota = "/relator/" + usuario._id
+          }
+
+          console.log(rota)
+
+          const response = await api.get('/ro' + rota);
           setRos(response.data);
           setLoading(false)
         } catch (response) {
@@ -49,6 +60,7 @@ export const TabelaROs = () =>{
     //   <Icon name='search' size={21} style={style.searchIcon}/>
     // </TouchableOpacity>
     // <View style={style.bar}/> 
+
 <View style={style.container}>
     <View style={style.containerbusca}>
         <View style={style.container12}>
@@ -78,11 +90,18 @@ export const TabelaROs = () =>{
       <ScrollView style={style.scroll}>
       {
         ros && !loading ? ros.map(ro => (
-        <View key={ro.numroOcorrencia} style={style.square}>
-          <Text style={style.square}> <Text style={style.bold}>#{ro.numroOcorrencia} </Text>
+        <View key={ro._id} style={style.square}>
+          <Text style={style.square}> <Text style={style.bold}>#{ro._id} </Text>
               {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
-              {'\n'} <Text style={style.bold}>Status: </Text> Sem tratamento
-              {'\n'} <Text style={style.bold}>Categoria: </Text> Alta
+              {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
+              
+              {type == "specific" ? (
+                <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.responsavel ? ro.responsavel.nome : "Não identificado"}</>
+
+              ) : (
+                <>{'\n'} <Text style={style.bold}>Categoria: </Text>{ro.suporte ? ro.suporte.fase : "A definir"}</>
+              )}
+
           </Text>
           </View>
         )) :

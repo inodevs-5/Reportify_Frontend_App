@@ -36,7 +36,7 @@ export const Home = () =>{
           <>
           <TouchableOpacity style={style.buttonAdm}
             onPress={() => 
-            navigation.navigate('TabelaROs')
+            navigation.navigate('TabelaROs', {type: "general"})
             }>
             <Text style={style.enterButton}>Registro de Ocorrência</Text>
           </TouchableOpacity>
@@ -68,14 +68,14 @@ export const Home = () =>{
           <>
           <TouchableOpacity style={style.buttonSup}
             onPress={() => 
-            navigation.navigate('TabelaROs')
+            navigation.navigate('TabelaROs', {type: "general"})
             }>
             <Text style={style.enterButton}>Registro de Ocorrência</Text>
           </TouchableOpacity>
     
           <TouchableOpacity style={style.buttonSup}
             onPress={() => 
-            navigation.navigate('TabelaROs')
+            navigation.navigate('TabelaROs', {type: "specific"})
             }>
             <Text style={style.enterButton}>Minhas Tasks</Text>
           </TouchableOpacity>
@@ -100,7 +100,7 @@ export const Home = () =>{
     
           <TouchableOpacity style={style.buttonClt2}
             onPress={() => 
-            navigation.navigate('TabelaROs')
+            navigation.navigate('TabelaROs', {type: "specific"})
             }>
             <Text style={style.enterButton}>Acompanhar Meus Registros de Ocorrência</Text>
           </TouchableOpacity>
