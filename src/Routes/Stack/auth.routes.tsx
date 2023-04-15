@@ -14,6 +14,7 @@ export default function AuthRoutes () {
             <Screen name="Home" component={Home}/>
             <Screen name="CadastroRO" component={CadastroRO}/>
             <Screen name="TabelaROs" component={TabelaROs}/>
+            {/*<Screen name="CadastroUsuario" component={CadastroUsuario}/>*/}
         </Navigator>
     )
 }

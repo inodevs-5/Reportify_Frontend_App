@@ -10,12 +10,12 @@
     "test": "jest"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.18.1",
     "@primer/react": "^35.22.0",
+    "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-native-community/checkbox": "^0.5.15",
     "@react-native-community/cli-platform-android": "^10.2.0",
     "@react-native-community/datetimepicker": "^7.0.0",
-    "@react-native-picker/picker": "^2.4.9",
+    "@react-native-picker/picker": "^2.4.10",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "apisauce": "^3.0.0",
