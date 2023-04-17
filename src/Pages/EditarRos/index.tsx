@@ -134,7 +134,7 @@ const EditaRos = ({route}) => {
           <TouchableOpacity >
         <Icon name='trash' size={25} style={style.icon}
           onPress={() => 
-            console.warn("apaguei")
+            console.warn("apagou")
             }/>
         </TouchableOpacity>
         </View>
