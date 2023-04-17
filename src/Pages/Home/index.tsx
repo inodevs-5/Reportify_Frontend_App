@@ -38,7 +38,7 @@ export const Home = () =>{
       </TouchableOpacity>
       <TouchableOpacity style={style.button}
         onPress={() => 
-        navigation.navigate('Membro_suporte')
+        navigation.navigate('EditarUsuario')
         }>
         <Text style={style.enterButton}>Membros do Suporte</Text>
       </TouchableOpacity>
@@ -196,7 +196,6 @@ const style = StyleSheet.create({
 
   container: {
     // backgroundColor: '#F9FbFa',
-    // display:'flex',
     // margin:'auto',
     // alignItems: 'center',
     flex: 1,
