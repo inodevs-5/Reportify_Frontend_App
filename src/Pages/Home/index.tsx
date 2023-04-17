@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
+import Menu from '../../components/menu';
 
 export const Home = () =>{
   const { usuario, signOut } = useAuth();
@@ -56,23 +57,7 @@ export const Home = () =>{
       </TouchableOpacity>
       </View>
 
-  <View style={style.containermenu}>
-      <View style={style.menu}>
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='home' size={27} style={style.iconHome}
-          onPress={() => 
-            navigation.navigate('Login')
-            }/>
-        </TouchableOpacity>
-   
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='notifications' size={27} style={style.iconNotif}
-          onPress={() => 
-            navigation.navigate('Login')
-            }/>
-        </TouchableOpacity>
-      </View>
-      </View>
+  <Menu></Menu>
 
     </View>
   );
