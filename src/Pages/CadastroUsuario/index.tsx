@@ -7,15 +7,6 @@ import DocumentPicker from 'react-native-document-picker';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/auth';
 import {Picker} from '@react-native-picker/picker';
-interface Perfil {
-  label: string;
-  value: string;
-}
-
-interface Empresa {
-  label: string;
-  value: string;
-}
 
 export const CadastroUsuario = () =>{
   const navigation = useNavigation<propsStack>();
@@ -23,27 +14,22 @@ export const CadastroUsuario = () =>{
   const { usuario } = useAuth();
 
   const [text, setText] = useState('');
+
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [empresa, setEmpresa] = useState('');
+  const [senha, setSenha] = useState('');
   
   const [loading, setLoading] = useState(false);// do botão de enviar
 
-  const [selectedPerfil, setSelectedPerfil] = useState('administrador');
+  const [perfil, setPerfil] = useState('cliente');
   const perfis: Perfil[] = [
-    { label: 'Administrador', value: 'administrador' },
+    { label: 'Administrador', value: 'admin' },
     { label: 'Suporte', value: 'suporte' },
     { label: 'Ciente', value: 'cliente' },
   
   ];
 
-  const [selectedEmpresa, setSelectedEmpresa] = useState('empresa1');
-  const empresas: Empresa[] = [
-    { label: 'Empresa1', value: 'empresa1' },
-    { label: 'Empresa2', value: 'empresa2' },
-    { label: 'Empresa3', value: 'empresa3' },
-  
-  ];
-
-   
-    
     // inicio back
     async function cadastrarUser() {
       setLoading(true);
@@ -55,11 +41,6 @@ export const CadastroUsuario = () =>{
         data.append('perfil', perfil);
         data.append('empresa', empresa);
         data.append('senha', senha);
-       
-
-        
-        
-       
 
         navigation.navigate('Home')
       } catch (response) {
@@ -101,7 +82,7 @@ export const CadastroUsuario = () =>{
         
         <Picker
         selectedValue={selectedPerfil}
-        onValueChange={(itemValue) => setSelectedPerfil(itemValue)}
+        onValueChange={(itemValue) => setPerfil(itemValue)}
         style={{ width: '70%', borderWidth: 1, borderColor: 'black', padding: 2 }}
       > 
         {perfis.map((perfil) => (
@@ -117,7 +98,7 @@ export const CadastroUsuario = () =>{
         </Text>
         <Picker
         selectedValue={selectedEmpresa}
-        onValueChange={(itemValue) => setSelectedEmpresa(itemValue)}
+        onValueChange={(itemValue) => setEmpresa(itemValue)}
         style={{ width: '70%', borderWidth: 1, borderColor: 'black', padding: 2 }}
       > 
         {empresas.map((empresa) => (
