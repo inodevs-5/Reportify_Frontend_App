@@ -6,6 +6,7 @@ export type propsNavigationStack = {
     Login:undefined
     CadastroRO:undefined
     TabelaROs:undefined
+    Membro_suporte:undefined
 }
 
 export type propsStack = NativeStackNavigationProp<propsNavigationStack>
