@@ -17,30 +17,25 @@ export const CadastroUsuario = () =>{
 
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
-  const [empresa, setEmpresa] = useState('');
+  // const [empresa, setEmpresa] = useState('');
   const [senha, setSenha] = useState('');
-  
-  const [loading, setLoading] = useState(false);// do botão de enviar
-
   const [perfil, setPerfil] = useState('cliente');
-  const perfis: Perfil[] = [
-    { label: 'Administrador', value: 'admin' },
-    { label: 'Suporte', value: 'suporte' },
-    { label: 'Ciente', value: 'cliente' },
-  
-  ];
+  const [loading, setLoading] = useState(false);// do botão de enviar
+  // const perfis: Perfil[] = [
+  //   { label: 'Administrador', value: 'admin' },
+  //   { label: 'Suporte', value: 'suporte' },
+  //   { label: 'Ciente', value: 'cliente' },
+  // ];
 
     // inicio back
     async function cadastrarUser() {
       setLoading(true);
       try {
-        const data = new FormData();
+        
+        const response = await api.post('/usuario', {nome, email, perfil, senha})
+        console.log(nome)
 
-        data.append('nome', nome);
-        data.append('email', email);
-        data.append('perfil', perfil);
-        data.append('empresa', empresa);
-        data.append('senha', senha);
+        Alert.alert(response.data.msg)
 
         navigation.navigate('Home')
       } catch (response) {
@@ -76,36 +71,37 @@ export const CadastroUsuario = () =>{
       </View>
 
       <View style={style.campos2}>
-        <Text style={style.paragraph}>
+        {/* <Text style={style.paragraph}>
           Perfil*
         </Text>
         
         <Picker
-        selectedValue={selectedPerfil}
+        selectedValue={Perfil}
         onValueChange={(itemValue) => setPerfil(itemValue)}
         style={{ width: '70%', borderWidth: 1, borderColor: 'black', padding: 2 }}
       > 
         {perfis.map((perfil) => (
           <Picker.Item style={style.input} label={perfil.label} value={perfil.value} key={perfil.value} />
         ))}
-      </Picker>
+      </Picker> */}
+
+        <Text style={style.paragraph}>
+          Perfil*
+        </Text>
+        <TextInput style={style.input} 
+        placeholder='' onChangeText={texto => setPerfil(texto)}
+        ></TextInput>
         
       </View>
 
-      <View style={style.campos2}>
+      {/* <View style={style.campos2}>
         <Text style={style.paragraph}>
           Empresa*
         </Text>
-        <Picker
-        selectedValue={selectedEmpresa}
-        onValueChange={(itemValue) => setEmpresa(itemValue)}
-        style={{ width: '70%', borderWidth: 1, borderColor: 'black', padding: 2 }}
-      > 
-        {empresas.map((empresa) => (
-          <Picker.Item style={style.input} label={empresa.label} value={empresa.value} key={empresa.value} />
-        ))}
-      </Picker>
-      </View>
+        <TextInput style={style.input} 
+        placeholder='' onChangeText={texto => setEmpresa(texto)}
+        ></TextInput>
+      </View> */}
 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
