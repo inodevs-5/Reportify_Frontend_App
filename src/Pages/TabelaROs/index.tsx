@@ -21,13 +21,11 @@ export const TabelaROs = ({ route }) =>{
       (async () => {
         try {
           let rota = "";
-          if (usuario.perfil == "suporte" && type == "specific") {
-            rota = "/responsavel/" + usuario._id
+          if (usuario.perfil == "admin" && type == "specific") {
+            rota = "/atribuido/" + usuario._id;
           } else if (usuario.perfil == "cliente") {
-            rota = "/relator/" + usuario._id
+            rota = "/relator/" + usuario._id;
           }
-
-          console.log(rota)
 
           const response = await api.get('/ro' + rota);
           setRos(response.data);
@@ -41,7 +39,7 @@ export const TabelaROs = ({ route }) =>{
     async function pesquisar() {
       try {
         setLoading(true)
-        const response = await api.get('/ro/' + input);
+        const response = await api.get('/ro/search/' + input);
         setRos(response.data);
         setLoading(false)
       } catch (response) {
@@ -96,7 +94,7 @@ export const TabelaROs = ({ route }) =>{
               {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
               
               {type == "specific" ? (
-                <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.responsavel ? ro.responsavel.nome : "Não identificado"}</>
+                <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.responsavel ? ro.responsavel.nome : "A definir"}</>
 
               ) : (
                 <>{'\n'} <Text style={style.bold}>Categoria: </Text>{ro.suporte ? ro.suporte.fase : "A definir"}</>

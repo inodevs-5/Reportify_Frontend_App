@@ -32,7 +32,7 @@ export const Home = () =>{
 
      <View style={style.buttons}>
 
-        {usuario.perfil === "admin" && ( 
+        {usuario.perfil === "admin" ? ( 
           <>
           <TouchableOpacity style={style.buttonAdm}
             onPress={() => 
@@ -46,6 +46,13 @@ export const Home = () =>{
             navigation.navigate('TabelaUsuarios')
             }>
             <Text style={style.enterButton}>Membros do Suporte</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={style.buttonAdm}
+            onPress={() => 
+            navigation.navigate('TabelaROs', {type: "specific"})
+            }>
+            <Text style={style.enterButton}>Minhas Tasks</Text>
           </TouchableOpacity>
     
           <TouchableOpacity style={style.buttonAdm}
@@ -62,34 +69,7 @@ export const Home = () =>{
             <Text style={style.enterButton}>Administração do Sistema</Text>
           </TouchableOpacity>
           </>
-        )}
-
-        {usuario.perfil === "suporte" && ( 
-          <>
-          <TouchableOpacity style={style.buttonSup}
-            onPress={() => 
-            navigation.navigate('TabelaROs', {type: "general"})
-            }>
-            <Text style={style.enterButton}>Registro de Ocorrência</Text>
-          </TouchableOpacity>
-    
-          <TouchableOpacity style={style.buttonSup}
-            onPress={() => 
-            navigation.navigate('TabelaROs', {type: "specific"})
-            }>
-            <Text style={style.enterButton}>Minhas Tasks</Text>
-          </TouchableOpacity>
-    
-          <TouchableOpacity style={style.buttonSup}
-            onPress={() => 
-            navigation.navigate('CadastroRO')
-            }>
-            <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
-          </TouchableOpacity>
-          </>
-        )}
-
-        {usuario.perfil === "cliente" && ( 
+        ) : ( 
           <>
           <TouchableOpacity style={style.buttonClt}
             onPress={() => 
@@ -277,16 +257,6 @@ const style = StyleSheet.create({
     marginBottom: 20,
     // marginTop: 20,
     borderRadius: 7,
-  },
-  
-  buttonSup :{
-    alignItems: 'center',
-    width: 300,
-    paddingTop: 30,
-    backgroundColor: '#72A2FA',
-    marginBottom: 20,
-    borderRadius: 7,
-    height: 90,
   },
 
   buttonClt :{
