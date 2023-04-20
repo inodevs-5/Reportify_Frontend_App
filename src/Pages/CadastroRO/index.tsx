@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking, ScrollView, Button, Alert, ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
@@ -8,6 +8,7 @@ import CheckBox from '@react-native-community/checkbox';
 import DocumentPicker from 'react-native-document-picker';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/auth';
+import {Picker} from '@react-native-picker/picker';
 
 export const CadastroRO = () =>{
   const navigation = useNavigation<propsStack>();
@@ -39,6 +40,23 @@ export const CadastroRO = () =>{
 
     const [loading, setLoading] = useState(false);
 
+    const [usuarios, setUsuarios] = useState([]);
+
+    useEffect(() => {
+      (async () => {
+        try {
+          const response = await api.get('/usuario');
+
+          setUsuarios(response.data);
+          setLoading(false);
+        } catch (response) {
+          console.log(response.data.msg);
+        }
+      })();
+    }, []);
+
+    const [selectedUser, setSelectedUser] = useState(usuario._id);
+    
     const handleHardwareCheck = () => {
       setHardwareChecked(!hardwareChecked);
       setSoftwareChecked(false);
@@ -80,7 +98,8 @@ export const CadastroRO = () =>{
         data.append('contrato', contrato);
         data.append('fase', fase);
         data.append('orgao', orgao);
-        data.append('nomeRelator', relator);
+        data.append('idRelator', selectedUser);
+        // data.append('nomeRelator', relator);
         data.append('posGradRelator', posGradRelator);
         data.append('nomeResponsavel', responsavel);
         data.append('posGradResponsavel', posGradResponsavel);
@@ -106,7 +125,6 @@ export const CadastroRO = () =>{
           data.append('descricaoOcorrencia', descricao);
         }
         data.append('tituloOcorrencia', titulo);
-        data.append('colaboradorIACIT', usuario.nome);
         
         const response = await api.post('/ro', data, {headers: {'Content-Type': 'multipart/form-data'}});
       
@@ -137,14 +155,14 @@ export const CadastroRO = () =>{
         ></TextInput>
       </View>
 
-      <View style={style.campos2}>
+      {/* <View style={style.campos2}>
         <Text style={style.paragraph}>
           Fase*
         </Text>
         <TextInput style={style.input} 
         placeholder='' onChangeText={texto => setFase(texto)}
         ></TextInput>
-      </View>
+      </View> */}
 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
@@ -155,14 +173,24 @@ export const CadastroRO = () =>{
         ></TextInput>
       </View>
 
+      { usuario && usuario.perfil === "admin" && 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
           Relator*
         </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setRelator(texto)}
-        ></TextInput>
+
+        <Picker
+          selectedValue={selectedUser}
+          onValueChange={(itemValue) => setSelectedUser(itemValue)}
+          style={{ width: '82%', marginVertical:10}}
+        >
+
+          {usuarios && usuarios.map((relator) => (
+            <Picker.Item style={style.input} label={relator.nome} value={relator._id} key={relator._id} />
+          ))}
+        </Picker>
       </View>
+      }
 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
