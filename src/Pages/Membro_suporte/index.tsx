@@ -1,15 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
+import api from '../../services/api';
 
 export const Membro_suporte = () =>{
   const { usuario, signOut } = useAuth();
 
+  const [usuarios, setUsuarios] = useState()
+
   const navigation = useNavigation<propsStack>()
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await api.get('/usuario');
+
+        setUsuarios(response.data);
+        setLoading(false)
+      } catch (response) {
+        setErrorMessage(response.data.msg);
+      }
+    })();
+  }, []);
 
   return (
     <View style={style.container}>
@@ -29,38 +46,20 @@ export const Membro_suporte = () =>{
       <View style={style.bar}/> 
        </View>
       
-     <View style={style.buttons}>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('')
-        }>
-        <Text style={style.enterButton}>Ana Alves</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('')
-        }>
-        <Text style={style.enterButton}>Sarah Andrade</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('')
-        }>
-        <Text style={style.enterButton}>Carlos Augusto</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('')
-        }>
-        <Text style={style.enterButton}>Luisa Souza</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('')
-        }>
-        <Text style={style.enterButton}>Pedro Moura</Text>
-      </TouchableOpacity>
+      { 
+        usuarios && !loading ? usuarios.map(usuario => (
+      <View style={style.buttons}>
+        <TouchableOpacity style={style.button}
+          onPress={() => 
+          navigation.navigate('')
+          }>
+          <Text style={style.enterButton}>{usuario.nome}</Text>
+        </TouchableOpacity> 
       </View>
+   )) : <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator size="large" color="#666"/>
+      </View>
+      }
 
       <View >
       <View style={style.menu}>
@@ -132,8 +131,6 @@ const style = StyleSheet.create({
    height:60,
    borderRadius:20,
    marginBottom:10
-
-   
   },
   
   
