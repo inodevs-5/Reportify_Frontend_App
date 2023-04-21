@@ -104,6 +104,26 @@ export const CadastroUsuario = () =>{
       </View> */}
 
       <View style={style.campos2}>
+          <Text style={style.paragraph}>
+            Empresa*
+          </Text>
+          <TextInput style={style.input} 
+          placeholder='' onChangeText={texto => setEmpresa(texto)}
+          ></TextInput>
+      </View>
+
+      <View style={style.campos2}>
+        <Text style={style.paragraph}>
+          Contato da Empresa*
+        </Text>
+      </View>
+      <View style={style.campos3}>
+        <TextInput style={style.input2} 
+        placeholder='' onChangeText={texto => setEmpresa(texto)}
+        ></TextInput>
+      </View>
+
+      <View style={style.campos2}>
         <Text style={style.paragraph}>
           Senha*
         </Text>
@@ -195,6 +215,14 @@ const style = StyleSheet.create({
     marginRight: '3%',
     marginTop:'3%'
 
+  },
+
+  campos3:{ //estilo do alinhamento input de responsável/supervisor
+    
+    alignItems: 'center',
+    marginRight: '3%',
+    marginBottom:8,
+    
   },
   
   paragraph: {
