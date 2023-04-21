@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking, ScrollView, Button, Alert, ActivityIndicator} from 'react-native';
+import {StyleSheet,KeyboardAvoidingView, View,Text,TextInput,TouchableOpacity,Platform, Linking, ScrollView, Button, Alert, ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
@@ -7,6 +7,11 @@ import DocumentPicker from 'react-native-document-picker';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/auth';
 import {Picker} from '@react-native-picker/picker';
+
+interface Perfil { // para o picker (select)
+  label: string;
+  value: string;
+}
 
 export const CadastroUsuario = () =>{
   const navigation = useNavigation<propsStack>();
@@ -17,15 +22,18 @@ export const CadastroUsuario = () =>{
 
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
+
   // const [empresa, setEmpresa] = useState('');
   const [senha, setSenha] = useState('');
   const [perfil, setPerfil] = useState('cliente');
   const [loading, setLoading] = useState(false);// do botão de enviar
-  // const perfis: Perfil[] = [
-  //   { label: 'Administrador', value: 'admin' },
-  //   { label: 'Suporte', value: 'suporte' },
-  //   { label: 'Ciente', value: 'cliente' },
-  // ];
+
+   const [selectedPerfil, setSelectedPerfil] = useState('administrador');
+   const perfis: Perfil[] = [
+    { label: 'Administrador', value: 'admin' },
+    { label: 'Suporte', value: 'suporte' },
+    { label: 'Cliente', value: 'cliente' },
+   ];
 
     // inicio back
     async function cadastrarUser() {
@@ -45,130 +53,134 @@ export const CadastroUsuario = () =>{
     }
 
   return (
-
-    <View style={style.container}><Text style={style.title2}>Cadastrar Novo Usuário</Text>
-     {/* ScrollView = parte rolavel */}
-    <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}> 
+    <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    keyboardVerticalOffset={-30}
+  >
+      <View style={style.container}><Text style={style.title2}>Cadastrar Novo Usuário</Text>
+      {/* ScrollView = parte rolavel */}
       
-      {/*Cada view alinha um titulo de campo e um input*/}
-
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Nome*
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setNome(texto)}
-        ></TextInput>
-      </View>
-
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Email*
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setEmail(texto)}
-        ></TextInput>
-      </View>
-
-      <View style={style.campos2}>
-        {/* <Text style={style.paragraph}>
-          Perfil*
-        </Text>
+      
+      <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}> 
         
-        <Picker
-        selectedValue={Perfil}
-        onValueChange={(itemValue) => setPerfil(itemValue)}
-        style={{ width: '70%', borderWidth: 1, borderColor: 'black', padding: 2 }}
-      > 
-        {perfis.map((perfil) => (
-          <Picker.Item style={style.input} label={perfil.label} value={perfil.value} key={perfil.value} />
-        ))}
-      </Picker> */}
+        {/*Cada view alinha um titulo de campo e um input*/}
 
-        <Text style={style.paragraph}>
-          Perfil*
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setPerfil(texto)}
-        ></TextInput>
+        <View style={style.campos2}>
+          <Text style={style.paragraph}>
+            Nome*
+          </Text>
+          <TextInput style={style.input} 
+          placeholder='' onChangeText={texto => setNome(texto)}
+          ></TextInput>
+        </View>
+
+        <View style={style.campos2}>
+          <Text style={style.paragraph}>
+            Email*
+          </Text>
+          <TextInput style={style.input} 
+          placeholder='' onChangeText={texto => setEmail(texto)}
+          ></TextInput>
+        </View>
+
+        <View style={style.campos2}>
+           <Text style={style.paragraph}>
+            Perfil*   {/*Nome do campo picker*/}
+          </Text>
+          {/*Abaixo o picker*/}
+          <Picker 
+          selectedValue={selectedPerfil}  
+          onValueChange={(itemValue) => setPerfil(itemValue)}
+          style={{ width: '90%', borderWidth: 1, borderColor: 'black', padding: 2, }}
+        > 
+        {/*itens do picker*/}
+          {perfis.map((perfil) => (
+            <Picker.Item style={style.input4} label={perfil.label} value={perfil.value} key={perfil.value} />
+          ))}
+        </Picker> 
         
-      </View>
+          
+          
+        </View>
 
-      {/* <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Empresa*
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setEmpresa(texto)}
-        ></TextInput>
-      </View> */}
-
-      <View style={style.campos2}>
+        {/* <View style={style.campos2}>
           <Text style={style.paragraph}>
             Empresa*
           </Text>
           <TextInput style={style.input} 
           placeholder='' onChangeText={texto => setEmpresa(texto)}
           ></TextInput>
-      </View>
+        </View> */}
 
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Contato da Empresa*
-        </Text>
-      </View>
-      <View style={style.campos3}>
-        <TextInput style={style.input2} 
-        placeholder='' onChangeText={texto => setEmpresa(texto)}
-        ></TextInput>
-      </View>
+        <View style={style.campos2}>
+            <Text style={style.paragraph}>
+              Empresa*
+            </Text>
+            <TextInput style={style.input} 
+            placeholder='' onChangeText={texto => setEmpresa(texto)}
+            ></TextInput>
+        </View>
 
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Senha*
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setSenha(texto)}
-        ></TextInput>
-      </View>
+        <View style={style.campos2}>
+          <Text style={style.paragraph}>
+            Contato da Empresa*
+          </Text>
+        </View>
+        <View style={style.campos3}>
+          <TextInput style={style.input2} 
+          placeholder='' onChangeText={texto => setContatoEmpresa(texto)}
+          ></TextInput>
+        </View>
 
-      
+        <View style={style.campos2}>
+          <Text style={style.paragraph}>
+            Senha*
+          </Text>
+          <TextInput style={style.input} 
+          placeholder='' onChangeText={texto => setSenha(texto)}
+          ></TextInput>
+        </View>
+
         
-      
-      <View style={style.botaoalinha}>
-        {!loading ? (
-            <TouchableOpacity style={style.button}
-              onPress={cadastrarUser}>
-              <Text style={style.cadastra}>Enviar</Text>
-            </TouchableOpacity>
-        ) : (
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <ActivityIndicator size="large" color="#666"/>
-          </View>
-        )}
+          
+        
+        <View style={style.botaoalinha}>
+          {!loading ? (
+              <TouchableOpacity style={style.button}
+                onPress={cadastrarUser}>
+                <Text style={style.cadastra}>Enviar</Text>
+              </TouchableOpacity>
+          ) : (
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <ActivityIndicator size="large" color="#666"/>
+            </View>
+          )}
 
-      </View>
-    </ScrollView>
-    {/* Fim da parte de rolagem */}
+        </View>
+      </ScrollView>
+      {/* Fim da parte de rolagem */}
 
-    <View >
-      <View style={style.menu}>
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='home' size={27} style={style.iconHome}
-          onPress={() => 
-            navigation.navigate('Home')
-            }/>
-        </TouchableOpacity>
-   
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='notifications' size={27} style={style.iconNotif}
-          onPress={() => 
-            navigation.navigate('Home')
-            }/>
-        </TouchableOpacity>
+      <View >
+        <View style={style.menu}>
+          <TouchableOpacity style={style.enterButton}>
+          <Icon name='home' size={27} style={style.iconHome}
+            onPress={() => 
+              navigation.navigate('Home')
+              }/>
+          </TouchableOpacity>
+    
+          <TouchableOpacity style={style.enterButton}>
+          <Icon name='notifications' size={27} style={style.iconNotif}
+            onPress={() => 
+              navigation.navigate('Home')
+              }/>
+          </TouchableOpacity>
+        </View>
+        </View>
       </View>
-      </View>
-    </View>
+
+      </KeyboardAvoidingView>
   );
 }
 
@@ -235,11 +247,12 @@ const style = StyleSheet.create({
     height: '20%',
     width: '90%',
     marginTop:'3%',
-    marginBottom:'65%',
+    marginBottom:'40%',
     alignSelf: 'center',
     padding:10,
     backgroundColor: '#C3C9D0',
     borderRadius: 9,
+    
   },
 
   contentContainer: {  //Faz parte do estilo da scrollview
@@ -290,6 +303,30 @@ const style = StyleSheet.create({
      },
 
   input: {
+    flex: 1,
+    alignItems:'center',
+    flexDirection:'row',
+    backgroundColor: '#ffff',
+    justifyContent:'space-between',
+    margin:'auto',
+    color: 'black',
+    paddingLeft:6,
+    paddingBottom:3,
+    width:140,
+    height:27,
+    marginBottom: 3,
+    borderRadius:300,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+  },
+
+  input4: {
     flex: 1,
     alignItems:'center',
     flexDirection:'row',
