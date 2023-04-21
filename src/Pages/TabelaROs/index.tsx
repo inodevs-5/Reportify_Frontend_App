@@ -8,40 +8,66 @@ import { ScrollView } from 'react-native';
 import { useAuth } from '../../contexts/auth';
 
 export const TabelaROs = ({ route }) =>{
-    const navigation = useNavigation<propsStack>();
-    const { type } = route.params;
+    const navigation = useNavigation<propsStack>()
     const { usuario } = useAuth();
     const [input, setInput] = useState('');
 
     const [errorMessage, setErrorMessage] = useState(null);
     const [ros, setRos] = useState();
+    const [allRos, setAllRos] = useState();
+    const [myRos, setMyRos] = useState();
     const [loading, setLoading] = useState(true);
+    const [selectedFirstButton, setSelectedFirstButton] = useState(true);
 
     useEffect(() => {
       (async () => {
         try {
-          let rota = "";
-          if (usuario.perfil == "admin" && type == "specific") {
-            rota = "/atribuido/" + usuario._id;
-          } else if (usuario.perfil == "cliente") {
-            rota = "/relator/" + usuario._id;
+          if (usuario.perfil == "admin") {
+            setSelectedFirstButton(true);
+            const response = await api.get('/ro');
+            setAllRos(response.data);
+            setRos(response.data);
+            const response2 = await api.get('/ro/atribuido/' + usuario._id);
+            setMyRos(response2.data);
+          } else {
+            setSelectedFirstButton(false);
+            const response = await api.get('/ro/relator/' + usuario._id);
+            setRos(response.data);
           }
 
-          const response = await api.get('/ro' + rota);
-          setRos(response.data);
-          setLoading(false)
+          setLoading(false);
         } catch (response) {
           setErrorMessage(response.data.msg);
         }
       })();
     }, []);
 
+    function changeToAll() {
+      if (!selectedFirstButton) {
+        try {
+          setSelectedFirstButton(true);
+          setRos(allRos);
+        } catch (error) {
+          setErrorMessage(response.data.msg);
+        }
+      }
+    }
+
+    function changeToMyTasks() {
+      if (selectedFirstButton) {
+        try {
+          setSelectedFirstButton(false);
+          setRos(myRos);
+        } catch (error) {
+          setErrorMessage(response.data.msg);
+        }
+      }
+    }
+
     async function pesquisar() {
       try {
-        setLoading(true)
         const response = await api.get('/ro/search/' + input);
         setRos(response.data);
-        setLoading(false)
       } catch (response) {
         setErrorMessage(response.data.msg);
       }
@@ -74,6 +100,20 @@ export const TabelaROs = ({ route }) =>{
         <View style={style.bar}/>
       </View>
 
+      {usuario && usuario.perfil === 'admin' && 
+        <View style={style.groupButtons}>
+
+          <TouchableOpacity style={selectedFirstButton ? style.buttonSelected : style.button} onPress={changeToAll}>
+            <Text style={style.textButton}>Todos registros</Text>
+          </TouchableOpacity> 
+
+          <TouchableOpacity style={!selectedFirstButton ? style.buttonSelected : style.button} onPress={changeToMyTasks}>
+            <Text style={style.textButton}>Minhas Tasks</Text>
+          </TouchableOpacity>
+
+        </View>
+      }
+
      {/* <TextInput style={style.busca}  
         placeholder='Buscar RO'  
         value={input} 
@@ -83,7 +123,7 @@ export const TabelaROs = ({ route }) =>{
       <View style={style.bar}/>  */}
 
     <View style={style.squareContainer}>
-    <View style={{height: 490}}>
+    <View style={usuario.perfil == 'cliente' ? {height: 520} : {height: 460}}>
       {errorMessage && <Text style={{color: 'red', textAlign: 'center'}}>{errorMessage}</Text>}
       <ScrollView style={style.scroll}>
       {
@@ -93,7 +133,7 @@ export const TabelaROs = ({ route }) =>{
               {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
               {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
               
-              {type == "specific" ? (
+              {!selectedFirstButton ? (
                 <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.responsavel ? ro.responsavel.nome : "A definir"}</>
 
               ) : (
@@ -162,7 +202,6 @@ const style = StyleSheet.create({
     // backgroundColor:'yellow',
   },
 squareContainer: {
-    marginTop: 20,
     flexDirection: 'column',
     // alignItems: 'center',
   },
@@ -261,13 +300,39 @@ squareContainer: {
   },
 
   button:{
-    alignItems: 'center',
-    width: 300,
-    padding: 15,
+    width: 140,
+    padding: 5,
+    marginHorizontal: 5,
+    paddingBottom: 15,
     backgroundColor: '#72A2FA',
-    marginBottom: 10,
-    marginTop: 20,
+    marginBottom: 5,
+    marginTop: 10,
     borderRadius: 7,
+    alignItems: 'center'
+  },
+
+  buttonSelected:{
+    width: 140,
+    padding: 5,
+    marginHorizontal: 5,
+    paddingBottom: 15,
+    backgroundColor: '#6368f8',
+    marginBottom: 5,
+    marginTop: 10,
+    borderRadius: 7,
+    alignItems: 'center'
+  },
+
+  textButton: {
+    textAlign:'center',
+    paddingTop:8,
+    color:'white',
+    fontSize: 16,
+  },
+
+  groupButtons: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   
   enterButton:{
