@@ -13,7 +13,7 @@ export default function AuthRoutes () {
     return(
         <Navigator initialRouteName="Home"  screenOptions={{headerShown : false}}>
             <Screen name="Home" component={Home}/>
-            <Screen name="CadastroRO" component={CadastroUsuario}/>
+            <Screen name="CadastroRO" component={CadastroRO}/>
             <Screen name="TabelaROs" component={TabelaROs}/>
             <Screen name="CadastroUsuario" component={CadastroUsuario}/>
         </Navigator>
