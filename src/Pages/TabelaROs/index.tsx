@@ -8,6 +8,7 @@ import { ScrollView } from 'react-native';
 import { Props } from '@react-native-community/checkbox/dist/CheckBox.android';
 import { Ro } from '../../types/Types';
 import  Menu  from '../../components/menu';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const TabelaROs = () =>{
     const navigation = useNavigation();
@@ -41,9 +42,12 @@ export const TabelaROs = () =>{
       }
     }
 
-    function handlePress(numroOcorrencia:Ro): void {
-      navigation.navigate('EditaRos' , {numroOcorrencia})
+    function handlePress(_id:Ro): void {
+      navigation.navigate('EditaRos' , {_id})
+
+      // console.warn(_id)
     }
+
 
 
   return (
@@ -78,20 +82,20 @@ export const TabelaROs = () =>{
       <ScrollView nestedScrollEnabled={true}> 
       {
         ros && !loading ? ros.map(ro => (
-        <View key={ro.numroOcorrencia} style={style.square}>
-          <TouchableOpacity onPress={() => handlePress(ro.numroOcorrencia) }>
+        <View key={ro._id} style={style.square}>
+          <TouchableOpacity onPress={() => handlePress(ro._id) }>
             <View>
-          <Text style={style.square}> <Text style={style.bold}>#{ro.numroOcorrencia} </Text>
+          <Text style={style.square}> <Text style={style.bold}>#{ro._id} </Text>
               {'\n'} <Text style={style.bold}>Título: {ro.tituloOcorrencia}</Text>
-              {'\n'} <Text style={style.bold}>Status: </Text> sem tratemento
-              {'\n'} <Text style={style.bold}>Situação: </Text><Text style={style.normal}>{ro?.id}</Text>
+              {'\n'} <Text style={style.bold}>Status: </Text> {ro.suporte?.fase}
+              {'\n'} <Text style={style.bold}>Atribuido A: </Text><Text style={style.normal}>{ro.suporte?.colaboradorIACIT?.nome}</Text>
           </Text>
           </View>
           </TouchableOpacity>
           </View>
         )) 
       :
-      <View style={{ height:40 ,}}>
+      <View style={{ height:40 }}>
         <ActivityIndicator size="large" color="#666"/>
     </View>
     }
@@ -101,7 +105,9 @@ export const TabelaROs = () =>{
       
     </View>
     </ScrollView>
+    
     </KeyboardAvoidingView>
+    
   );
 };
 
@@ -129,10 +135,11 @@ squareContainer: {
     // backgroundColor:"red",
     justifyContent:'center',
     borderRadius:20,
-    height:"70%",
+    maxHeight:500,
+    // backgroundColor: 'red',
     padding:5,
-    // marginBottom:'16%'
-  },
+    marginTop:"10%",
+    },
   square: {
     width: 300,
     minHeight: 100,
@@ -172,7 +179,7 @@ squareContainer: {
       ios: { fontFamily: 'Arial', }, 
       android: { fontFamily: 'Roboto' }}), 
     display:'flex',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     margin:'auto',
     // height:"300%",
     alignItems: 'center',
@@ -211,3 +218,6 @@ squareContainer: {
 });
 
 export default TabelaROs;
+
+
+

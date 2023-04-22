@@ -8,7 +8,6 @@ import CheckBox from '@react-native-community/checkbox';
 import DocumentPicker from 'react-native-document-picker';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/auth';
-import Menu from '../../components/menu';
 
 export const CadastroRO = () =>{
   const navigation = useNavigation<propsStack>();
@@ -87,7 +86,7 @@ export const CadastroRO = () =>{
         data.append('posGradResponsavel', posGradResponsavel);
 
         if (softwareChecked) {
-          data.append('class_defeito', 'software');
+          data.append('classDefeito', 'software');
           data.append('versaoBaseDados', versaoBaseDados);
           data.append('versaoSoftware', versaoSoftware);
 
@@ -96,7 +95,7 @@ export const CadastroRO = () =>{
           });
 
         } else if (hardwareChecked) {
-          data.append('class_defeito', 'hardware');
+          data.append('classDefeito', 'hardware');
           data.append('equipamento', equipamento);
           data.append('equipPosicao', posicao);
           data.append('serialNumber', serialNumber);
@@ -354,7 +353,23 @@ export const CadastroRO = () =>{
     </ScrollView>
     {/* Fim da parte de rolagem */}
 
-    <Menu></Menu>
+    <View >
+      <View style={style.menu}>
+        <TouchableOpacity style={style.enterButton}>
+        <Icon name='home' size={27} style={style.iconHome}
+          onPress={() => 
+            navigation.navigate('Home')
+            }/>
+        </TouchableOpacity>
+   
+        <TouchableOpacity style={style.enterButton}>
+        <Icon name='notifications' size={27} style={style.iconNotif}
+          onPress={() => 
+            navigation.navigate('Home')
+            }/>
+        </TouchableOpacity>
+      </View>
+      </View>
     </View>
   );
 }
