@@ -9,13 +9,12 @@ export type Ro = {
     classDefeito:string,
     versaoBaseDados: string,
     versaoSoftware: string,
-    // logsAnexado:anexoSchema,
     opcoesHardware:string,
     equipamento:string,
     equipPosicao:string,
     partNumber:string
     serialNumber:string,
-    descricaoOcorrencia:string
+    descricaoOcorrencia:string,
     relator:string
     responsavel:string
     suporte: roSuporteSchema
