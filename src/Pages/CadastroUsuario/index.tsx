@@ -22,16 +22,17 @@ export const CadastroUsuario = () =>{
 
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
+  const [empresa, setEmpresa] = useState('');
+  const [contato_empresa, setContatoEmpresa]
 
   // const [empresa, setEmpresa] = useState('');
   const [senha, setSenha] = useState('');
   const [perfil, setPerfil] = useState('cliente');
   const [loading, setLoading] = useState(false);// do botão de enviar
 
-   const [selectedPerfil, setSelectedPerfil] = useState('administrador');
+   const [selectedPerfil, setSelectedPerfil] = useState('admin');
    const perfis: Perfil[] = [
     { label: 'Administrador', value: 'admin' },
-    { label: 'Suporte', value: 'suporte' },
     { label: 'Cliente', value: 'cliente' },
    ];
 
@@ -40,7 +41,7 @@ export const CadastroUsuario = () =>{
       setLoading(true);
       try {
         
-        const response = await api.post('/usuario', {nome, email, perfil, senha})
+        const response = await api.post('/usuario', {nome, email, perfil, empresa, contato_empresa, senha})
         console.log(nome)
 
         Alert.alert(response.data.msg)
