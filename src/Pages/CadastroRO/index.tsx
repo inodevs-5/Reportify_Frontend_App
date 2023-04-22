@@ -16,6 +16,7 @@ export const CadastroRO = () =>{
   const { usuario } = useAuth();
 
   const [text, setText] = useState('');
+  
   const [fileName, setFileName] = useState('');//da parte de anexar arquivos
 
   //abaixo itens da checkbox

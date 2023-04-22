@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking, ScrollView, Button, Alert, ActivityIndicator} from 'react-native';
+import {StyleSheet, View,Text,TextInput,TouchableOpacity, ScrollView, Alert, ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
-import DocumentPicker from 'react-native-document-picker';
 import api from '../../services/api';
-import { useAuth } from '../../contexts/auth';
+import {Picker} from '@react-native-picker/picker';
 
 
 interface Perfil {
@@ -21,29 +20,25 @@ interface Empresa {
 export const EditarUsuario = ({route}) =>{
   const navigation = useNavigation<propsStack>();
   const [loading, setLoading] = useState(false);// do botão de enviar
-
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
-  const [perfil, setPerfil] = useState('');
+  const [selectedPerfil, setSelectedPerfil] = useState('admin');
   const [empresa, setEmpresa] = useState('');
   const [contato_empresa, setContato] = useState('');
   // const [senha, setSenha] = useState('');
   const id = route.params.id
   const perfis: Perfil[] = [
     { label: 'Administrador', value: 'administrador' },
-    { label: 'Suporte', value: 'suporte' },
-    { label: 'Ciente', value: 'cliente' },
+    { label: 'Cliente', value: 'cliente' },
   
   ];
   const [selectedEmpresa, getSelectedEmpresa] = useState('empresa1');
 
     // inicio back
     async function editarUser() {
-      console.log(contato_empresa)
       setLoading(true);
       try {
-        
-        const response = await api.put('/usuario/'+id , {nome, email, perfil, empresa, contato_empresa })
+        const response = await api.put('/usuario/'+id , {nome, email, selectedPerfil, empresa, contato_empresa })
         Alert.alert(response.data.msg);
         navigation.navigate('Home')
       } catch (response) {
@@ -57,11 +52,10 @@ export const EditarUsuario = ({route}) =>{
       (async () => {
         try {
           const response = await api.get('/usuario/'+id);
-  
           
           setNome(response.data.nome);
           setEmail(response.data.email);
-          setPerfil(response.data.perfil);
+          setSelectedPerfil(response.data.perfil);
           setEmpresa(response.data.empresa);
           setContato(response.data.contato_empresa);
           // setSenha(response.data.senha);
@@ -100,13 +94,21 @@ export const EditarUsuario = ({route}) =>{
       </View>
 
       <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Perfil*
-        </Text>
-        <TextInput value={perfil} style={style.input} 
-        placeholder='' onChangeText={texto => setPerfil(texto)}
-        ></TextInput>
-      </View>
+           <Text style={style.paragraph}>
+            Perfil*   {/*Nome do campo picker*/}
+          </Text>
+          {/*Abaixo o picker*/}
+          <Picker 
+          selectedValue={selectedPerfil}  
+          onValueChange={(itemValue) => setSelectedPerfil(itemValue)}
+          style={{ width: '90%', borderWidth: 1, borderColor: 'black', padding: 2, }}
+        > 
+        {/*itens do picker*/}
+          {perfis.map((perfil) => (
+            <Picker.Item style={style.input4} label={perfil.label} value={perfil.value} key={perfil.value} />
+          ))}
+        </Picker>           
+        </View>
 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
@@ -323,6 +325,30 @@ const style = StyleSheet.create({
     elevation: 4,
   },
  
+  input4: {
+    flex: 1,
+    alignItems:'center',
+    flexDirection:'row',
+    backgroundColor: '#ffff',
+    justifyContent:'space-between',
+    margin:'auto',
+    color: 'black',
+    paddingLeft:6,
+    paddingBottom:3,
+    width:140,
+    height:27,
+    marginBottom: 3,
+    borderRadius:300,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+  },
+
   menu:{
     display:'flex',
     justifyContent:'space-around',

@@ -4,9 +4,9 @@ import Home from "../../Pages/Home";
 import CadastroRO from "../../Pages/CadastroRO";
 import TabelaROs from "../../Pages/TabelaROs";
 import MembroSuporte from "../../Pages/Membro_suporte";
+import CadastroUsuario from "../../Pages/CadastroUsuario";
 import { propsNavigationStack } from "./Models";
 import EditaRos from "../../Pages/EditarRos";
-import CadastroUsuario from "../../Pages/CadastroUsuario";
 import EditarUsuario from "../../Pages/EditarUsuario";
 
 const { Navigator, Screen } = createNativeStackNavigator<propsNavigationStack>()
