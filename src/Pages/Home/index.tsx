@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import React, { useState } from 'react';
 import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -29,7 +30,7 @@ export const Home = () =>{
       </View>
       <View style={style.bar}/> 
        </View>
-      
+
      <View style={style.buttons}>
       <TouchableOpacity style={style.button}
         onPress={() => 
@@ -201,7 +202,7 @@ const style = StyleSheet.create({
     fontSize: 12
   },
 
-  button:{
+  buttonAdm :{
     alignItems: 'center',
     width: 300,
     padding: 15,
@@ -210,8 +211,31 @@ const style = StyleSheet.create({
     // marginTop: 20,
     borderRadius: 7,
   },
-  
+
+  buttonClt :{
+    alignItems: 'center',
+    width: 300,
+    paddingTop: 60,
+    padding: 15,
+    backgroundColor: '#72A2FA',
+    marginBottom: 20,
+    borderRadius: 7,
+    height: 140,
+  },
+
+  buttonClt2 :{
+    alignItems: 'center',
+    width: 300,
+    paddingTop: 40,
+    padding: 15,
+    backgroundColor: '#72A2FA',
+    marginBottom: 20,
+    borderRadius: 7,
+    height: 140,
+  },
+
   enterButton:{
+    textAlign: 'center',
     color: 'white',
     fontSize: 20,
   },
