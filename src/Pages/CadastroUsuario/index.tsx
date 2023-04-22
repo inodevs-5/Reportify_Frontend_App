@@ -230,7 +230,7 @@ const style = StyleSheet.create({
     height: '20%',
     width: '90%',
     marginTop:'3%',
-    marginBottom:'65%',
+    marginBottom:'15%',
     alignSelf: 'center',
     padding:10,
     backgroundColor: '#C3C9D0',

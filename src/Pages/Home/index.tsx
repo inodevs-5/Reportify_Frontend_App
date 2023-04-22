@@ -51,9 +51,9 @@ export const Home = () =>{
       </TouchableOpacity>
       <TouchableOpacity style={style.button}
         onPress={() => 
-        navigation.navigate('Administra')
+        navigation.navigate('CadastroUsuario')
         }>
-        <Text style={style.enterButton}>Administração do Sistema</Text>
+        <Text style={style.enterButton}>Cadastrar Novo Usuário</Text>
       </TouchableOpacity>
       </View>
 
