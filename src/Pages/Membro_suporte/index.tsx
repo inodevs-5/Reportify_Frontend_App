@@ -48,12 +48,13 @@ export const Membro_suporte = () =>{
       
       { 
         usuarios && !loading ? usuarios.map(usuario => (
-      <View style={style.buttons}>
+      <View style={style.buttons} key={usuario._id}>
         <TouchableOpacity style={style.button}
+          key={usuario._id}
           onPress={() => 
           navigation.navigate('EditarUsuario', {id:usuario._id})
           }>
-          <Text style={style.enterButton}>{usuario.nome}</Text>
+          <Text key={usuario._id} style={style.enterButton}>{usuario.nome}</Text>
         </TouchableOpacity> 
       </View>
    )) : <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
