@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import React, { useState } from 'react';
 import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -29,32 +30,55 @@ export const Home = () =>{
       </View>
       <View style={style.bar}/> 
        </View>
-      
+
      <View style={style.buttons}>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('TabelaROs')
-        }>
-        <Text style={style.enterButton}>Registro de Ocorrência</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('MembroSuporte')
-        }>
-        <Text style={style.enterButton}>Membros do Suporte</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('CadastroRO')
-        }>
-        <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('Administra')
-        }>
-        <Text style={style.enterButton}>Administração do Sistema</Text>
-      </TouchableOpacity>
+        {usuario.perfil === "admin" ? ( 
+          <>
+          <TouchableOpacity style={style.buttonAdm}
+            onPress={() => 
+            navigation.navigate('TabelaROs')
+            }>
+            <Text style={style.enterButton}>Registro de Ocorrência</Text>
+          </TouchableOpacity>
+    
+          <TouchableOpacity style={style.buttonAdm}
+            onPress={() => 
+            navigation.navigate('TabelaUsuarios')
+            }>
+            <Text style={style.enterButton}>Membros do Suporte</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={style.buttonAdm}
+            onPress={() => 
+            navigation.navigate('CadastroRO')
+            }>
+            <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={style.buttonAdm}
+            onPress={() => 
+            navigation.navigate('CadastroUsuario')
+            }>
+            <Text style={style.enterButton}>Administração do Sistema</Text>
+          </TouchableOpacity>
+          </>
+        ) : ( 
+          <>
+          <TouchableOpacity style={style.buttonClt}
+            onPress={() => 
+            navigation.navigate('CadastroRO')
+            }>
+            <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
+          </TouchableOpacity>
+    
+          <TouchableOpacity style={style.buttonClt2}
+            onPress={() => 
+            navigation.navigate('TabelaROs')
+            }>
+            <Text style={style.enterButton}>Acompanhar Meus Registros de Ocorrência</Text>
+          </TouchableOpacity>
+          </>
+        )}
       </View>
 
   <Menu></Menu>
@@ -201,7 +225,7 @@ const style = StyleSheet.create({
     fontSize: 12
   },
 
-  button:{
+  buttonAdm :{
     alignItems: 'center',
     width: 300,
     padding: 15,
@@ -210,8 +234,31 @@ const style = StyleSheet.create({
     // marginTop: 20,
     borderRadius: 7,
   },
-  
+
+  buttonClt :{
+    alignItems: 'center',
+    width: 300,
+    paddingTop: 60,
+    padding: 15,
+    backgroundColor: '#72A2FA',
+    marginBottom: 20,
+    borderRadius: 7,
+    height: 140,
+  },
+
+  buttonClt2 :{
+    alignItems: 'center',
+    width: 300,
+    paddingTop: 40,
+    padding: 15,
+    backgroundColor: '#72A2FA',
+    marginBottom: 20,
+    borderRadius: 7,
+    height: 140,
+  },
+
   enterButton:{
+    textAlign: 'center',
     color: 'white',
     fontSize: 20,
   },
