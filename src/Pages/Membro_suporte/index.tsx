@@ -1,27 +1,43 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
-import Menu from '../../components/menu';
+import api from '../../services/api';
 
-export const Home = () =>{
+export const Membro_suporte = () =>{
   const { usuario, signOut } = useAuth();
+
+  const [usuarios, setUsuarios] = useState()
 
   const navigation = useNavigation<propsStack>()
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await api.get('/usuario');
+
+        setUsuarios(response.data);
+        setLoading(false)
+      } catch (response) {
+        setErrorMessage(response.data.msg);
+      }
+    })();
+  }, []);
 
   return (
     <View style={style.container}>
-      <Text style={style.title}>Olá, {usuario.nome}!</Text>
+      <Text style={style.title}>Membros do Suporte:</Text>
       <TouchableOpacity onPress={signOut} style={style.exitIcon} >
         <Icon name='exit-outline' size={30} />
       </TouchableOpacity>
       <View style={style.containerbusca}>
         <View style={style.container12}>
       <TextInput style={style.busca}  
-        placeholder='Buscar RO'  
+        placeholder='Buscar suporte'  
         value={input} 
         onChangeText={(texto => setInput(texto))}>
       </TextInput>
@@ -30,36 +46,40 @@ export const Home = () =>{
       <View style={style.bar}/> 
        </View>
       
-     <View style={style.buttons}>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('TabelaROs')
-        }>
-        <Text style={style.enterButton}>Registro de Ocorrência</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('MembroSuporte')
-        }>
-        <Text style={style.enterButton}>Membros do Suporte</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('CadastroRO')
-        }>
-        <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('Administra')
-        }>
-        <Text style={style.enterButton}>Administração do Sistema</Text>
-      </TouchableOpacity>
+      { 
+        usuarios && !loading ? usuarios.map(usuario => (
+      <View style={style.buttons}>
+        <TouchableOpacity style={style.button}
+          onPress={() => 
+          navigation.navigate('EditarUsuario', {id:usuario._id})
+          }>
+          <Text style={style.enterButton}>{usuario.nome}</Text>
+        </TouchableOpacity> 
       </View>
+   )) : <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator size="large" color="#666"/>
+      </View>
+      }
 
-  <Menu></Menu>
-
-    </View>
+      <View >
+      <View style={style.menu}>
+        <TouchableOpacity style={style.enterButton}>
+        <Icon name='home' size={27} style={style.iconHome}
+          onPress={() => 
+            navigation.navigate('Home')
+            }/>
+        </TouchableOpacity>
+   
+        <TouchableOpacity style={style.enterButton}>
+        <Icon name='notifications' size={27} style={style.iconNotif}
+          onPress={() => 
+            navigation.navigate('Login')
+            }/>
+        </TouchableOpacity>
+      </View>
+      </View>
+       {/* </View> */}
+      </View>
   );
 }
 
@@ -111,8 +131,6 @@ const style = StyleSheet.create({
    height:60,
    borderRadius:20,
    marginBottom:10
-
-   
   },
   
   
@@ -148,7 +166,7 @@ const style = StyleSheet.create({
   },
 
   title:{
-    fontSize: 35,
+    fontSize: 25,
     marginTop: 30,
     marginRight: 115,
     textAlign: 'left',
@@ -231,4 +249,4 @@ const style = StyleSheet.create({
 });
 
 
-export default Home;
+export default Membro_suporte;

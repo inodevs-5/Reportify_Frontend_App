@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking, ScrollView, Button, Alert, ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
@@ -57,6 +57,7 @@ export const EditarUsuario = ({route}) =>{
         try {
           const response = await api.get('/usuario/'+id);
   
+          
           setNome(response.data.nome);
           setEmail(response.data.email);
           setPerfil(response.data.perfil);
@@ -65,6 +66,7 @@ export const EditarUsuario = ({route}) =>{
           setSenha(response.data.senha);
           setLoading(false)
         } catch (response) {
+          console.log(response)
           setErrorMessage(response.data.msg);
         }
       })();
