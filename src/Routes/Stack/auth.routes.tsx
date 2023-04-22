@@ -1,10 +1,10 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 import Home from "../../Pages/Home";
 import CadastroRO from "../../Pages/CadastroRO";
 import TabelaROs from "../../Pages/TabelaROs";
 import { propsNavigationStack } from "./Models";
+import EditaRos from "../../Pages/EditarRos";
 import CadastroUsuario from "../../Pages/CadastroUsuario";
 import EditarUsuario from "../../Pages/EditarUsuario";
 
@@ -16,6 +16,7 @@ export default function AuthRoutes () {
             <Screen name="Home" component={Home}/>
             <Screen name="CadastroRO" component={CadastroRO}/>
             <Screen name="TabelaROs" component={TabelaROs}/>
+            <Screen name="EditaRos" component={EditaRos} />
             <Screen name="CadastroUsuario" component={CadastroUsuario}/>
             <Screen name="EditarUsuario" component={EditarUsuario}/>
         </Navigator>
