@@ -196,6 +196,7 @@ const style = StyleSheet.create({
 
   container: {
     // backgroundColor: '#F9FbFa',
+    // display:'flex',
     // margin:'auto',
     // alignItems: 'center',
     flex: 1,

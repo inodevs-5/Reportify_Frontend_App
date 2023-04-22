@@ -6,7 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import DocumentPicker from 'react-native-document-picker';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/auth';
-import {Picker} from '@react-native-picker/picker';
+
+
 interface Perfil {
   label: string;
   value: string;
@@ -22,23 +23,17 @@ export const EditarUsuario = () =>{
   const { usuario } = useAuth();
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);// do botão de enviar
-  const [selectedPerfil, setSelectedPerfil] = useState('administrador');
+  const [selectedPerfil, getSelectedPerfil] = useState('administrador');
   const perfis: Perfil[] = [
     { label: 'Administrador', value: 'administrador' },
     { label: 'Suporte', value: 'suporte' },
     { label: 'Ciente', value: 'cliente' },
   
   ];
-  const [selectedEmpresa, setSelectedEmpresa] = useState('empresa1');
-  const empresas: Empresa[] = [
-    { label: 'Empresa1', value: 'empresa1' },
-    { label: 'Empresa2', value: 'empresa2' },
-    { label: 'Empresa3', value: 'empresa3' },
-  
-  ];
+  const [selectedEmpresa, getSelectedEmpresa] = useState('empresa1');
 
     // inicio back
-    async function cadastrarUser() {
+    async function editarUser() {
       setLoading(true);
       try {
         const data = new FormData();
@@ -58,18 +53,18 @@ export const EditarUsuario = () =>{
 
   return (
 
-    <View style={style.container}><Text style={style.title2}>Cadastrar Novo Usuário</Text>
+    <View style={style.container}><Text style={style.title}>Editar Usuário</Text>
      {/* ScrollView = parte rolavel */}
-    <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}> 
+    <ScrollView style={style.scrollView}> 
       
       {/*Cada view alinha um titulo de campo e um input*/}
 
       <View style={style.campos2}>
-        <Text style={style.paragraph}>
+        <Text  style={style.paragraph}>
           Nome*
         </Text>
         <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setNome(texto)}
+        placeholder='' onChangeText={texto => getNome(texto)}
         ></TextInput>
       </View>
 
@@ -78,7 +73,7 @@ export const EditarUsuario = () =>{
           Email*
         </Text>
         <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setEmail(texto)}
+        placeholder='' onChangeText={texto => getEmail(texto)}
         ></TextInput>
       </View>
 
@@ -86,32 +81,29 @@ export const EditarUsuario = () =>{
         <Text style={style.paragraph}>
           Perfil*
         </Text>
-        
-        <Picker
-        selectedValue={selectedPerfil}
-        onValueChange={(itemValue) => setSelectedPerfil(itemValue)}
-        style={{ width: '70%', borderWidth: 1, borderColor: 'black', padding: 2 }}
-      > 
-        {perfis.map((perfil) => (
-          <Picker.Item style={style.input} label={perfil.label} value={perfil.value} key={perfil.value} />
-        ))}
-      </Picker>
-        
+        <TextInput style={style.input} 
+        placeholder='' onChangeText={texto => getPerfil(texto)}
+        ></TextInput>
       </View>
 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
           Empresa*
         </Text>
-        <Picker
-        selectedValue={selectedEmpresa}
-        onValueChange={(itemValue) => setSelectedEmpresa(itemValue)}
-        style={{ width: '70%', borderWidth: 1, borderColor: 'black', padding: 2 }}
-      > 
-        {empresas.map((empresa) => (
-          <Picker.Item style={style.input} label={empresa.label} value={empresa.value} key={empresa.value} />
-        ))}
-      </Picker>
+        <TextInput style={style.input} 
+        placeholder='' onChangeText={texto => getEmpresa(texto)}
+        ></TextInput>
+      </View>
+
+      <View style={style.campos2}>
+        <Text style={style.paragraph}>
+          Contato da Empresa*
+        </Text>
+      </View>
+      <View style={style.campos3}>
+        <TextInput style={style.input2} 
+        placeholder='' onChangeText={texto => getContatoEmpresa(texto)}
+        ></TextInput>
       </View>
 
       <View style={style.campos2}>
@@ -119,15 +111,15 @@ export const EditarUsuario = () =>{
           Senha*
         </Text>
         <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setSenha(texto)}
+        placeholder='' onChangeText={texto => getSenha(texto)}
         ></TextInput>
       </View>
       
       <View style={style.botaoalinha}>
         {!loading ? (
             <TouchableOpacity style={style.button}
-              onPress={cadastrarUser}>
-              <Text style={style.cadastra}>Enviar</Text>
+              onPress={editarUser}>
+              <Text style={style.cadastra} >Editar</Text>
             </TouchableOpacity>
         ) : (
           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -166,25 +158,26 @@ const style = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    height: '80%',
   },
   
   botaoalinha:{
-    marginLeft:'40%',
+    marginLeft:'27%',
   },
 
   button:{
-    width:160,
-    borderRadius:300,
+    width: 160,
+    borderRadius: 300,
     height: 40,
     backgroundColor: '#72A2FA',
-    marginTop:10,
-    marginBottom:10
+    marginTop: '10%',
+    marginBottom: 10
   },
 
   cadastra:{   //texto do botão de enviar
     textAlign:'center',
-   paddingTop:8,
-   color:'white'
+    paddingTop:8,
+    color:'white'
   },
 
   campos:{
@@ -199,10 +192,16 @@ const style = StyleSheet.create({
     marginRight: '3%',
     marginTop:'3%'
   },
+
+  campos3:{ //estilo do alinhamento input de responsável/supervisor
+    alignItems: 'center',
+    marginRight: '3%',
+    marginBottom:8,
+  },
   
   paragraph: {
     margin: 10,
-    fontSize:15,
+    fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'left',
   },
@@ -210,24 +209,17 @@ const style = StyleSheet.create({
   scrollView: {
     height: '20%',
     width: '90%',
-    marginTop:'3%',
-    marginBottom:'65%',
+    marginTop: '10%',
+    marginBottom: '15%',
     alignSelf: 'center',
-    padding:10,
+    padding: 10,
     backgroundColor: '#C3C9D0',
     borderRadius: 9,
   },
 
-  contentContainer: {  //Faz parte do estilo da scrollview
-    justifyContent: 'center',
-    backgroundColor: '#C3C9D0',
-    paddingBottom: 30,
-  },
-
-  title2:{ //titulos das divisões dos campos
+  title:{ //titulos das divisões dos campos
     fontSize: 24,
-    marginTop: 0,
-    textAlign: 'left',
+    marginTop: 10,
     color: 'black',
     fontWeight: 'bold',
   },
@@ -258,7 +250,7 @@ const style = StyleSheet.create({
     marginBottom: 10,
     top: 575,
     borderRadius: 35,
-    },
+  },
 
   input: {
     flex: 1,
@@ -318,7 +310,7 @@ const style = StyleSheet.create({
     width:300,
     height:60,
     borderRadius:20,
-    marginBottom:'20%',
+    marginBottom:'5%',
   },
 });
 
