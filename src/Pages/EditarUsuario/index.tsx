@@ -18,12 +18,20 @@ interface Empresa {
   value: string;
 }
 
-export const EditarUsuario = () =>{
+export const EditarUsuario = ({route}) =>{
   const navigation = useNavigation<propsStack>();
   const { usuario } = useAuth();
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);// do botão de enviar
   const [selectedPerfil, getSelectedPerfil] = useState('administrador');
+
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [perfil, setPerfil] = useState('');
+  const [empresa, setEmpresa] = useState('');
+  const [contato, setContato] = useState('');
+  const [senha, setSenha] = useState('');
+  const id = route.params.id
   const perfis: Perfil[] = [
     { label: 'Administrador', value: 'administrador' },
     { label: 'Suporte', value: 'suporte' },
@@ -36,20 +44,32 @@ export const EditarUsuario = () =>{
     async function editarUser() {
       setLoading(true);
       try {
-        const data = new FormData();
-
-        data.append('nome', nome);
-        data.append('email', email);
-        data.append('perfil', perfil);
-        data.append('empresa', empresa);
-        data.append('senha', senha);
-
-        navigation.navigate('Home')
+        api.put('/usuario/'+id , {nome, email, perfil, empresa, contato, senha })
       } catch (response) {
         Alert.alert(response.data.msg);
       }
       setLoading(false);
     }
+
+
+    useEffect(() => {
+      (async () => {
+        try {
+          const response = await api.get('/usuario/'+id);
+  
+          setNome(response.data.nome);
+          setEmail(response.data.email);
+          setPerfil(response.data.perfil);
+          setEmpresa(response.data.empresa);
+          setContato(response.data.contato_empresa);
+          setSenha(response.data.senha);
+          setLoading(false)
+        } catch (response) {
+          setErrorMessage(response.data.msg);
+        }
+      })();
+    }, []);
+
 
   return (
 
@@ -63,8 +83,8 @@ export const EditarUsuario = () =>{
         <Text  style={style.paragraph}>
           Nome*
         </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => getNome(texto)}
+        <TextInput value={nome} style={style.input} 
+        placeholder='' onChangeText={texto => setNome(texto)}
         ></TextInput>
       </View>
 
@@ -72,8 +92,8 @@ export const EditarUsuario = () =>{
         <Text style={style.paragraph}>
           Email*
         </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => getEmail(texto)}
+        <TextInput value={email} style={style.input} 
+        placeholder='' onChangeText={texto => setEmail(texto)}
         ></TextInput>
       </View>
 
@@ -81,8 +101,8 @@ export const EditarUsuario = () =>{
         <Text style={style.paragraph}>
           Perfil*
         </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => getPerfil(texto)}
+        <TextInput value={perfil} style={style.input} 
+        placeholder='' onChangeText={texto => setPerfil(texto)}
         ></TextInput>
       </View>
 
@@ -90,8 +110,8 @@ export const EditarUsuario = () =>{
         <Text style={style.paragraph}>
           Empresa*
         </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => getEmpresa(texto)}
+        <TextInput value={empresa} style={style.input} 
+        placeholder='' onChangeText={texto => setEmpresa(texto)}
         ></TextInput>
       </View>
 
@@ -101,8 +121,8 @@ export const EditarUsuario = () =>{
         </Text>
       </View>
       <View style={style.campos3}>
-        <TextInput style={style.input2} 
-        placeholder='' onChangeText={texto => getContatoEmpresa(texto)}
+        <TextInput value={contato} style={style.input2} 
+        placeholder='' onChangeText={texto => setContato(texto)}
         ></TextInput>
       </View>
 
@@ -110,8 +130,8 @@ export const EditarUsuario = () =>{
         <Text style={style.paragraph}>
           Senha*
         </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => getSenha(texto)}
+        <TextInput value={senha} style={style.input} 
+        placeholder='' onChangeText={texto => setSenha(texto)}
         ></TextInput>
       </View>
       
