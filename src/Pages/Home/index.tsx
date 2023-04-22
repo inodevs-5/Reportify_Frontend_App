@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
-import Menu from '../../components/menu';
 
 export const Home = () =>{
   const { usuario, signOut } = useAuth();
@@ -32,33 +31,74 @@ export const Home = () =>{
        </View>
 
      <View style={style.buttons}>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('TabelaROs')
-        }>
-        <Text style={style.enterButton}>Registro de Ocorrência</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('MembroSuporte')
-        }>
-        <Text style={style.enterButton}>Membros do Suporte</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('CadastroRO')
-        }>
-        <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={style.button}
-        onPress={() => 
-        navigation.navigate('CadastroUsuario')
-        }>
-        <Text style={style.enterButton}>Cadastrar Novo Usuário</Text>
-      </TouchableOpacity>
+
+        {usuario.perfil === "admin" ? ( 
+          <>
+          <TouchableOpacity style={style.buttonAdm}
+            onPress={() => 
+            navigation.navigate('TabelaROs')
+            }>
+            <Text style={style.enterButton}>Registro de Ocorrência</Text>
+          </TouchableOpacity>
+    
+          <TouchableOpacity style={style.buttonAdm}
+            onPress={() => 
+            navigation.navigate('MembroSuporte')
+            }>
+            <Text style={style.enterButton}>Membros do Suporte</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={style.buttonAdm}
+            onPress={() => 
+            navigation.navigate('CadastroRO')
+            }>
+            <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={style.buttonAdm}
+            onPress={() => 
+            navigation.navigate('CadastroUsuario')
+            }>
+            <Text style={style.enterButton}>Cadastrar Novo Usuário</Text>
+          </TouchableOpacity>
+          </>
+        ) : ( 
+          <>
+          <TouchableOpacity style={style.buttonClt}
+            onPress={() => 
+            navigation.navigate('CadastroRO')
+            }>
+            <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
+          </TouchableOpacity>
+    
+          <TouchableOpacity style={style.buttonClt2}
+            onPress={() => 
+            navigation.navigate('TabelaROs', {type: "specific"})
+            }>
+            <Text style={style.enterButton}>Acompanhar Meus Registros de Ocorrência</Text>
+          </TouchableOpacity>
+          </>
+        )}
+
       </View>
 
-  <Menu></Menu>
+  <View style={style.containermenu}>
+      <View style={style.menu}>
+        <TouchableOpacity style={style.enterButton}>
+        <Icon name='home' size={27} style={style.iconHome}
+          onPress={() => 
+            navigation.navigate('Login')
+            }/>
+        </TouchableOpacity>
+   
+        <TouchableOpacity style={style.enterButton}>
+        <Icon name='notifications' size={27} style={style.iconNotif}
+          onPress={() => 
+            navigation.navigate('Login')
+            }/>
+        </TouchableOpacity>
+      </View>
+      </View>
 
     </View>
   );

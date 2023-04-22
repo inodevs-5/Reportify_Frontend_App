@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator ,Alert, KeyboardAvoidingView} from 'react-native';
+import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import { propsStack } from '../../Routes/Stack/Models';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -11,14 +11,13 @@ export const TabelaROs = ({ route }) =>{
     const navigation = useNavigation<propsStack>()
     const { usuario } = useAuth();
     const [input, setInput] = useState('');
-    const [inputFocus, setInputFocus] = useState(false);
+
     const [errorMessage, setErrorMessage] = useState(null);
     const [ros, setRos] = useState();
     const [allRos, setAllRos] = useState();
     const [myRos, setMyRos] = useState();
     const [loading, setLoading] = useState(true);
     const [selectedFirstButton, setSelectedFirstButton] = useState(true);
-
 
     useEffect(() => {
       (async () => {
@@ -74,23 +73,18 @@ export const TabelaROs = ({ route }) =>{
       }
     }
 
-    function handlePress(_id:Ro): void {
-      navigation.navigate('EditaRos' , {_id})
-
-      // console.warn(_id)
-    }
-
-
-
   return (
-    <KeyboardAvoidingView
-    behavior={Platform.OS === 'ios' ? 'padding' : null}
-    style={{flex: 1, backgroundColor: '#ffff',}}
-    keyboardVerticalOffset={100}>
-      <ScrollView 
-    contentContainerStyle={{ flexGrow: 1 }} 
-    keyboardShouldPersistTaps="always"
-  >
+    // <View style={style.container}>
+    // <TextInput style={style.busca}  
+    //   placeholder='Buscar RO'  
+    //   value={input} 
+    //   onChangeText={(texto => setInput(texto))}>
+    // </TextInput> 
+    // <TouchableOpacity onPress={pesquisar}>
+    //   <Icon name='search' size={21} style={style.searchIcon}/>
+    // </TouchableOpacity>
+    // <View style={style.bar}/> 
+
 <View style={style.container}>
     <View style={style.containerbusca}>
         <View style={style.container12}>
@@ -99,8 +93,8 @@ export const TabelaROs = ({ route }) =>{
            value={input} 
            onChangeText={(texto => setInput(texto))}>
           </TextInput>
-          <TouchableOpacity style={style.searchIcon} onPress={pesquisar}>
-          <Icon name='search' size={21} />
+          <TouchableOpacity onPress={pesquisar}>
+          <Icon name='search' size={21} style={style.searchIcon}/>
            </TouchableOpacity>
         </View>
         <View style={style.bar}/>
@@ -130,14 +124,11 @@ export const TabelaROs = ({ route }) =>{
 
     <View style={style.squareContainer}>
     <View style={usuario.perfil == 'cliente' ? {height: 520} : {height: 460}}>
-
       {errorMessage && <Text style={{color: 'red', textAlign: 'center'}}>{errorMessage}</Text>}
-      <ScrollView nestedScrollEnabled={true}> 
+      <ScrollView style={style.scroll}>
       {
         ros && !loading ? ros.map(ro => (
         <View key={ro._id} style={style.square}>
-        <TouchableOpacity onPress={() => handlePress(ro._id) }>
-            <View>
           <Text style={style.square}> <Text style={style.bold}>#{ro._id} </Text>
               {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
               {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
@@ -148,60 +139,76 @@ export const TabelaROs = ({ route }) =>{
               ) : (
                 <>{'\n'} <Text style={style.bold}>Categoria: </Text>{ro.suporte ? ro.suporte.fase : "A definir"}</>
               )}
+
           </Text>
           </View>
-          </TouchableOpacity>
-          </View>
-        )) 
-      :
-      <View style={{ height:40 }}>
-        <ActivityIndicator size="large" color="#666"/>
-    </View>
-    }
+        )) :
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator size="large" color="#666"/>
+      </View>
+      }
       </ScrollView>
     </View>
-    <Menu/>
-      
+{/* <View style={fler}> */}
+    <View >
+      <View style={style.menu}>
+        <TouchableOpacity style={style.enterButton}>
+        <Icon name='home' size={27} style={style.iconHome}
+          onPress={() => 
+            navigation.navigate('Home')
+            }/>
+        </TouchableOpacity>
+   
+        <TouchableOpacity style={style.enterButton}>
+        <Icon name='notifications' size={27} style={style.iconNotif}
+          onPress={() => 
+            navigation.navigate('Login')
+            }/>
+        </TouchableOpacity>
+      </View>
+      </View>
+       {/* </View> */}
+      </View>
     </View>
-    </ScrollView>
-    
-    </KeyboardAvoidingView>
-    
   );
 };
 
 const style = StyleSheet.create({
+  menu:{
+    display:'flex',
+    justifyContent:'space-around',
+    backgroundColor: '#2B3467',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width:300,
+    height:60,
+    borderRadius:20,
+    marginBottom:10,
+   },
   containerbusca:{
     display:'flex',
     flexDirection:'column',
-    width:"80%",
-    marginVertical:20,
-    height:0
-    
+    alignItems:'center',
+    marginTop: 6 ,
+    // backgroundColor:'red',
   },
   container12:{
     flexDirection:'row',
-    // width: '70%',
+    width:300,
     height:40,
     margin:'auto',
     alignItems:'center',
-    justifyContent:'space-around',
+    justifyContent:'space-between',
+    // backgroundColor:'yellow',
   },
 squareContainer: {
     flexDirection: 'column',
-    alignItems:'center',
-    // backgroundColor:"red",
-    justifyContent:'center',
-    borderRadius:20,
-    maxHeight:500,
-    // backgroundColor: 'red',
-    padding:5,
-    marginTop:"10%",
-    },
+    // alignItems: 'center',
+  },
   square: {
     width: 300,
-    minHeight: 100,
-    backgroundColor: '#c3c9d0',
+    height: 150,
+    backgroundColor: '#C3C9D0',
     marginVertical: 10,
     borderRadius: 10,
     fontWeight: 'normal',
@@ -209,18 +216,38 @@ squareContainer: {
   },
 
   searchIcon:{
-    width:"15%",
-    alignItems:'flex-end',
-    padding:2,
+    color: 'black',
   },
   
   busca:{
     textAlign: 'left',
-    width: '80%',
+    width: 300,
+    height:40,
+    // marginBottom: -30,
     fontWeight: 'bold',
   },
 
+  iconNotif:{
+    paddingLeft: 70,
+    color: 'white',
+  },
+  
+  iconHome: {
+    // paddingLeft: 90,
+    color: 'white',
+  },
 
+  div: {
+    position: 'absolute',
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin:"auto",
+    width: 300,
+    height: 70,
+    backgroundColor: '#2B3467',
+    top: 500,
+    borderRadius: 35,
+  },
 
   title:{
     fontSize: 35,
@@ -231,17 +258,45 @@ squareContainer: {
     fontWeight: 'bold',
   },
 
+  input: {
+    flex: 1,
+    alignItems:'center',
+    flexDirection:'row',
+    backgroundColor: '#ffff',
+    justifyContent:'space-between',
+    margin:'auto',
+    color: 'black',
+    paddingLeft:6,
+    width:300,
+    height:40,
+    marginBottom: 10,
+    borderRadius:300,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+  },
+
   container: {
     flex: 1,
     ...Platform.select({
       ios: { fontFamily: 'Arial', }, 
       android: { fontFamily: 'Roboto' }}), 
     display:'flex',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     margin:'auto',
-    // height:"300%",
     alignItems: 'center',
     flexDirection: 'column',
+  },
+
+  hyperlinkStyle: {
+    color: '#72A2FA',
+    marginTop: 25,
+    fontSize: 12
   },
 
   button:{
@@ -280,28 +335,26 @@ squareContainer: {
     flexWrap: 'wrap',
   },
   
+  enterButton:{
+    color: 'white',
+    fontSize: 20,
+  },
 
   bar:{
     backgroundColor: '#68696C',
-    width: "80%",
+    width: 290,
     height: 2,
-    marginTop: -6
+    marginTop: 0
+  },
+  scroll: { 
+    marginLeft: 10,
+    paddingRight: 10,
+
   },
   bold: {
-    fontWeight: '700',
+    fontWeight: 'bold',
     color: '#000',
-  },
-  normal: {
-    fontWeight: '600',
-    color: '#000',
-  },
-  urgente: {
-    fontWeight: '600',
-    color: '#ff0000',
   }
 });
 
 export default TabelaROs;
-
-
-
