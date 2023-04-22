@@ -23,7 +23,7 @@ export const CadastroUsuario = () =>{
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [empresa, setEmpresa] = useState('');
-  const [contato_empresa, setContatoEmpresa]
+  const [contato_empresa, setContatoEmpresa] = useState('');
 
   // const [empresa, setEmpresa] = useState('');
   const [senha, setSenha] = useState('');
@@ -92,7 +92,7 @@ export const CadastroUsuario = () =>{
           {/*Abaixo o picker*/}
           <Picker 
           selectedValue={selectedPerfil}  
-          onValueChange={(itemValue) => setPerfil(itemValue)}
+          onValueChange={(itemValue) => setSelectedPerfil(itemValue)}
           style={{ width: '90%', borderWidth: 1, borderColor: 'black', padding: 2, }}
         > 
         {/*itens do picker*/}
