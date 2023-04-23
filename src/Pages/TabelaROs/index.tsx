@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator} from 'react-native';
+import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator, KeyboardAvoidingView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import { propsStack } from '../../Routes/Stack/Models';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -7,17 +7,18 @@ import api from '../../services/api';
 import { ScrollView } from 'react-native';
 import { useAuth } from '../../contexts/auth';
 
-export const TabelaROs = ({ route }) =>{
+export const TabelaROs = () =>{
     const navigation = useNavigation<propsStack>()
     const { usuario } = useAuth();
     const [input, setInput] = useState('');
-
     const [errorMessage, setErrorMessage] = useState(null);
     const [ros, setRos] = useState();
     const [allRos, setAllRos] = useState();
     const [myRos, setMyRos] = useState();
     const [loading, setLoading] = useState(true);
     const [selectedFirstButton, setSelectedFirstButton] = useState(true);
+
+    const [inputFocus, setInputFocus] = useState(false);
 
     useEffect(() => {
       (async () => {
@@ -27,6 +28,7 @@ export const TabelaROs = ({ route }) =>{
             const response = await api.get('/ro');
             setAllRos(response.data);
             setRos(response.data);
+            setLoading(false)
             const response2 = await api.get('/ro/atribuido/' + usuario._id);
             setMyRos(response2.data);
           } else {
@@ -73,6 +75,12 @@ export const TabelaROs = ({ route }) =>{
       }
     }
 
+    function handlePress(_id:Ro): void {
+      navigation.navigate('EditaRos' , {_id})
+
+      // console.warn(_id)
+    }
+
   return (
     // <View style={style.container}>
     // <TextInput style={style.busca}  
@@ -85,105 +93,113 @@ export const TabelaROs = ({ route }) =>{
     // </TouchableOpacity>
     // <View style={style.bar}/> 
 
-<View style={style.container}>
-    <View style={style.containerbusca}>
-        <View style={style.container12}>
-          <TextInput style={style.busca}
-           placeholder='Buscar RO'  
-           value={input} 
-           onChangeText={(texto => setInput(texto))}>
-          </TextInput>
-          <TouchableOpacity onPress={pesquisar}>
-          <Icon name='search' size={21} style={style.searchIcon}/>
-           </TouchableOpacity>
-        </View>
-        <View style={style.bar}/>
-      </View>
-
-      {usuario && usuario.perfil === 'admin' && 
-        <View style={style.groupButtons}>
-
-          <TouchableOpacity style={selectedFirstButton ? style.buttonSelected : style.button} onPress={changeToAll}>
-            <Text style={style.textButton}>Todos registros</Text>
-          </TouchableOpacity> 
-
-          <TouchableOpacity style={!selectedFirstButton ? style.buttonSelected : style.button} onPress={changeToMyTasks}>
-            <Text style={style.textButton}>Minhas Tasks</Text>
-          </TouchableOpacity>
-
-        </View>
-      }
-
-     {/* <TextInput style={style.busca}  
-        placeholder='Buscar RO'  
-        value={input} 
-        onChangeText={(texto => setInput(texto))}>
-      </TextInput>
-      <Icon name='search' size={21} style={style.searchIcon}/>
-      <View style={style.bar}/>  */}
-
-    <View style={style.squareContainer}>
-    <View style={usuario.perfil == 'cliente' ? {height: 520} : {height: 460}}>
-      {errorMessage && <Text style={{color: 'red', textAlign: 'center'}}>{errorMessage}</Text>}
-      <ScrollView style={style.scroll}>
-      {
-        ros && !loading ? ros.map(ro => (
-        <View key={ro._id} style={style.square}>
-          <Text style={style.square}> <Text style={style.bold}>#{ro._id} </Text>
-              {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
-              {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
-              
-              {!selectedFirstButton ? (
-                <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.responsavel ? ro.responsavel.nome : "A definir"}</>
-
-              ) : (
-                <>{'\n'} <Text style={style.bold}>Categoria: </Text>{ro.suporte ? ro.suporte.fase : "A definir"}</>
-              )}
-
-          </Text>
+      <ScrollView 
+    contentContainerStyle={{ flexGrow: 1 }} 
+    keyboardShouldPersistTaps="always"
+    >
+    <View style={style.container}>
+        <View style={style.containerbusca}>
+            <View style={style.container12}>
+              <TextInput style={style.busca}
+              placeholder='Buscar RO'  
+              value={input} 
+              onChangeText={(texto => setInput(texto))}>
+              </TextInput>
+              <TouchableOpacity onPress={pesquisar}>
+              <Icon name='search' size={21} style={style.searchIcon}/>
+              </TouchableOpacity>
+            </View>
+            <View style={style.bar}/>
           </View>
-        )) :
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <ActivityIndicator size="large" color="#666"/>
-      </View>
-      }
-      </ScrollView>
-    </View>
-{/* <View style={fler}> */}
-    <View >
-      <View style={style.menu}>
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='home' size={27} style={style.iconHome}
-          onPress={() => 
-            navigation.navigate('Home')
-            }/>
-        </TouchableOpacity>
-   
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='notifications' size={27} style={style.iconNotif}
-          onPress={() => 
-            navigation.navigate('Login')
-            }/>
-        </TouchableOpacity>
-      </View>
-      </View>
-       {/* </View> */}
-      </View>
-    </View>
+
+          {usuario && usuario.perfil === 'admin' && 
+            <View style={style.groupButtons}>
+
+              <TouchableOpacity style={selectedFirstButton ? style.buttonSelected : style.button} onPress={changeToAll}>
+                <Text style={style.textButton}>Todos registros</Text>
+              </TouchableOpacity> 
+
+              <TouchableOpacity style={!selectedFirstButton ? style.buttonSelected : style.button} onPress={changeToMyTasks}>
+                <Text style={style.textButton}>Minhas Tasks</Text>
+              </TouchableOpacity>
+
+            </View>
+          }
+
+        {/* <TextInput style={style.busca}  
+            placeholder='Buscar RO'  
+            value={input} 
+            onChangeText={(texto => setInput(texto))}>
+          </TextInput>
+          <Icon name='search' size={21} style={style.searchIcon}/>
+          <View style={style.bar}/>  */}
+
+        <View style={style.squareContainer}>
+        <View style={usuario.perfil == 'cliente' ? {height: 520} : {height: 460}}>
+          {errorMessage && <Text style={{color: 'red', textAlign: 'center'}}>{errorMessage}</Text>}
+          <ScrollView style={style.scroll}>
+          {
+            ros && !loading ? ros.map(ro => (
+            <View key={ro._id} style={style.square}>
+              <TouchableOpacity onPress={() => handlePress(ro._id) }>
+              <Text style={style.square}> <Text style={style.bold}>#{ro._id} </Text>
+                  {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
+                  {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
+                  
+                  {!selectedFirstButton ? (
+                    <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.responsavel ? ro.responsavel.nome : "A definir"}</>
+
+                  ) : (
+                    <>{'\n'} <Text style={style.bold}>Categoria: </Text>{ro.suporte ? ro.suporte.fase : "A definir"}</>
+                  )}
+
+              </Text>
+              </TouchableOpacity>
+              </View>
+            )) :
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <ActivityIndicator size="large" color="#666"/>
+          </View>
+          }
+          </ScrollView>
+        </View>
+    {/* <View style={fler}> */}
+        <View >
+          <View style={style.menu}>
+            <TouchableOpacity style={style.enterButton}>
+            <Icon name='home' size={27} style={style.iconHome}
+              onPress={() => 
+                navigation.navigate('Home')
+                }/>
+            </TouchableOpacity>
+      
+            <TouchableOpacity style={style.enterButton}>
+            <Icon name='notifications' size={27} style={style.iconNotif}
+              onPress={() => 
+                navigation.navigate('Login')
+                }/>
+            </TouchableOpacity>
+          </View>
+          </View>
+          {/* </View> */}
+          </View>
+        </View>
+        </ScrollView>
   );
 };
 
 const style = StyleSheet.create({
   menu:{
-    display:'flex',
+    display: 'flex',
     justifyContent:'space-around',
     backgroundColor: '#2B3467',
     alignItems: 'center',
     flexDirection: 'row',
-    width:300,
-    height:60,
-    borderRadius:20,
-    marginBottom:10,
+    width: 300,
+    height: 60,
+    borderRadius: 20,
+    marginBottom: 10,
+    marginLeft: 8,
    },
   containerbusca:{
     display:'flex',
