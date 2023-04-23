@@ -4,9 +4,10 @@ import AuthRoutes from "./Stack/auth.routes";
 import Routes from "./Stack/routes";
 import { useAuth } from '../contexts/auth';
 import { ActivityIndicator, View } from 'react-native';
+import AdminRoutes from "./Stack/admin.routes";
 
 export default function () {
-    const { signed, loading } = useAuth();
+    const { signed, loading, usuario } = useAuth();
 
     if (loading) {
         return (
@@ -18,7 +19,7 @@ export default function () {
 
    return(
     <NavigationContainer>
-        {signed ? <AuthRoutes /> : <Routes />}
+        {usuario && usuario.perfil == "admin" ? <AdminRoutes /> : signed ? <AuthRoutes /> : <Routes />}
     </NavigationContainer>
     )
 
