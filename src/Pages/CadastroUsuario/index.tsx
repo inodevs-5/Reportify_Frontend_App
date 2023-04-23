@@ -136,7 +136,7 @@ export const CadastroUsuario = () =>{
             Senha*
           </Text>
           <TextInput style={style.input} 
-          placeholder='' onChangeText={texto => setSenha(texto)}
+          placeholder='' onChangeText={texto => setSenha(texto)} secureTextEntry={true}
           ></TextInput>
         </View>
 

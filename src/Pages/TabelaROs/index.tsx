@@ -28,7 +28,6 @@ export const TabelaROs = () =>{
             const response = await api.get('/ro');
             setAllRos(response.data);
             setRos(response.data);
-            setLoading(false)
             const response2 = await api.get('/ro/atribuido/' + usuario._id);
             setMyRos(response2.data);
           } else {

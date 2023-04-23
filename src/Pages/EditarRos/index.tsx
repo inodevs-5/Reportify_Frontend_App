@@ -8,7 +8,8 @@ import {
   TouchableOpacity, 
   TextInput,
   KeyboardAvoidingView, 
-  Alert
+  Alert,
+  ActivityIndicator
 } 
 from 'react-native';
 import {Picker} from '@react-native-picker/picker';
@@ -17,9 +18,11 @@ import { useNavigation } from '@react-navigation/native';;
 import { Ro } from '../../types/Types';
 import Menu from '../../components/menu';
 import api from '../../services/api';
+import { useAuth } from '../../contexts/auth';
 
 
 const EditaRos = ({route}) => {
+  const { usuario } = useAuth(); 
   const navigation = useNavigation();
     const [loading, setLoading] = useState(true);
     const numer = route.params._id
@@ -56,6 +59,8 @@ const EditaRos = ({route}) => {
     const [situacao, setSituacao] = useState('')
     const [justificativaReclassificacao, setJustificativaReclassificacao] = useState('')
     const [validacaoFechamentoRo, setValidacaoFechamentoRo] = useState('')
+    const [usuarios, setUsuarios] = useState()
+    const [idcolaboradorIACIT, setIdColaboradorIACIT] = useState()
      
     useEffect(() => {
       (async () => {
@@ -88,10 +93,15 @@ const EditaRos = ({route}) => {
           setNome(response.data.suporte.colaboradorIACIT.nome);
           setValidacaoFechamentoRo(response.data.suporte.validacaoFechamentoRo);
           setJustificativaReclassificacao(response.data.suporte.justificativaReclassificacao)
+          setIdColaboradorIACIT(response.data.suporte.colaboradorIACIT.id)
+
+          const response2 = await api.get('/usuario')
+          setUsuarios(response2.data)
           setLoading(false)
         } catch (response) {
           setErrorMessage(response.data.msg);
         }
+        setLoading(false)
       })();
           
     },[] );
@@ -103,6 +113,7 @@ const EditaRos = ({route}) => {
         {
             categoria,
             fase , 
+            idcolaboradorIACIT,
             melhoria ,
             classificacao , 
             nome,
@@ -183,12 +194,11 @@ const EditaRos = ({route}) => {
     const horaFormatada  = dataObj.toLocaleTimeString("pt-BR", opcoesHora); 
 
   return (
-
-  
     <KeyboardAvoidingView
     behavior={Platform.OS === 'ios' ? 'padding' : null}
     style={{flex: 1, backgroundColor: '#ffff',}}
     keyboardVerticalOffset={100}>
+        {!loading ? <>
           <ScrollView 
             contentContainerStyle={{ flexGrow: 1 }} 
             keyboardShouldPersistTaps="always"
@@ -198,8 +208,10 @@ const EditaRos = ({route}) => {
               <View style={style.container_edi}>
 
           <ScrollView nestedScrollEnabled={true}> 
+
                   <View style={style.container_ro} >
                     <View style={style.container_r}>
+
                     <Text style={style.text1}>RO#</Text>
                     <Text style={style.text1}>{ro._id}</Text>
                     </View>
@@ -438,11 +450,23 @@ const EditaRos = ({route}) => {
                             defaultValue={categoria}
                             onChangeText={categoria => setCategoria(categoria)} >
                             </TextInput> 
-                      <Text style={style.text}>Responsável</Text>
-                            <TextInput style={style.input}
-                            onChangeText={ nome => setNome( nome)} 
-                            defaultValue={nome}
-                            ></TextInput>
+                            <Text style={style.text}>Responsável:</Text>
+                            <View>
+                              <Picker
+                                style={style.picker}
+                                selectedValue={idcolaboradorIACIT}
+                                onValueChange={(itemValue, itemIndex) =>{
+                                  setIdColaboradorIACIT(itemValue)
+                                  setNome(usuarios[itemIndex-1].nome)
+                                }
+                              }>
+                                <Picker.Item  label={nome} value={idcolaboradorIACIT} enabled={false} />
+                                {usuarios && usuarios.map(usuario => (
+                                  <Picker.Item key={usuario._id} label={usuario.nome} value={usuario._id} />
+                                ))}
+                              </Picker>
+                            </View>
+
                       <View style={style.campos1}>
                           <Text style={style.text}>Justificativa de Reclassificação / Ações Tomadas</Text>
                               <View>
@@ -473,7 +497,7 @@ const EditaRos = ({route}) => {
                       )}
 
                       {
-                         fase == "aguardando validacao" ? (
+                         fase == "aguardando validacao" && usuario.perfil === "admin" ? (
                             <View style={style.conatualiza}>
                                 <TouchableOpacity
                                 style={style.atualiza1}
@@ -503,8 +527,13 @@ const EditaRos = ({route}) => {
         </View>
     </View> 
   </ScrollView>
+  </> : 
+  <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <ActivityIndicator size="large" color="#666"/>
+  </View>
+}
 </KeyboardAvoidingView>
-    
+
   );
 };
 

@@ -100,7 +100,7 @@ export const CadastroRO = () =>{
         data.append('fase', fase);
         data.append('orgao', orgao);
         data.append('idRelator', selectedUser);
-        // data.append('nomeRelator', relator);
+        data.append('nomeRelator', relator);
         data.append('posGradRelator', posGradRelator);
         data.append('nomeResponsavel', responsavel);
         data.append('posGradResponsavel', posGradResponsavel);
@@ -179,10 +179,12 @@ export const CadastroRO = () =>{
         <Text style={style.paragraph}>
           Relator*
         </Text>
-
         <Picker
           selectedValue={selectedUser}
-          onValueChange={(itemValue) => setSelectedUser(itemValue)}
+          onValueChange={(itemValue, itemIndex) => {
+            setSelectedUser(itemValue)
+            setRelator(usuarios[itemIndex-1].nome)}
+          }
           style={{ width: '82%', marginVertical:10}}
         >
 

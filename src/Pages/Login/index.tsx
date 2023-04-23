@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking} from 'react-native';
+import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking, ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useAuth } from '../../contexts/auth';
 
@@ -19,13 +19,16 @@ export const Login = () =>{
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false)
 
   async function login() {
+    setLoading(true);
     try {
       await signIn(email, senha);
     } catch (response) {
       setErrorMessage(response.data.msg);
     }
+    setLoading(false);
   }
 
   return (
@@ -59,10 +62,18 @@ export const Login = () =>{
         }
         </TouchableOpacity>
     </View>
+      {
+        !loading ? (
+          <TouchableOpacity style={style.button} onPress={login}>
+            <Text style={style.valeu}>Send</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <ActivityIndicator size="large" color="#666"/>
+          </View>
+        )
+      }
 
-      <TouchableOpacity style={style.button} onPress={login}>
-        <Text style={style.valeu}>Send</Text>
-      </TouchableOpacity>
       <Text
             style={style.hyperlinkStyle}
             onPress={() => {
