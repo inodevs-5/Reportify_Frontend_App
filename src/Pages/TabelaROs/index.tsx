@@ -141,13 +141,13 @@ export const TabelaROs = () =>{
               <TouchableOpacity onPress={() => handlePress(ro._id) }>
               <Text style={style.square}> <Text style={style.bold}>#{ro._id} </Text>
                   {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
-                  {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
+                  {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte && ro.suporte.fase ? ro.suporte.fase : "Pendente"}
                   
                   {!selectedFirstButton ? (
-                    <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.responsavel ? ro.responsavel.nome : "A definir"}</>
+                    <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.suporte && ro.suporte.colaboradorIACIT ? ro.suporte.colaboradorIACIT.nome : "A definir"}</>
 
                   ) : (
-                    <>{'\n'} <Text style={style.bold}>Categoria: </Text>{ro.suporte ? ro.suporte.fase : "A definir"}</>
+                    <>{'\n'} <Text style={style.bold}>Categoria: </Text>{ro.suporte ? ro.suporte.categoria : "A definir"}</>
                   )}
 
               </Text>
