@@ -8,6 +8,7 @@ import { propsNavigationStack } from "./Models";
 import EditaRos from "../../Pages/EditarRos";
 import CadastroUsuario from "../../Pages/CadastroUsuario";
 import EditarUsuario from "../../Pages/EditarUsuario";
+import Notificacoes from "../../Pages/Notificacoes";
 
 const { Navigator, Screen } = createNativeStackNavigator<propsNavigationStack>()
 
@@ -23,6 +24,8 @@ export default function AdminRoutes () {
             <Screen name="EditarUsuario" component={EditarUsuario}/>
             <Screen name="MembroSuporte" component={MembroSuporte}/>
             <Screen name="CadastroUsuario" component={CadastroUsuario}/> 
+            <Screen name="Notificacoes" component={Notificacoes}/>
+
         </Navigator>
     )
 }

@@ -94,7 +94,7 @@ export const Home = () =>{
         <TouchableOpacity style={style.enterButton}>
         <Icon name='notifications' size={27} style={style.iconNotif}
           onPress={() => 
-            navigation.navigate('Login')
+            navigation.navigate('Notificacoes')
             }/>
         </TouchableOpacity>
       </View>

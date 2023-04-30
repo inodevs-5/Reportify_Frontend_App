@@ -19,7 +19,7 @@ export const Menu = ()  => {
         <TouchableOpacity style ={style.enterButton}>
         <Icon name='notifications' size={27} style={style.iconHome}
           onPress={() => 
-            navigation.navigate('Login')
+            navigation.navigate('Notificacoes')
             }/>
         </TouchableOpacity>
       </View>
