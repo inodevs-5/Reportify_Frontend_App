@@ -8,7 +8,7 @@ Este README contém as informações necessárias para a execução do front-end
 
 #
 
-## Requesitos:
+## Requesitos: 
 - Node >= 18.14.2
 - NPM >= 9.5.0
 - O emulador da aplicação pode ser feito com as duas opções abaixo:
