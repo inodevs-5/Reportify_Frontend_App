@@ -17,8 +17,25 @@ export default function () {
         )
     }
 
+    const linking = {
+        prefixes: ["app://reportify", "http://reportify-app-inodevs-2023"],
+        config: {
+            screens: {
+                Login: {
+                    path: ""
+                },
+                RedefinirSenha: {
+                    path: "senha/:id",
+                    parse: {
+                        id: (id) => `${id}`,
+                    }
+                }
+            }
+        }
+    }  
+
    return(
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
         {usuario && usuario.perfil == "admin" ? <AdminRoutes /> : signed ? <AuthRoutes /> : <Routes />}
     </NavigationContainer>
     )
