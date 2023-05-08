@@ -64,9 +64,9 @@ export const Home = () =>{
 
           <TouchableOpacity style={style.buttonChat}
            onPress={() => 
-            navigation.navigate('Chat')
+            navigation.navigate('Contatos')
             }>
-            <Icon style={style.icon} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
+              <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
           </TouchableOpacity>
           </>
         ) : ( 
@@ -119,15 +119,24 @@ const style = StyleSheet.create({
   },
 
   buttonChat:{
-      backgroundColor:'red',
-      width:'18%',
+      backgroundColor: '#72A2FA',
+      flexDirection:'row',
+      justifyContent:'space-around',
+      // width:'18%',
       alignItems:'center',
-      borderRadius:200
+      width: 300,
+      padding: 15,
+      marginBottom: 20,
+      borderRadius: 7,
 
   },
 icon:{
  padding:10
 },
+iconchat:{
+  // padding:10,
+  color:'white'
+ },
   containerbusca:{
     // backgroundColor:'yellow',
     display:'flex',

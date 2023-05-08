@@ -76,21 +76,9 @@ export const TabelaROs = () =>{
 
     function handlePress(_id:Ro): void {
       navigation.navigate('EditaRos' , {_id})
-
-      // console.warn(_id)
     }
 
   return (
-    // <View style={style.container}>
-    // <TextInput style={style.busca}  
-    //   placeholder='Buscar RO'  
-    //   value={input} 
-    //   onChangeText={(texto => setInput(texto))}>
-    // </TextInput> 
-    // <TouchableOpacity onPress={pesquisar}>
-    //   <Icon name='search' size={21} style={style.searchIcon}/>
-    // </TouchableOpacity>
-    // <View style={style.bar}/> 
 
       <ScrollView 
     contentContainerStyle={{ flexGrow: 1 }} 

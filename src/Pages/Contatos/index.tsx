@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {Dimensions,KeyboardAvoidingView, View,Text,TextInput,TouchableOpacity,Platform, Linking, ScrollView, Button, Alert, ActivityIndicator} from 'react-native';
+import {Dimensions,KeyboardAvoidingView, View,Text,TextInput,TouchableOpacity,Platform, Linking, ScrollView, Button, Alert, ActivityIndicator, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
@@ -12,63 +12,60 @@ export const Contatos = () =>{
     const { usuario, signOut } = useAuth();
     const {height} = Dimensions.get('screen')
     const [usuarios, setUsuarios] = useState()
-  
+    const [errorMessage, setErrorMessage] = useState(null);
     const navigation = useNavigation<propsStack>()
     const [input, setInput] = useState('');
+    const [ros, setRos] = useState();
+    const [myRos, setMyRos] = useState();
+    const [allRos, setAllRos] = useState();
     const [loading, setLoading] = useState(true);
   
     useEffect(() => {
       (async () => {
         try {
-          const response = await api.get('/usuario');
-  
-          setUsuarios(response.data);
-          setLoading(false)
+         
+            const response = await api.get('/ro/atribuido/' + usuario._id);
+            setMyRos(response.data);
+          setLoading(false);
         } catch (response) {
           setErrorMessage(response.data.msg);
         }
       })();
     }, []);
+
   
 
   return (
     <View style={style.container}>
-      <Text >Membros do Suporte:</Text>
-      <TouchableOpacity onPress={signOut}  >
-        <Icon name='exit-outline' size={30} />
-      </TouchableOpacity>
-      <View >
-        <View >
-      <TextInput 
-        placeholder='Buscar suporte'  
-        value={input} 
-        onChangeText={(texto => setInput(texto))}>
-      </TextInput>
-      <Icon name='search' size={21} />
-      </View>
-      <View /> 
-       </View>
-      
-      { 
-        usuarios && !loading ? usuarios.map(usuario => (
-      <View  key={usuario._id}>
-        <TouchableOpacity 
-          key={usuario._id}
-          onPress={() => 
-          navigation.navigate('EditarUsuario', {id:usuario._id})
-          }>
-          <Text key={usuario._id} >{usuario.nome}</Text>
-        </TouchableOpacity> 
-      </View>
-   )) : <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <ActivityIndicator size="large" color="#666"/>
-      </View>
-      }
+      <Text style={style.titulo}>Meus Chats</Text>
+            <View  style={style.containermensagens}>
+            <ScrollView style={style.scroll} >
+          {
+            myRos && !loading ? myRos.map(ro => (
+            <View style={style.chat} key={ro._id} >
+            <TouchableOpacity  onPress={() => 
+            navigation.navigate('Chat')
+            } >
+              <Text >{ro.relator.nome}</Text>
+              <Text >{ro.tituloOcorrencia}</Text>
+              </TouchableOpacity>
+              </View>
+            )) :
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <ActivityIndicator size="large" color="#666"/>
+          </View>
+          }
+          </ScrollView>
+          <Image
+              source={{ uri: 'https://api.dicebear.com/6.x/pixel-art/svg' }}
+              style={{ width: 200, height: 200 }}
+              />
+              
 
-      <View >
-    <Menu></Menu>
+            </View>
+      <View style={{position:'absolute',  bottom: 0,}}>
+        <Menu/>
       </View>
-       {/* </View> */}
       </View>
   );
 }

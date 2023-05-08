@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { Bubble, GiftedChat, MessageText, Send } from 'react-native-gifted-chat'
+import { Bubble, GiftedChat, InputToolbar, MessageText, Send } from 'react-native-gifted-chat'
 import style from './style';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { Platform, View } from 'react-native';
-import 'dayjs/locale/fr'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Menu from '../../components/menu';
+import { useNavigation } from '@react-navigation/native';
 
 export const Chat = () =>{
 
@@ -19,8 +19,9 @@ export const Chat = () =>{
       avatar:string
     };
   }
-
+  const { usuario, signOut } = useAuth();
   const [messages, setMessages] = useState<Imessage[]>([]);
+  const navigation = useNavigation<propsStack>()
 
   useEffect(() => {
     setMessages([
@@ -44,7 +45,7 @@ export const Chat = () =>{
       },
       {
         _id: 1,
-        text: 'Hello developer',
+        text: 'Hello developerlll',
         createdAt: new Date(),
         user: {
           _id: 2,
@@ -67,10 +68,10 @@ export const Chat = () =>{
     {... props}
     wrapperStyle={{
       right:{
-        backgroundColor:'#2B3467'
+        backgroundColor:'#2B3467',
       },
       left:{
-        backgroundColor:'#F8F9FB'
+        backgroundColor:'#F8F9FB',
       }
     }}
     textStyle={{
@@ -103,6 +104,14 @@ export const Chat = () =>{
       </Send>
     )
   } 
+  const CustomInputToolbar = (props) =>{
+    return(
+      <InputToolbar
+      {...props}
+      containerStyle={style.inputToolbar}
+    />
+    )
+  }
 
 
   return (
@@ -110,11 +119,12 @@ export const Chat = () =>{
     <Icon name={Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back'} 
      size={50} 
      color='black' 
-     
-     />
+     onPress={() => 
+      navigation.navigate('Home')
+      }/>
+      {/* <View> */}
     <GiftedChat
       messages={messages}
-      // inverted={false}
       onSend={messages => onSend(messages)}
       user={{
         _id: 1,
@@ -123,14 +133,18 @@ export const Chat = () =>{
       locale='pt-br'
       timeFormat='HH:mm'
       renderUsernameOnMessage={true}
-      alwaysShowSend={false}
+      alwaysShowSend={true}
       renderSend={renderSend}
+      // minInputToolbarHeight={232}
       isLoadingEarlier={true}
       scrollToBottom
+      renderInputToolbar={CustomInputToolbar}
       placeholder='Digite sua mensagem'
       // renderMessageText={renderMessageText}
       // scrollToBottomComponent={scrollToBottomComponent}
-    />
+    /> 
+  
+    {/* </View> */}
     </SafeAreaView>
   )
   }
