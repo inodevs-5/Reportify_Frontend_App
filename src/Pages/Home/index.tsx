@@ -61,6 +61,13 @@ export const Home = () =>{
             }>
             <Text style={style.enterButton}>Cadastrar Novo Usuário</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={style.buttonChat}
+           onPress={() => 
+            navigation.navigate('Chat')
+            }>
+            <Icon style={style.icon} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
+          </TouchableOpacity>
           </>
         ) : ( 
           <>
@@ -111,18 +118,16 @@ const style = StyleSheet.create({
     // backgroundColor: 'yellow',
   },
 
-  containermenu:{
-      // position: 'relative',
-      // alignItems: 'center',
-      // width: 300,
-      // height: 70,
-      // backgroundColor: '#2B3467',
-      // // marginBottom: -100,
-      // // marginTop: 160,
-      // borderRadius: 35,
-      // alignSelf: 'flex-end',
-  },
+  buttonChat:{
+      backgroundColor:'red',
+      width:'18%',
+      alignItems:'center',
+      borderRadius:200
 
+  },
+icon:{
+ padding:10
+},
   containerbusca:{
     // backgroundColor:'yellow',
     display:'flex',
