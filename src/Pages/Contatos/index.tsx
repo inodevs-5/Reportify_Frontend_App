@@ -9,6 +9,12 @@ import Menu from '../../components/menu';
 import style from './style';
 
 export const Contatos = () =>{
+
+  // interface Imessage{
+  
+  // }
+
+
     const { usuario, signOut } = useAuth();
     const {height} = Dimensions.get('screen')
     const [usuarios, setUsuarios] = useState()
@@ -33,7 +39,10 @@ export const Contatos = () =>{
       })();
     }, []);
 
-  
+    function handlePress(destinatario): void {
+      navigation.navigate('Chat' , {destinatario})
+      console.warn(`${destinatario} `)
+    }
 
   return (
     <View style={style.container}>
@@ -42,24 +51,31 @@ export const Contatos = () =>{
             <ScrollView style={style.scroll} >
           {
             myRos && !loading ? myRos.map(ro => (
-            <View style={style.chat} key={ro._id} >
-            <TouchableOpacity  onPress={() => 
-            navigation.navigate('Chat')
-            } >
-              <Text >{ro.relator.nome}</Text>
-              <Text >{ro.tituloOcorrencia}</Text>
-              </TouchableOpacity>
+            
+            <TouchableOpacity style={style.containerchat} key={ro._id}   
+            onPress={() => handlePress(ro.relator.nome)}
+            >
+              <View style={style.chat} >
+              <View style={style.containerIcone} >
+                <Text style={style.icone}>{ 
+                usuario.perfil == 'cliente' ? ro.suporte.colaboradorIACIT.nome.charAt(0).toUpperCase()
+                 : ro.relator.nome.charAt(0).toUpperCase()}</Text>
               </View>
+              <View style={style.container_nome} >
+                <Text style={style.nome}>{ 
+                usuario.perfil == 'cliente' ? ro.suporte.colaboradorIACIT.nome
+                 : ro.relator.nome}</Text>
+                <Text>{ro.tituloOcorrencia}</Text>
+              </View>
+              </View>
+              <View style={style.bar}/>
+              </TouchableOpacity>
             )) :
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <ActivityIndicator size="large" color="#666"/>
           </View>
           }
           </ScrollView>
-          <Image
-              source={{ uri: 'https://api.dicebear.com/6.x/pixel-art/svg' }}
-              style={{ width: 200, height: 200 }}
-              />
               
 
             </View>

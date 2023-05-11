@@ -17,6 +17,10 @@ export default StyleSheet.create({
    backgroundColor: '#fff',
    margin:'1%',
    borderRadius:30,
-   
+ },
+ test:{
+  backgroundColor:'red',
+  width:500,
+  height:500
  }
 });

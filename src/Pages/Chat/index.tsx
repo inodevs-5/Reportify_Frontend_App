@@ -2,12 +2,15 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { Bubble, GiftedChat, InputToolbar, MessageText, Send } from 'react-native-gifted-chat'
 import style from './style';
 import Icon from 'react-native-vector-icons/Ionicons'
-import { Platform, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Menu from '../../components/menu';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../contexts/auth';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import api from '../../services/api';
 
-export const Chat = () =>{
+export const Chat = ({route}) =>{
 
   interface Imessage{
     id:number;
@@ -22,43 +25,58 @@ export const Chat = () =>{
   const { usuario, signOut } = useAuth();
   const [messages, setMessages] = useState<Imessage[]>([]);
   const navigation = useNavigation<propsStack>()
+  const [loading, setLoading] = useState(true);
+  const destinatario = route.params.destinatario
+  // const a = route.params.a
 
-  useEffect(() => {
-    setMessages([
-      {
-        _id: 2,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 1,
-          name: 'suporte',
-        },
-      },
-      {
-        _id: 3,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 3,
-          name: 'suporte',
-        },
-      },
-      {
-        _id: 1,
-        text: 'Hello developerlll',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'suporte',
-        },
-      },
+  // useEffect(() => {
+  //   setMessages([
+  //     {
+  //       _id: 2,
+  //       text: 'Hello developer',
+  //       createdAt: new Date(),
+  //       user: {
+  //         _id: 1,
+  //         name: 'suporte',
+  //       },
+  //     },
+  //     {
+  //       _id: 3,
+  //       text: 'Hello developer',
+  //       createdAt: new Date(),
+  //       user: {
+  //         _id: 3,
+  //         name: 'suporte',
+  //       },
+  //     },
+  //     {
+  //       _id: 1,
+  //       text: 'Hello developerlll',
+  //       createdAt: new Date(),
+  //       user: {
+  //         _id: 2,
+  //         name: 'suporte',
+  //       },
+  //     },
       
-    ])
-  }, [])
+  //   ])
+  // }, [])
+  useEffect(()=>{
+    (async () => {
+      try {
+    const response = await api.get(`/mensagem/${usuario._id}/${destinatario}`)
+    setMessages(response.data)
+    setLoading(false);
+    } catch (response) {
+      setErrorMessage(response.data.msg);
+    }
+  })();
+}, []);
 
   const onSend = useCallback((messages = []) => {
     setMessages((previousMessages) => 
       GiftedChat.append(previousMessages, messages))
+      console.warn(`${destinatario}`)
   }, [])
 
 //  Container das messagens
@@ -120,7 +138,7 @@ export const Chat = () =>{
      size={50} 
      color='black' 
      onPress={() => 
-      navigation.navigate('Home')
+      navigation.navigate('Contatos')
       }/>
       {/* <View> */}
     <GiftedChat
@@ -143,8 +161,6 @@ export const Chat = () =>{
       // renderMessageText={renderMessageText}
       // scrollToBottomComponent={scrollToBottomComponent}
     /> 
-  
-    {/* </View> */}
     </SafeAreaView>
   )
   }

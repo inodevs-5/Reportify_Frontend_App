@@ -113,13 +113,6 @@ export const TabelaROs = () =>{
             </View>
           }
 
-        {/* <TextInput style={style.busca}  
-            placeholder='Buscar RO'  
-            value={input} 
-            onChangeText={(texto => setInput(texto))}>
-          </TextInput>
-          <Icon name='search' size={21} style={style.searchIcon}/>
-          <View style={style.bar}/>  */}
 
         <View style={style.squareContainer}>
         <View style={usuario.perfil == 'cliente' ? {height: 520} : {height: 460}}>
@@ -128,7 +121,7 @@ export const TabelaROs = () =>{
           {
             ros && !loading ? ros.map(ro => (
             <View key={ro._id} style={style.square}>
-              <TouchableOpacity onPress={() => handlePress(ro._id) }>
+              <TouchableOpacity onPress={() => handlePress(ro._id)}>
               <Text style={style.square}> <Text style={style.bold}>#{ro._id} </Text>
                   {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
                   {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
