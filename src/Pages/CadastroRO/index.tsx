@@ -48,29 +48,6 @@ export const CadastroRO = () =>{
       setSoftwareChecked(!softwareChecked);
       setHardwareChecked(false);
     };
- //Abaixo para anexar aquivos
-    const pickDocument = async () => {
-      try {
-        const result = await DocumentPicker.pick({
-          allowMultiSelection: true,
-          type: [DocumentPicker.types.allFiles],
-        });
-        setLogsAnexados(result)
-        setFileName(result.name);
-        console.log(
-          result.uri,
-          result.type, 
-          result.name,
-          result.size
-        );
-      } catch (err) {
-        if (DocumentPicker.isCancel(err)) {
-          console.log("Cancelado!")
-        } else {
-          console.log(err);
-        }
-      }
-    };
     
     async function cadastrarRO() {
       setLoading(true);
@@ -121,85 +98,26 @@ export const CadastroRO = () =>{
 
   return (
 
-      //Abaixo o titulo do RO
+    //Redefinir 
     <View style={style.container}><Text style={style.title}></Text>
-     {/* ScrollView = parte rolavel */}
-    <ScrollView style={style.scrollView} contentContainerStyle={style.contentContainer}> 
-      <Text style={style.title2}>Registro de Ocorrência</Text>
-      {/*Cada view alinha um titulo de campo e um input*/}
+    <ScrollView contentContainerStyle={style.contentContainer}> 
+      <Text style={style.title2}>Redefinição de Senha</Text>
 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
-          Contrato*
+          Email*
         </Text>
         <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setContrato(texto)}
         ></TextInput>
       </View>
 
       <View style={style.campos2}>
         <Text style={style.paragraph}>
-          Fase*
+          Nova Senha*
         </Text>
         <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setFase(texto)}
         ></TextInput>
       </View>
-
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Orgão*
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setOrgao(texto)}
-        ></TextInput>
-      </View>
-
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Relator*
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setRelator(texto)}
-        ></TextInput>
-      </View>
-
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          POS./GRAD*
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setPosGradRelator(texto)}
-        ></TextInput>
-      </View>
-
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Responsável/Surpevisor do centro*
-        </Text>
-      </View>
-      <View style={style.campos3}>
-        <TextInput style={style.input2} 
-        placeholder='' onChangeText={texto => setResponsavel(texto)}
-        ></TextInput>
-      </View>
-      
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          POS./GRAD*
-        </Text>
-        <TextInput style={style.input} 
-        placeholder='' onChangeText={texto => setPosGradResponsavel(texto)}
-        ></TextInput>
-      </View>
-
-      <Text style={style.title2}>Classificação em Campo</Text>
-
-      {/* "titulo" da checkbox */}
-      <Text style={style.paragraph}>
-          Defeito*
-      </Text>
-
       {/* Inicio da checkbox */}
       <View style={style.check}>
         <View style={{ flexDirection: 'row' }}>
@@ -207,139 +125,15 @@ export const CadastroRO = () =>{
             value={hardwareChecked}
             onValueChange={handleHardwareCheck}
           />
-          <Text style={style.paragraph}>Hardware</Text>
+          <Text style={style.paragraph}>Estou ciente do Termo de Compromisso do app</Text>
         </View>
-
-        {hardwareChecked && (
-          <View style={style.check}>
-           <View style={style.campos2}>
-              <Text style={style.paragraph}>Equipamento*</Text>
-              <TextInput
-                style={style.input2}
-                value={equipamento}
-                onChangeText={setEquipamento}
-              />
-            </View>
-
-            <View style={style.campos2}>
-              <Text style={style.paragraph}>Posição*</Text>
-              <TextInput
-                style={style.input2}
-                value={posicao}
-                onChangeText={setPosicao}
-              />
-            </View>
-            
-            <View style={style.campos2}>
-              <Text style={style.paragraph}>Part Number*</Text>
-              <TextInput
-                style={style.input2}
-                value={partNumber}
-                onChangeText={setPartNumber}
-              />
-            </View>
-
-
-            <View style={style.campos2}>
-              <Text style={style.paragraph}>Serial Number*</Text>
-              <TextInput
-                style={style.input2}
-                value={serialNumber}
-                onChangeText={setSerialNumber}
-              />
-            </View>
-          </View>
-        )}
-
-        {/* Segunda opção da checkbox*/}
-
-        <View style={{ flexDirection: 'row', marginTop: 20 }}>
-          <CheckBox
-            value={softwareChecked}
-            onValueChange={handleSoftwareCheck}
-          />
-          <Text style={style.paragraph}>Software</Text>
-        </View>
-
-        {softwareChecked && (
-          <View style={style.check}>
-
-
-              <Text style={style.paragraph}>Versão da base de dados*</Text>
-              <View style={style.checkalinhar}>
-              <TextInput
-                style={style.input2}
-                value={versaoBaseDados}
-                onChangeText={setVersaoBaseDados}
-              />
-            </View>
-            
-           
-              <Text style={style.paragraph}>Versão do software*</Text>
-              <View style={style.checkalinhar}>
-                <TextInput
-                  style={style.input2}
-                  value={versaoSoftware}
-                  onChangeText={setVersaoSoftware}
-                />
-              </View>
-
-              <View style={style.campos2}>
-                <Text style={style.paragraph}>Logs Anexos</Text>
-                
-                
-                  <TouchableOpacity style={style.button2} onPress={pickDocument}>
-                    <Text style={style.text}>Selecionar</Text>
-                  </TouchableOpacity>
-                  
-                    <Text style={style.fileName}>
-                      {
-                        logsAnexados && softwareChecked && logsAnexados.map(l => (
-                          <Text key={l.uri}>
-                              {l.name}  {'\n'}
-                          </Text>
-                        ))
-                      }
-                    </Text>
-                  
-          
-              </View>
-           
-        </View>
-      )}
-      </View>
-      
-      {/* acima o fim da checkbox */}
-
-      <View style={style.campos2}>
-        <Text style={style.paragraph}>
-          Titulo*
-        </Text>
-        <TextInput style={style.input} 
-        placeholder=''onChangeText={texto => setTitulo(texto)}
-        ></TextInput>
-      </View>
-
-      <View style={style.campos}>
-        <Text style={style.paragraph}>
-          Descrição
-        </Text>
-      </View>
-
-      <View style={style.campos4}>
-        <TextInput style={style.input3} 
-        
-        multiline={true}
-        onChangeText={(descricao) => setDescricao(descricao)}
-        placeholder=''
-        ></TextInput>
       </View>
       <View style={style.botaoalinha}>
 
       {!loading ? (
           <TouchableOpacity style={style.button}
-            onPress={cadastrarRO}>
-            <Text style={style.cadastra}>Criar RO</Text>
+            onPress={cadastrarRO}> 
+            <Text style={style.redefinir}>Redefinir Senha</Text>
           </TouchableOpacity>
       ) : (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -354,21 +148,7 @@ export const CadastroRO = () =>{
     {/* Fim da parte de rolagem */}
 
     <View >
-      <View style={style.menu}>
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='home' size={27} style={style.iconHome}
-          onPress={() => 
-            navigation.navigate('Home')
-            }/>
-        </TouchableOpacity>
-   
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='notifications' size={27} style={style.iconNotif}
-          onPress={() => 
-            navigation.navigate('Home')
-            }/>
-        </TouchableOpacity>
-      </View>
+      
       </View>
     </View>
   );
@@ -405,34 +185,28 @@ const style = StyleSheet.create({
   },
 
   button:{
-    
+    marginRight: 7,
     width:160,
     borderRadius:300,
     height: 40,
     backgroundColor: '#72A2FA',
     marginTop:10,
+    marginLeft: -45,
     marginBottom:10
     
   },
 
-  cadastra:{   //texto do botão de criar RO
-    textAlign:'center',
-   paddingTop:8,
-   color:'white'
+  redefinir:{   //texto do botão para redefinir senha
+   textAlign:'center',
+   paddingTop:10,
+   color:'white',
   },
 
   check:{
     backgroundColor:'E9EFF7',
-    
-    
+    marginTop: 15,
+
   },
-  checkalinhar:{
-    marginBottom: 5,
-   
-   
-    alignItems: 'center',
-  },
- 
   campos:{
     flexDirection: 'row',
     alignItems: 'center',
@@ -453,33 +227,18 @@ const style = StyleSheet.create({
     
   },
 
-  campos4:{//estilo do alinhamento do input caixa de texto
-    
-    alignItems: 'center',
-   
-  },
-
  
   paragraph: {
     margin: 10,
+    paddingBottom: 10,
+    paddingRight: 15,
+    paddingLeft: 5,
     fontSize:15,
     fontWeight: 'bold',
     textAlign: 'left',
   },
-  scrollView: {
-    height: '20%',
-    width: '90%',
-    marginTop:'1%',
-    marginBottom:'27%',
-    alignSelf: 'center',
-    padding:10,
-    backgroundColor: '#C3C9D0',
-    borderRadius: 9,
-  },
   contentContainer: {  //Faz parte do estilo da scrollview
     justifyContent: 'center',
-    
-    backgroundColor: '#C3C9D0',
     paddingBottom: 30,
    
   },
@@ -487,10 +246,9 @@ const style = StyleSheet.create({
   
   title2:{ //titulos das divisões dos campos
     fontSize: 24,
-    marginTop: 0,
-    
-    textAlign: 'left',
-    
+    marginTop: 30,
+    marginBottom: 20,
+    textAlign: 'center',
     color: 'black',
     fontWeight: 'bold',
   },
@@ -512,22 +270,6 @@ const style = StyleSheet.create({
     // paddingLeft: 90,
     color: 'white',
   },
-
-  div: { //estilo e alinhamento dos botões e menu
-    
-    position: 'absolute',
-    flexDirection: 'row',
-    alignItems: 'center',
-    margin: 'auto',
-    width: 300,
-    height: 70,
-    backgroundColor: '#2B3467',
-    marginBottom: 10,
-    top: 575,
-    borderRadius: 35,
-     },
-
-  
 
   input: {
     flex: 1,
@@ -578,42 +320,6 @@ const style = StyleSheet.create({
     elevation: 4,
   },
  
-  // abaixo o input da area de texto descrição
-  input3: { 
-     flex: 1,
-    
-    backgroundColor: '#ffff',
-   
-     width:'96%',
-     height:170,
-    
-     borderRadius:30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4,
-   
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    textAlignVertical: 'top', // Define a posição do texto como início da caixa
-  },
-
-  menu:{
-    display:'flex',
-    justifyContent:'space-around',
-    backgroundColor: '#2B3467',
-    alignItems: 'center',
-    flexDirection: 'row',
-    width:300,
-    height:60,
-    borderRadius:20,
-    marginBottom:10,
-   },
 });
 
 
