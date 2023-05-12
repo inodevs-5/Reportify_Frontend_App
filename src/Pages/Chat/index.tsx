@@ -14,18 +14,21 @@ import axios from 'axios';
 export const Chat = ({route}) =>{
 
   interface Imessage{
-    id:number;
-    text:string;
-    createAt:Date;
-    user:{
-      _id:number;
-      name:string;
-      avatar:string
+    conteudo?:string,
+    Enviado?:Date,
+    remetente?:{
+      _id?:number;
+      nome?:string;
+    };
+    destinatario?:{
+      _id?:number;
+      nome?:string
     };
   }
   const { usuario, signOut } = useAuth();
   const [messages, setMessages] = useState<Imessage[]>([]);
-  const navigation = useNavigation<propsStack>()
+  const navigation = useNavigation<propsStack>();
+  const [refresh, setRefresh] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(true);
   const destinatario = route.params.destinatario
@@ -74,6 +77,18 @@ export const Chat = ({route}) =>{
     }
   })();
 }, []);
+
+useEffect(() => {
+  (async () => {
+    try {
+      const response = await api.get(`/mensagem/${usuario._id}/${destinatario}`)
+      setMessages(response.data)
+      setLoading(false);
+    } catch (response) {
+      setErrorMessage(response.data.msg);
+    }
+  })();
+}, [refresh]);
 // useEffect(() => {
 //   const fetchMessages = async () => {
 //     try {
@@ -94,11 +109,14 @@ export const Chat = ({route}) =>{
 //   };
 //   fetchMessages();
 // }, []);
+const uniqueId = Math.floor(Math.random() * 1000000000000000).toString(16);
+
 
 async function enviarMensagem (novaMensagem) {
   setLoading(true);
   try{
  const reponse2 = api.post('/mensagem/', {
+    _id :  uniqueId,
     conteudo: novaMensagem[0].text,
     remetente: usuario._id,
     destinatario: destinatario,
@@ -112,6 +130,18 @@ setLoading(false)
 
 }
 
+let giftedChatMessages = messages.map((chatMessage) => {
+  let gcm = {
+    _id: chatMessage._id,
+    text: chatMessage.conteudo,
+    createdAt: chatMessage.enviadoEm,
+    user: {
+      _id: usuario._id,
+      name: usuario.nome,
+    }
+  };
+  return gcm;
+});
 // const novasMensagens = response.data.map(mensagem => ({
 //   _id: mensagem._id,
 //   text: mensagem.conteudo,
@@ -146,6 +176,7 @@ setLoading(false)
   // }
     
   const onSend = useCallback((messages = []) => {
+    setRefresh(true)
     setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
     // console.log(m)
     enviarMensagem(messages);
@@ -216,7 +247,7 @@ setLoading(false)
       }/>
       {/* <View> */}
     <GiftedChat
-      messages={messages}
+      messages={giftedChatMessages}
       onSend={messages => onSend(messages)}
       user={{
         _id: usuario._id, // ou qualquer outra propriedade do usuário que você queira utilizar
@@ -236,6 +267,9 @@ setLoading(false)
       // renderMessageText={renderMessageText}
       // scrollToBottomComponent={scrollToBottomComponent}
     /> 
+    {/* <Text>
+      {messages.conteudo}
+    </Text> */}
     </SafeAreaView>
   )
   }
