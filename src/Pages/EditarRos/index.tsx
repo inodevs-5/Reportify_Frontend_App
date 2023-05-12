@@ -217,7 +217,7 @@ const EditaRos = ({route}) => {
                     </View>
                   </View>
                   <View style={style.campos}>
-                    <Text style={style.text}>Titulo : </Text>
+                    <Text style={style.text}>Título: </Text>
                           <TextInput
                           defaultValue={tituloOcorrencia} 
                           editable={isEditable} 
@@ -226,56 +226,56 @@ const EditaRos = ({route}) => {
                           </TextInput>
                   </View>
                         <View style={style.campos}>
-                          <Text style={style.text}>Orgão :</Text>
+                          <Text style={style.text}>Orgão: </Text>
                           <TextInput defaultValue={orgao} editable={isEditable} style={style.info} 
                           onChangeText={orgao => setOrgao(orgao)}
                           >
                           </TextInput>
                         </View>
                   <View style={style.campos}>
-                          <Text style={style.text}>Contrato :</Text>
+                          <Text style={style.text}>Contrato: </Text>
                           <TextInput defaultValue={contrato} editable={isEditable} style={style.info} 
                           onChangeText={contrato => setContrato(contrato)}
                           >
                           </TextInput>
                   </View>
                   <View style={style.campos1}>
-                    <Text style={style.text}>Data e hora do Registro :</Text>
+                    <Text style={style.text}>Data e horário: </Text>
                             <TextInput defaultValue={dataRegistro} editable={false} style={style.info1}
                             onChangeText={dataRegistro => setDataRegistro(dataRegistro)}
                             >
                             </TextInput>
                   </View>
                   <View style={style.campos}>
-                      <Text style={style.text}>Relator :</Text>
+                      <Text style={style.text}>Relator: </Text>
                           <TextInput defaultValue={nomeRelator} editable={isEditable} style={style.info}
                           onChangeText={nomeRelator => setNomeRelator(nomeRelator)}
                           >
                           </TextInput>
                   </View>
                   <View style={style.campos1}>
-                      <Text style={style.text}>Responsavel  / Supervisor do Centro:</Text>
+                      <Text style={style.text}>Responsável/Supervisor do Centro: </Text>
                         <TextInput defaultValue={nomeResponsavel} editable={isEditable} style={style.info}
                         onChangeText={nomeResponsavel => setNomeResponsavel(nomeResponsavel)}
                         >
                         </TextInput>
                   </View>
                   <View style={style.campos}>
-                      <Text style={style.text}>Pos./Grad :</Text>
+                      <Text style={style.text}>Pos./Grad: </Text>
                         <TextInput defaultValue={posGradRelator} editable={isEditable} style={style.info}
                         onChangeText={posGradRelator => setPosGradRelator(posGradRelator)}
                         >
                         </TextInput>
                   </View>
                   <View style={style.campos}>
-                      <Text style={style.text}>Pos./Grad - Responsavel :</Text>
+                      <Text style={style.text}>Pos./Grad - Responsável: </Text>
                         <TextInput defaultValue={posGradResponsavel} editable={isEditable} style={style.info}
                         onChangeText={posGradResponsavel => setPosGradResponsavel(posGradResponsavel)}
                         >
                         </TextInput>
                   </View>
                   <View style={style.campos}>
-                        <Text style={style.text}>Defeito :</Text>
+                        <Text style={style.text}>Defeito: </Text>
                           <TextInput defaultValue={classDefeito} editable={isEditable} style={style.info}
                           onChangeText={classDefeito => setClassDefeito(classDefeito)}
                           >
@@ -292,7 +292,7 @@ const EditaRos = ({route}) => {
                                   ></TextInput>
                               </View>
                               <View style={style.campos}>
-                                <Text style={style.text}>Posição:</Text>
+                                <Text style={style.text}>Posição: </Text>
                                   <TextInput  defaultValue={equipPosicao} editable={isEditable} style={style.info}
                                   onChangeText={equipPosicao => setEquipPosicao(equipPosicao)}
                                   ></TextInput>
@@ -336,7 +336,7 @@ const EditaRos = ({route}) => {
 
 
                         <View style={style.campos1}>
-                          <Text style={style.text}>Descrição :</Text>
+                          <Text style={style.text}>Descrição: </Text>
                               <View style={{alignItems:'center'}}>
                                     <TextInput style={style.input3} 
                                           onChangeText={descricaoOcorrencia => setDescricaoOcorrencia(descricaoOcorrencia)}
@@ -348,7 +348,7 @@ const EditaRos = ({route}) => {
                                     </TextInput>
                               </View>
                         </View>
-                        <View style={style.campos5}>
+                        {/* <View style={style.campos5}>
                             <TouchableOpacity
                             style={visi ? style.hidden : style.atualiza }
                             onPress={EditarRoa}
@@ -359,10 +359,11 @@ const EditaRos = ({route}) => {
                             style={visible ? style.atualiza : style.hidden}
                             onPress={ConfimarRo}
                             >
-                                  <Text style={{color: '#ffffff', fontSize:22}}>Confimar</Text>
+                                  <Text style={{color: '#ffffff', fontSize:22}}>Confirmar</Text>
                             </TouchableOpacity>
-                        </View>
-                        <Text style={style.text}>Situação:</Text>
+                        </View> */}
+                        
+                        <Text style={style.text}>Situação: </Text>
                           <View>
                                 <Picker
                                   style={style.picker}
@@ -372,13 +373,14 @@ const EditaRos = ({route}) => {
                                 }>
                           
                                         <Picker.Item  label={fase} value={fase} enabled={false} />
-                                        <Picker.Item label="Pendente" value="pendente" />
-                                        <Picker.Item label="Em andamento" value="em andamento" />
-                                        <Picker.Item label="Aguardando validação" value="aguardando validacao" />
-                                        <Picker.Item label="Concluido" value="concluido" />
+                                        <Picker.Item label="Pendente" value="Fase atual: Pendente" />
+                                        <Picker.Item label="Em andamento" value="Fase atual: Em andamento" />
+                                        <Picker.Item label="Aguardando validação" value="Fase atual: Aguardando validação" />
+                                        <Picker.Item label="Concluído" value="Fase atual: Concluído" />
                                 </Picker>
                           </View>
-                        <Text style={style.text}>Classificação</Text>
+                          
+                        <Text style={style.text}>Classificação: </Text>
                                   <Picker
                                       style={style.picker}
                                         selectedValue={classificacao}
@@ -392,7 +394,7 @@ const EditaRos = ({route}) => {
                                   </Picker>
                             { classificacao == "Defeito" && (
                                   <>
-                                    <Text style={style.text}>Defeito</Text>
+                                    <Text style={style.text}>Defeito: </Text>
                                               <View>
                                                     <Picker
                                                       style={style.picker}
@@ -401,7 +403,7 @@ const EditaRos = ({route}) => {
                                                       setDefeito(itemValue)
                                                     }>
                                                             <Picker.Item  label={defeito} value={defeito} enabled={false} />
-                                                            <Picker.Item label="Critico" value="Critico" />
+                                                            <Picker.Item label="Crítico" value="Crítico" />
                                                             <Picker.Item label="Alto" value="Alto" /> 
                                                             <Picker.Item label="Baixo" value="Baixo" />
                                                     </Picker>
@@ -411,7 +413,7 @@ const EditaRos = ({route}) => {
 
                                     { classificacao == "Melhoria" && (
                                   <>  
-                                  <Text style={style.text}>Melhoria:</Text>
+                                  <Text style={style.text}>Melhoria: </Text>
                                         <View>
                                                 <Picker
                                                   style={style.picker}
@@ -421,14 +423,14 @@ const EditaRos = ({route}) => {
                                                 }>
                                                         <Picker.Item  label={melhoria} value={melhoria} enabled={false} />
                                                         <Picker.Item label="Funcinalidade existente" value="Funcinalidade existente" />
-                                                        <Picker.Item label="Funcionalidade não existente" value="Funcionalidade nao existente"/>
+                                                        <Picker.Item label="Funcionalidade não existente" value="Funcionalidade não existente"/>
                                                 </Picker>
                                         </View>
                                   </>
                                 ) } 
                                 { classificacao == "Outros" && (
                                     <> 
-                                      <Text style={style.text}>Outro</Text>
+                                      <Text style={style.text}>Outros: </Text>
                                             <View>
                                                 <Picker
                                                 style={style.picker}
@@ -445,12 +447,13 @@ const EditaRos = ({route}) => {
                                       </>
                                 ) }
 
-                      <Text style={style.text}>Categoria:</Text>
+                      <Text style={style.text}>Categoria: </Text>
                             <TextInput style={style.input}
                             defaultValue={categoria}
                             onChangeText={categoria => setCategoria(categoria)} >
                             </TextInput> 
-                            <Text style={style.text}>Responsável:</Text>
+                            
+                            <Text style={style.text}>Responsável: </Text>
                             <View>
                               <Picker
                                 style={style.picker}
@@ -468,7 +471,7 @@ const EditaRos = ({route}) => {
                             </View>
 
                       <View style={style.campos1}>
-                          <Text style={style.text}>Justificativa de Reclassificação / Ações Tomadas</Text>
+                          <Text style={style.text}>Justificativa de Reclassificação/Ações Tomadas: </Text>
                               <View>
                                     <TextInput style={style.input3} 
                                     multiline={true}
