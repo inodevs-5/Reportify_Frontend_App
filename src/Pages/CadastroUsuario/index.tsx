@@ -41,7 +41,8 @@ export const CadastroUsuario = () =>{
       setLoading(true);
       try {
         
-        const response = await api.post('/usuario', {nome, email, perfil, empresa, contato_empresa, senha})
+        const response = await api.post('/usuario', {nome, 
+          email, perfil, empresa, contato_empresa, senha})
         console.log(nome)
 
         Alert.alert(response.data.msg)

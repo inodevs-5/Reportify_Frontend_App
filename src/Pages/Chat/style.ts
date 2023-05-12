@@ -6,7 +6,7 @@ export default StyleSheet.create({
     flexDirection: 'column',
     justifyContent:'space-between',
 
-   //  backgroundColor: '#F9Fbca',
+    // backgroundColor: '#F9Fbca',
  },
  send:{
    color:'black',
@@ -22,5 +22,10 @@ export default StyleSheet.create({
   backgroundColor:'red',
   width:500,
   height:500
+ },
+ input:{
+  width:"80%",
+  height:40,
+  backgroundColor:"red",
  }
 });

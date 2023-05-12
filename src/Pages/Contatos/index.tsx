@@ -10,9 +10,9 @@ import style from './style';
 
 export const Contatos = () =>{
 
-  // interface Imessage{
-  
-  // }
+  interface myro{
+    destinatario?:number
+  }
 
 
     const { usuario, signOut } = useAuth();
@@ -39,10 +39,16 @@ export const Contatos = () =>{
       })();
     }, []);
 
-    function handlePress(destinatario): void {
+    function handlePress(destinatario:number): void {
       navigation.navigate('Chat' , {destinatario})
-      console.warn(`${destinatario} `)
+      // console.warn(`${destinatario} `)
+      
     }
+    // function handlePresa(): void {
+    //   console.log(myRos)
+    // }
+
+// console.log(myRos)
 
   return (
     <View style={style.container}>
@@ -53,7 +59,7 @@ export const Contatos = () =>{
             myRos && !loading ? myRos.map(ro => (
             
             <TouchableOpacity style={style.containerchat} key={ro._id}   
-            onPress={() => handlePress(ro.relator.nome)}
+            onPress={() => handlePress(ro.relator.id._id)}
             >
               <View style={style.chat} >
               <View style={style.containerIcone} >
@@ -68,6 +74,7 @@ export const Contatos = () =>{
                 <Text>{ro.tituloOcorrencia}</Text>
               </View>
               </View>
+              
               <View style={style.bar}/>
               </TouchableOpacity>
             )) :
@@ -76,8 +83,6 @@ export const Contatos = () =>{
           </View>
           }
           </ScrollView>
-              
-
             </View>
       <View style={{position:'absolute',  bottom: 0,}}>
         <Menu/>

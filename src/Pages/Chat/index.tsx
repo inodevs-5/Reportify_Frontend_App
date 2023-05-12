@@ -2,13 +2,14 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { Bubble, GiftedChat, InputToolbar, MessageText, Send } from 'react-native-gifted-chat'
 import style from './style';
 import Icon from 'react-native-vector-icons/Ionicons'
-import { Platform, Text, View } from 'react-native';
+import { Alert, Platform, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Menu from '../../components/menu';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import api from '../../services/api';
+import axios from 'axios';
 
 export const Chat = ({route}) =>{
 
@@ -25,6 +26,7 @@ export const Chat = ({route}) =>{
   const { usuario, signOut } = useAuth();
   const [messages, setMessages] = useState<Imessage[]>([]);
   const navigation = useNavigation<propsStack>()
+  const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(true);
   const destinatario = route.params.destinatario
   // const a = route.params.a
@@ -72,13 +74,85 @@ export const Chat = ({route}) =>{
     }
   })();
 }, []);
+// useEffect(() => {
+//   const fetchMessages = async () => {
+//     try {
+//       const response = await api.get(`/mensagem/${usuario._id}/${destinatario._id}`);
+//       const mensagens = response.data.map((mensagem) => ({
+//         _id: mensagem._id,
+//         text: mensagem.conteudo,
+//         createdAt: new Date(mensagem.enviadoEm),
+//         user: {
+//           _id: mensagem.remetente._id,
+//           name: mensagem.remetente.nome,
+//         },
+//       }));
+//       setMessages(mensagens);
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
+//   fetchMessages();
+// }, []);
 
+async function enviarMensagem (novaMensagem) {
+  setLoading(true);
+  try{
+ const reponse2 = api.post('/mensagem/', {
+    conteudo: novaMensagem[0].text,
+    remetente: usuario._id,
+    destinatario: destinatario,
+    enviadoEm: new Date().toLocaleString("en-US", {timezone: 'America/Sao_Paulo'}),
+  })
+  // Alert.alert(reponse2.data.msg)
+}catch(reponse2){
+  // Alert.alert(reponse2.data.msg)
+}
+setLoading(false)
+
+}
+
+// const novasMensagens = response.data.map(mensagem => ({
+//   _id: mensagem._id,
+//   text: mensagem.conteudo,
+//   createdAt: mensagem.enviadoEm,
+//   user: {
+//     _id: mensagem.remetente._id,
+//     name: mensagem.remetente.nome,
+//   },
+// user:{
+//     _id:mensagem.destinatario_id,
+//     name:mensagem.destinatario_nome
+// }
+
+  // const onSend = () => {
+  //   api.post('/mensagem', async (req, res) => {
+  //     try {
+  //       const { conteudo, remetente, destinatario } = req.body;
+    
+  //       // Cria um novo documento de mensagem
+  //       const novaMensagem = new Mensagem({ conteudo, remetente, destinatario });
+    
+  //       // Salva a nova mensagem no banco de dados
+  //       await novaMensagem.save();
+    
+  //       res.status(201).send(novaMensagem);
+  //     } catch (error) {
+  //       console.error(error);
+  //       res.status(500).send(error);
+  //     }
+  //   }
+  //   )
+  // }
+    
   const onSend = useCallback((messages = []) => {
-    setMessages((previousMessages) => 
-      GiftedChat.append(previousMessages, messages))
-      console.warn(`${destinatario}`)
-  }, [])
-
+    setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
+    // console.log(m)
+    enviarMensagem(messages);
+  }, [enviarMensagem]);  
+    
+    
+    
 //  Container das messagens
   const renderBubble = (props) => {
     return(
@@ -130,7 +204,7 @@ export const Chat = ({route}) =>{
     />
     )
   }
-
+ console.log(usuario.nome)
 
   return (
     <SafeAreaView style={style.container}>
@@ -145,7 +219,8 @@ export const Chat = ({route}) =>{
       messages={messages}
       onSend={messages => onSend(messages)}
       user={{
-        _id: 1,
+        _id: usuario._id, // ou qualquer outra propriedade do usuário que você queira utilizar
+        name: usuario.nome,
       }}
       renderBubble={renderBubble}
       locale='pt-br'

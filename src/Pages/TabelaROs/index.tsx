@@ -123,7 +123,7 @@ export const TabelaROs = () =>{
             <View key={ro._id} style={style.square}>
               <TouchableOpacity onPress={() => handlePress(ro._id)}>
               <Text style={style.square}> <Text style={style.bold}>#{ro._id} </Text>
-                  {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
+                  {'\n'} <Text style={style.bold}>Título: </Text>{ro._id}
                   {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
                   
                   {!selectedFirstButton ? (
