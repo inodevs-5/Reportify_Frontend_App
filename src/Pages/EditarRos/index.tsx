@@ -8,7 +8,8 @@ import {
   TouchableOpacity, 
   TextInput,
   KeyboardAvoidingView, 
-  Alert
+  Alert,
+  ActivityIndicator
 } 
 from 'react-native';
 import {Picker} from '@react-native-picker/picker';
@@ -17,9 +18,11 @@ import { useNavigation } from '@react-navigation/native';;
 import { Ro } from '../../types/Types';
 import Menu from '../../components/menu';
 import api from '../../services/api';
+import { useAuth } from '../../contexts/auth';
 
 
 const EditaRos = ({route}) => {
+  const { usuario } = useAuth(); 
   const navigation = useNavigation();
     const [loading, setLoading] = useState(true);
     const numer = route.params._id
@@ -53,18 +56,52 @@ const EditaRos = ({route}) => {
     const [procedTecnicos, setProcedTecnicos] = useState('')
     const [defeito, setDefeito] = useState('')
     const [outros, setOutros] = useState('')
+    const [situacao, setSituacao] = useState('')
     const [justificativaReclassificacao, setJustificativaReclassificacao] = useState('')
     const [validacaoFechamentoRo, setValidacaoFechamentoRo] = useState('')
+    const [usuarios, setUsuarios] = useState()
+    const [idcolaboradorIACIT, setIdColaboradorIACIT] = useState()
      
     useEffect(() => {
       (async () => {
         try {
           const response = await api.get(`/ro/${numer}`);
           setRo(response.data);
+          setTituloOcorrencia(response.data.tituloOcorrencia);
+          setOrgao(response.data.orgao);
+          setContrato(response.data.contrato);
+          setDataRegistro(response.data.dataRegistro);
+          setNomeRelator(response.data.relator.nome);
+          setNomeResponsavel(response.data.responsavel.nome);
+          setPosGradRelator(response.data.relator.posGrad);
+          setPosGradResponsavel(response.data.responsavel.posGrad);
+          setDefeito(response.data.suporte.defeito);
+          setClassDefeito(response.data.classDefeito);
+          setEquipamento(response.data.opcoesHardware.equipamento);
+          setEquipPosicao(response.data.opcoesHardware.equipPosicao);
+          setPartNumber(response.data.opcoesHardware.partNumber);
+          setSerialNumber(response.data.opcoesHardware.serialNumber);
+          setVersaoBaseDados(response.data.opcoesSoftware.versaoBaseDados);
+          setVersaoSoftware(response.data.opcoesSoftware.versaoSoftware);
+          setLogsAnexado(response.data.opcoesSoftware.logsAnexado);
+          setDescricaoOcorrencia(response.data.descricaoOcorrencia);
+          setFase(response.data.suporte.fase);
+          setClassificacao(response.data.suporte.classificacao);
+          setCategoria(response.data.suporte.categoria);
+          setMelhoria(response.data.suporte.melhoria);
+          setOutros(response.data.suporte.outros);
+          setNome(response.data.suporte.colaboradorIACIT.nome);
+          setValidacaoFechamentoRo(response.data.suporte.validacaoFechamentoRo);
+          setJustificativaReclassificacao(response.data.suporte.justificativaReclassificacao)
+          setIdColaboradorIACIT(response.data.suporte.colaboradorIACIT.id)
+
+          const response2 = await api.get('/usuario')
+          setUsuarios(response2.data)
           setLoading(false)
         } catch (response) {
           setErrorMessage(response.data.msg);
         }
+        setLoading(false)
       })();
           
     },[] );
@@ -74,9 +111,10 @@ const EditaRos = ({route}) => {
       try{
         const response = await api.patch(`/ro/suporte/${numer}`,
         {
-          categoria,
-           fase , 
-           melhoria ,
+            categoria,
+            fase , 
+            idcolaboradorIACIT,
+            melhoria ,
             classificacao , 
             nome,
             outros, 
@@ -147,7 +185,7 @@ const EditaRos = ({route}) => {
       setLoading(false);
     }
 
-    const dataObj = new Date(ro.dataRegistro)
+    const dataObj = new Date(dataRegistro)
 
     const opcoesData = { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric" };
     const opcoesHora = { timeZone: "UTC", hour: "2-digit", minute: "2-digit", second: "2-digit" };
@@ -156,12 +194,11 @@ const EditaRos = ({route}) => {
     const horaFormatada  = dataObj.toLocaleTimeString("pt-BR", opcoesHora); 
 
   return (
-
-  
     <KeyboardAvoidingView
     behavior={Platform.OS === 'ios' ? 'padding' : null}
     style={{flex: 1, backgroundColor: '#ffff',}}
     keyboardVerticalOffset={100}>
+        {!loading ? <>
           <ScrollView 
             contentContainerStyle={{ flexGrow: 1 }} 
             keyboardShouldPersistTaps="always"
@@ -171,102 +208,104 @@ const EditaRos = ({route}) => {
               <View style={style.container_edi}>
 
           <ScrollView nestedScrollEnabled={true}> 
+
                   <View style={style.container_ro} >
                     <View style={style.container_r}>
+
                     <Text style={style.text1}>RO#</Text>
                     <Text style={style.text1}>{ro._id}</Text>
                     </View>
                   </View>
                   <View style={style.campos}>
-                    <Text style={style.text}>Titulo : </Text>
+                    <Text style={style.text}>Título: </Text>
                           <TextInput
-                          defaultValue={ro.tituloOcorrencia} 
+                          defaultValue={tituloOcorrencia} 
                           editable={isEditable} 
                           style={style.info} 
                           onChangeText={tituloOcorrencia => setTituloOcorrencia(tituloOcorrencia)}>
                           </TextInput>
                   </View>
                         <View style={style.campos}>
-                          <Text style={style.text}>Orgão :</Text>
-                          <TextInput defaultValue={ro.orgao} editable={isEditable} style={style.info} 
+                          <Text style={style.text}>Orgão: </Text>
+                          <TextInput defaultValue={orgao} editable={isEditable} style={style.info} 
                           onChangeText={orgao => setOrgao(orgao)}
                           >
                           </TextInput>
                         </View>
                   <View style={style.campos}>
-                          <Text style={style.text}>Contrato :</Text>
-                          <TextInput defaultValue={ro.contrato} editable={isEditable} style={style.info} 
+                          <Text style={style.text}>Contrato: </Text>
+                          <TextInput defaultValue={contrato} editable={isEditable} style={style.info} 
                           onChangeText={contrato => setContrato(contrato)}
                           >
                           </TextInput>
                   </View>
                   <View style={style.campos1}>
-                    <Text style={style.text}>Data e hora do Registro :</Text>
-                            <TextInput defaultValue={`${dataFormata} as ${horaFormatada}`} editable={false} style={style.info1}
+                    <Text style={style.text}>Data e horário: </Text>
+                            <TextInput defaultValue={dataRegistro} editable={false} style={style.info1}
                             onChangeText={dataRegistro => setDataRegistro(dataRegistro)}
                             >
                             </TextInput>
                   </View>
                   <View style={style.campos}>
-                      <Text style={style.text}>Relator :</Text>
-                          <TextInput defaultValue={ro.relator?.nome} editable={isEditable} style={style.info}
+                      <Text style={style.text}>Relator: </Text>
+                          <TextInput defaultValue={nomeRelator} editable={isEditable} style={style.info}
                           onChangeText={nomeRelator => setNomeRelator(nomeRelator)}
                           >
                           </TextInput>
                   </View>
                   <View style={style.campos1}>
-                      <Text style={style.text}>Responsavel  / Supervisor do Centro:</Text>
-                        <TextInput defaultValue={ro.responsavel?.nome} editable={isEditable} style={style.info}
+                      <Text style={style.text}>Responsável/Supervisor do Centro: </Text>
+                        <TextInput defaultValue={nomeResponsavel} editable={isEditable} style={style.info}
                         onChangeText={nomeResponsavel => setNomeResponsavel(nomeResponsavel)}
                         >
                         </TextInput>
                   </View>
                   <View style={style.campos}>
-                      <Text style={style.text}>Pos./Grad :</Text>
-                        <TextInput defaultValue={ro.responsavel?.posGrad} editable={isEditable} style={style.info}
+                      <Text style={style.text}>Pos./Grad: </Text>
+                        <TextInput defaultValue={posGradRelator} editable={isEditable} style={style.info}
                         onChangeText={posGradRelator => setPosGradRelator(posGradRelator)}
                         >
                         </TextInput>
                   </View>
                   <View style={style.campos}>
-                      <Text style={style.text}>Pos./Grad - Respomsavel :</Text>
-                        <TextInput defaultValue={ro.responsavel?.posGrad} editable={isEditable} style={style.info}
+                      <Text style={style.text}>Pos./Grad - Responsável: </Text>
+                        <TextInput defaultValue={posGradResponsavel} editable={isEditable} style={style.info}
                         onChangeText={posGradResponsavel => setPosGradResponsavel(posGradResponsavel)}
                         >
                         </TextInput>
                   </View>
                   <View style={style.campos}>
-                        <Text style={style.text}>Defeito :</Text>
-                          <TextInput defaultValue={ro.classDefeito} editable={isEditable} style={style.info}
+                        <Text style={style.text}>Defeito: </Text>
+                          <TextInput defaultValue={classDefeito} editable={isEditable} style={style.info}
                           onChangeText={classDefeito => setClassDefeito(classDefeito)}
                           >
                           </TextInput>
                   </View>
 
 
-                      {ro.classDefeito == 'hardware' ? (
+                      {classDefeito == 'hardware' ? (
                             <View>
                               <View style={style.campos}>
                                 <Text style={style.text}>Equipamento: </Text>
-                                  <TextInput defaultValue={ro.opcoesHardware?.equipamento} editable={isEditable} style={style.info}
+                                  <TextInput defaultValue={equipamento} editable={isEditable} style={style.info}
                                   onChangeText={equipamento => setEquipamento(equipamento)}
                                   ></TextInput>
                               </View>
                               <View style={style.campos}>
-                                <Text style={style.text}>Posição:</Text>
-                                  <TextInput  defaultValue={ro.opcoesHardware?.equipPosicao} editable={isEditable} style={style.info}
+                                <Text style={style.text}>Posição: </Text>
+                                  <TextInput  defaultValue={equipPosicao} editable={isEditable} style={style.info}
                                   onChangeText={equipPosicao => setEquipPosicao(equipPosicao)}
                                   ></TextInput>
                               </View>
                               <View style={style.campos}>
                                   <Text style={style.text}>Part Number: </Text>
-                                    <TextInput  defaultValue={ro.opcoesHardware?.partNumber} editable={isEditable} style={style.info}
+                                    <TextInput  defaultValue={partNumber} editable={isEditable} style={style.info}
                                     onChangeText={partNumber => setPartNumber(partNumber)}
                                     ></TextInput>
                               </View>
                               <View style={style.campos}>
                                 <Text style={style.text}>Serial Number: </Text>
-                                    <TextInput defaultValue={ro.opcoesHardware?.serialNumber} editable={isEditable} style={style.info}
+                                    <TextInput defaultValue={serialNumber} editable={isEditable} style={style.info}
                                     onChangeText={serialNumber => setSerialNumber(serialNumber)}
                                     ></TextInput>
                               </View>
@@ -275,19 +314,19 @@ const EditaRos = ({route}) => {
                             <>
                               <View style={style.campos}>
                                 <Text style={style.text}>Versão da Base de Dados: </Text>
-                                    <TextInput defaultValue={ro.opcoesSoftware?.versaoBaseDados} editable={isEditable}  style={style.info}
+                                    <TextInput defaultValue={versaoBaseDados} editable={isEditable}  style={style.info}
                                     onChangeText={versaoBaseDados => setVersaoBaseDados(versaoBaseDados)}
                                     ></TextInput>
                               </View>
                               <View style={style.campos}>
                                 <Text style={style.text}>Versão do Software: </Text>
-                                    <TextInput defaultValue={ro.opcoesSoftware?.versaoSoftware} editable={isEditable} style={style.info}  
+                                    <TextInput defaultValue={versaoSoftware} editable={isEditable} style={style.info}  
                                     onChangeText={versaoSoftware => setVersaoSoftware(versaoSoftware)}
                                     ></TextInput>
                               </View>
                               <View style={style.campos}>
                                 <Text style={style.text}>Logs Anexados: </Text>
-                                    <TextInput defaultValue={ro.opcoesSoftware?.logsAnexado} editable={isEditable} style={style.info}
+                                    <TextInput defaultValue={logsAnexado} editable={isEditable} style={style.info}
                                     onChangeText={logsAnexado => setLogsAnexado(logsAnexado)}
                                     ></TextInput>
                               </View>
@@ -297,11 +336,11 @@ const EditaRos = ({route}) => {
 
 
                         <View style={style.campos1}>
-                          <Text style={style.text}>Descrição :</Text>
+                          <Text style={style.text}>Descrição: </Text>
                               <View style={{alignItems:'center'}}>
                                     <TextInput style={style.input3} 
                                           onChangeText={descricaoOcorrencia => setDescricaoOcorrencia(descricaoOcorrencia)}
-                                          defaultValue={ro.descricaoOcorrencia}
+                                          defaultValue={descricaoOcorrencia}
                                           editable={isEditable}
                                           multiline={true}
                                           placeholder=''
@@ -309,7 +348,7 @@ const EditaRos = ({route}) => {
                                     </TextInput>
                               </View>
                         </View>
-                        <View style={style.campos5}>
+                        {/* <View style={style.campos5}>
                             <TouchableOpacity
                             style={visi ? style.hidden : style.atualiza }
                             onPress={EditarRoa}
@@ -320,10 +359,11 @@ const EditaRos = ({route}) => {
                             style={visible ? style.atualiza : style.hidden}
                             onPress={ConfimarRo}
                             >
-                                  <Text style={{color: '#ffffff', fontSize:22}}>Confimar</Text>
+                                  <Text style={{color: '#ffffff', fontSize:22}}>Confirmar</Text>
                             </TouchableOpacity>
-                        </View>
-                        <Text style={style.text}>Situação:</Text>
+                        </View> */}
+                        
+                        <Text style={style.text}>Situação: </Text>
                           <View>
                                 <Picker
                                   style={style.picker}
@@ -332,28 +372,29 @@ const EditaRos = ({route}) => {
                                   setFase(itemValue)
                                 }>
                           
-                                        <Picker.Item  label={`${ro.suporte?.fase}`} value={`${ro.suporte?.fase}`} enabled={false} />
-                                        <Picker.Item label="Pendente" value="pendente" />
-                                        <Picker.Item label="Em andamento" value="em andamento" />
-                                        <Picker.Item label="Aguardando validação" value="aguardando validacao" />
-                                        <Picker.Item label="Concluido" value="concluido" />
+                                        <Picker.Item  label={fase} value={fase} enabled={false} />
+                                        <Picker.Item label="Pendente" value="Fase atual: Pendente" />
+                                        <Picker.Item label="Em andamento" value="Fase atual: Em andamento" />
+                                        <Picker.Item label="Aguardando validação" value="Fase atual: Aguardando validação" />
+                                        <Picker.Item label="Concluído" value="Fase atual: Concluído" />
                                 </Picker>
                           </View>
-                        <Text style={style.text}>Classificação</Text>
+                          
+                        <Text style={style.text}>Classificação: </Text>
                                   <Picker
                                       style={style.picker}
                                         selectedValue={classificacao}
                                         onValueChange={(itemValue, itemIndex) =>
                                         setClassificacao(itemValue)
                                       }>
-                                        <Picker.Item label={`${ro.suporte?.classificacao}`} value={`${ro.suporte?.classificacao}`} enabled={false} />
+                                        <Picker.Item label={classificacao} value={classificacao} enabled={false} />
                                         <Picker.Item label="Defeito" value="Defeito" />
                                         <Picker.Item label="Melhoria" value="Melhoria" /> 
                                         <Picker.Item label="Outros" value="Outros" />
                                   </Picker>
                             { classificacao == "Defeito" && (
                                   <>
-                                    <Text style={style.text}>Defeito</Text>
+                                    <Text style={style.text}>Defeito: </Text>
                                               <View>
                                                     <Picker
                                                       style={style.picker}
@@ -361,8 +402,8 @@ const EditaRos = ({route}) => {
                                                       onValueChange={(itemValue, itemIndex) =>
                                                       setDefeito(itemValue)
                                                     }>
-                                                            <Picker.Item  label={`${ro.suporte?.defeito}`} value={`${ro.suporte?.defeito}`} enabled={false} />
-                                                            <Picker.Item label="Critico" value="Critico" />
+                                                            <Picker.Item  label={defeito} value={defeito} enabled={false} />
+                                                            <Picker.Item label="Crítico" value="Crítico" />
                                                             <Picker.Item label="Alto" value="Alto" /> 
                                                             <Picker.Item label="Baixo" value="Baixo" />
                                                     </Picker>
@@ -372,7 +413,7 @@ const EditaRos = ({route}) => {
 
                                     { classificacao == "Melhoria" && (
                                   <>  
-                                  <Text style={style.text}>Melhoria:</Text>
+                                  <Text style={style.text}>Melhoria: </Text>
                                         <View>
                                                 <Picker
                                                   style={style.picker}
@@ -380,16 +421,16 @@ const EditaRos = ({route}) => {
                                                   onValueChange={(itemValue, itemIndex) =>
                                                   setMelhoria(itemValue)
                                                 }>
-                                                        <Picker.Item  label={`${ro.suporte?.melhoria}`} value={`${ro.suporte?.melhoria}`} enabled={false} />
+                                                        <Picker.Item  label={melhoria} value={melhoria} enabled={false} />
                                                         <Picker.Item label="Funcinalidade existente" value="Funcinalidade existente" />
-                                                        <Picker.Item label="Funcionalidade não existente" value="Funcionalidade nao existente"/>
+                                                        <Picker.Item label="Funcionalidade não existente" value="Funcionalidade não existente"/>
                                                 </Picker>
                                         </View>
                                   </>
                                 ) } 
                                 { classificacao == "Outros" && (
                                     <> 
-                                      <Text style={style.text}>Outro</Text>
+                                      <Text style={style.text}>Outros: </Text>
                                             <View>
                                                 <Picker
                                                 style={style.picker}
@@ -397,7 +438,7 @@ const EditaRos = ({route}) => {
                                                   onValueChange={(itemValue, itemIndex) =>
                                                   setOutros(itemValue)
                                                 }>
-                                                        <Picker.Item  label={`${ro.suporte?.outros}`} value={`${ro.suporte?.outros}`} enabled={false} />
+                                                        <Picker.Item  label={outros} value={outros} enabled={false} />
                                                         <Picker.Item label="Investigação" value="Investigação" />
                                                         <Picker.Item label="Causa externa" value="Causa externa" />
                                                 </Picker>
@@ -406,28 +447,41 @@ const EditaRos = ({route}) => {
                                       </>
                                 ) }
 
-                      <Text style={style.text}>Categoria:</Text>
+                      <Text style={style.text}>Categoria: </Text>
                             <TextInput style={style.input}
-                            defaultValue={ro.suporte?.categoria}
+                            defaultValue={categoria}
                             onChangeText={categoria => setCategoria(categoria)} >
                             </TextInput> 
-                      <Text style={style.text}>Responsável</Text>
-                            <TextInput style={style.input}
-                            onChangeText={ nome => setNome( nome)} 
-                            defaultValue={ro.suporte?.colaboradorIACIT?.nome}
-                            ></TextInput>
+                            
+                            <Text style={style.text}>Responsável: </Text>
+                            <View>
+                              <Picker
+                                style={style.picker}
+                                selectedValue={idcolaboradorIACIT}
+                                onValueChange={(itemValue, itemIndex) =>{
+                                  setIdColaboradorIACIT(itemValue)
+                                  setNome(usuarios[itemIndex-1].nome)
+                                }
+                              }>
+                                <Picker.Item  label={nome} value={idcolaboradorIACIT} enabled={false} />
+                                {usuarios && usuarios.map(usuario => (
+                                  <Picker.Item key={usuario._id} label={usuario.nome} value={usuario._id} />
+                                ))}
+                              </Picker>
+                            </View>
+
                       <View style={style.campos1}>
-                          <Text style={style.text}>Justificativa de Reclassificação / Ações Tomadas</Text>
-                              <View style={style.campos4}>
+                          <Text style={style.text}>Justificativa de Reclassificação/Ações Tomadas: </Text>
+                              <View>
                                     <TextInput style={style.input3} 
                                     multiline={true}
-                                    defaultValue={ro.suporte?.justificativaReclassificacao}
+                                    defaultValue={justificativaReclassificacao}
                                     onChangeText={(justificativaReclassificacao) => setJustificativaReclassificacao(justificativaReclassificacao)}
                                     placeholder=''
                                     ></TextInput>
                               </View>
                       </View>
-                      { ro.suporte?.fase == "aguardando validacao" ? (
+                      { fase == "aguardando validacao" ? (
                           <>
                             <Text style={style.text}>Validação e Fechamento do Ro</Text>
                               <Picker
@@ -436,17 +490,17 @@ const EditaRos = ({route}) => {
                                 onValueChange={(itemValue, itemIndex) =>
                                   setValidacaoFechamentoRo(itemValue)
                               }>
-                                      <Picker.Item  label={`${ro.suporte?.validacaoFechamentoRo}`} value={`${ro.suporte?.validacaoFechamentoRo}`} enabled={false} />
+                                      <Picker.Item  label={validacaoFechamentoRo} value={validacaoFechamentoRo} enabled={false} />
                                       <Picker.Item label="Encerrar RO" value="Encerrado" />
                                       <Picker.Item label="Aberto" value="Aberto" />
                               </Picker>
                            </>
                       ):(
-                        <View style={style.barra}></View>
+                        <View style={style.campos4}></View>
                       )}
 
                       {
-                         ro.suporte?.fase == "aguardando validacao" ? (
+                         fase == "aguardando validacao" && usuario.perfil === "admin" ? (
                             <View style={style.conatualiza}>
                                 <TouchableOpacity
                                 style={style.atualiza1}
@@ -476,8 +530,13 @@ const EditaRos = ({route}) => {
         </View>
     </View> 
   </ScrollView>
+  </> : 
+  <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <ActivityIndicator size="large" color="#666"/>
+  </View>
+}
 </KeyboardAvoidingView>
-    
+
   );
 };
 
@@ -682,26 +741,24 @@ display: 'none'
   },
   input3: { 
     flex: 1,
-   marginVertical:9,
-   backgroundColor: '#ffff',
-  
+    marginVertical:9,
+    backgroundColor: '#ffff',
     width:'96%',
     minHeight:100,
-   
     borderRadius:20,
-   shadowColor: "#000",
-   shadowOffset: {
+    shadowColor: "#000",
+    shadowOffset: {
      width: 0,
      height: 2,
    },
    shadowOpacity: 0.23,
    shadowRadius: 2.62,
    elevation: 4,
-  
    padding: 10,
    borderWidth: 1,
    borderColor: '#ccc',
    textAlignVertical: 'top', 
+   color: '#000'
  },
 
   descricao:{
