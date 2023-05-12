@@ -29,14 +29,20 @@ export const Contatos = () =>{
     useEffect(() => {
       (async () => {
         try {
-         
+           if (usuario.perfil == "admin") {
             const response = await api.get('/ro/atribuido/' + usuario._id);
             setMyRos(response.data);
           setLoading(false);
-        } catch (response) {
-          setErrorMessage(response.data.msg);
+        }else{
+          const response2 = await api.get('/ro/relator/' + usuario._id);
+          setRos(response2.data);
         }
-      })();
+        setLoading(false);
+      } catch (response) {
+        setErrorMessage(response.data.msg);
+      }
+      
+    })();
     }, []);
 
     function handlePress(destinatario:number): void {
@@ -55,8 +61,10 @@ export const Contatos = () =>{
       <Text style={style.titulo}>Meus Chats</Text>
             <View  style={style.containermensagens}>
             <ScrollView style={style.scroll} >
-          {
-            myRos && !loading ? myRos.map(ro => (
+              
+          {  usuario.perfil == 'admin' ? (
+
+          myRos && !loading ? myRos.map(ro => (
             
             <TouchableOpacity style={style.containerchat} key={ro._id}   
             onPress={() => handlePress(ro.relator.id._id)}
@@ -71,7 +79,7 @@ export const Contatos = () =>{
                 <Text style={style.nome}>{ 
                 usuario.perfil == 'cliente' ? ro.suporte.colaboradorIACIT.nome
                  : ro.relator.nome}</Text>
-                <Text>{ro.tituloOcorrencia}</Text>
+                <Text>{ro._id}</Text>
               </View>
               </View>
               
@@ -81,7 +89,33 @@ export const Contatos = () =>{
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <ActivityIndicator size="large" color="#666"/>
           </View>
-          }
+          ): (
+            ros && !loading ? ros.map(ro => (
+            
+              <TouchableOpacity style={style.containerchat} key={ro._id}   
+              onPress={() => handlePress(ro.suporte.colaboradorIACIT.id)}
+              >
+                <View style={style.chat} >
+                <View style={style.containerIcone} >
+                  <Text style={style.icone}>{ 
+                  usuario.perfil == 'cliente' ? ro.suporte.colaboradorIACIT.nome.charAt(0).toUpperCase()
+                   : ro.relator.nome.charAt(0).toUpperCase()}</Text>
+                </View>
+                <View style={style.container_nome} >
+                  <Text style={style.nome}>{ 
+                  usuario.perfil == 'cliente' ? ro.suporte.colaboradorIACIT.nome
+                   : ro.relator.nome}</Text>
+                  <Text>{ro.tituloOcorrencia}</Text>
+                </View>
+                </View>
+                {console.log(ro.suporte.colaboradorIACIT.id)}
+                <View style={style.bar}/>
+                </TouchableOpacity>
+              )) :
+              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <ActivityIndicator size="large" color="#666"/>
+            </View>
+          ) }
           </ScrollView>
             </View>
       <View style={{position:'absolute',  bottom: 0,}}>

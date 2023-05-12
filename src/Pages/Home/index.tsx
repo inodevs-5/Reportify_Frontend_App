@@ -84,6 +84,12 @@ export const Home = () =>{
             }>
             <Text style={style.enterButton}>Acompanhar Meus Registros de Ocorrência</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={style.buttonChat}
+           onPress={() => 
+            navigation.navigate('Contatos')
+            }>
+              <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
+          </TouchableOpacity>
           </>
         )}
 

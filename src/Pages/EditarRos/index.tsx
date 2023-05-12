@@ -75,47 +75,55 @@ const EditaRos = ({route}) => {
           setNomeResponsavel(response.data.responsavel.nome);
           setPosGradRelator(response.data.relator.posGrad);
           setPosGradResponsavel(response.data.responsavel.posGrad);
-          setDefeito(response.data.suporte.defeito);
           setClassDefeito(response.data.classDefeito);
-          setEquipamento(response.data.opcoesHardware.equipamento);
-          setEquipPosicao(response.data.opcoesHardware.equipPosicao);
-          setPartNumber(response.data.opcoesHardware.partNumber);
-          setSerialNumber(response.data.opcoesHardware.serialNumber);
-          setVersaoBaseDados(response.data.opcoesSoftware.versaoBaseDados);
-          setVersaoSoftware(response.data.opcoesSoftware.versaoSoftware);
-          setLogsAnexado(response.data.opcoesSoftware.logsAnexado);
           setDescricaoOcorrencia(response.data.descricaoOcorrencia);
-          setFase(response.data.suporte.fase);
-          setClassificacao(response.data.suporte.classificacao);
-          setCategoria(response.data.suporte.categoria);
-          setMelhoria(response.data.suporte.melhoria);
-          setOutros(response.data.suporte.outros);
-          setNome(response.data.suporte.colaboradorIACIT.nome);
-          setValidacaoFechamentoRo(response.data.suporte.validacaoFechamentoRo);
-          setJustificativaReclassificacao(response.data.suporte.justificativaReclassificacao)
-          setIdColaboradorIACIT(response.data.suporte.colaboradorIACIT.id)
-
+          setValidacaoFechamentoRo(response.data.validacaoFechamentoRo);
+          if (response.data.classDefeito === "hardware") {
+            setEquipamento(response.data.opcoesHardware.equipamento);
+            setEquipPosicao(response.data.opcoesHardware.equipPosicao);
+            setPartNumber(response.data.opcoesHardware.partNumber);
+            setSerialNumber(response.data.opcoesHardware.serialNumber);
+          }
+          if (response.data.classDefeito === "software") {
+            setVersaoBaseDados(response.data.opcoesSoftware.versaoBaseDados);
+            setVersaoSoftware(response.data.opcoesSoftware.versaoSoftware);
+            setLogsAnexado(response.data.opcoesSoftware.logsAnexado);
+          }
+          if (response.data.suporte) {
+            setFase(response.data.suporte.fase);
+            setDefeito(response.data.suporte.defeito);
+            setClassificacao(response.data.suporte.classificacao);
+            setCategoria(response.data.suporte.categoria);
+            setMelhoria(response.data.suporte.melhoria);
+            setOutros(response.data.suporte.outros);
+            setJustificativaReclassificacao(response.data.suporte.justificativaReclassificacao);
+            if (response.data.suporte.colaboradorIACIT) {
+              setNome(response.data.suporte.colaboradorIACIT.nome);
+              setIdColaboradorIACIT(response.data.suporte.colaboradorIACIT.id);
+            }
+          }
+          
           const response2 = await api.get('/usuario')
           setUsuarios(response2.data)
           setLoading(false)
         } catch (response) {
-          setErrorMessage(response.data.msg);
+          Alert.alert(response.data.msg);
         }
         setLoading(false)
       })();
           
     },[] );
-
     async function handelAtualizar() {
       setLoading(true)
+
       try{
         const response = await api.patch(`/ro/suporte/${numer}`,
         {
             categoria,
-            fase , 
+            fase, 
             idcolaboradorIACIT,
-            melhoria ,
-            classificacao , 
+            melhoria,
+            classificacao, 
             nome,
             outros, 
             procedTecnicos,
@@ -125,7 +133,7 @@ const EditaRos = ({route}) => {
           }, );
 
         Alert.alert(response.data.msg)
-        navigation.navigate('Home')
+        navigation.navigate('TabelaROs')
       }catch (response){
         Alert.alert(response.data.msg);
       }
@@ -161,6 +169,7 @@ const EditaRos = ({route}) => {
                   posGradRelator,
                   posGradResponsavel,
                   nomeResponsavel,
+                  idRelator: usuario._id
           }, );
         Alert.alert(response.data.msg)
         navigation.navigate('Home')
@@ -373,8 +382,8 @@ const EditaRos = ({route}) => {
                           
                                         <Picker.Item  label={fase} value={fase} enabled={false} />
                                         <Picker.Item label="Pendente" value="pendente" />
-                                        <Picker.Item label="Em andamento" value="em andamento" />
-                                        <Picker.Item label="Aguardando validação" value="aguardando validacao" />
+                                        <Picker.Item label="Em andamento" value="andamento" />
+                                        <Picker.Item label="Aguardando validação" value="validacao" />
                                         <Picker.Item label="Concluido" value="concluido" />
                                 </Picker>
                           </View>
@@ -386,11 +395,11 @@ const EditaRos = ({route}) => {
                                         setClassificacao(itemValue)
                                       }>
                                         <Picker.Item label={classificacao} value={classificacao} enabled={false} />
-                                        <Picker.Item label="Defeito" value="Defeito" />
-                                        <Picker.Item label="Melhoria" value="Melhoria" /> 
-                                        <Picker.Item label="Outros" value="Outros" />
+                                        <Picker.Item label="Defeito" value="defeito" />
+                                        <Picker.Item label="Melhoria" value="melhoria" /> 
+                                        <Picker.Item label="Outros" value="outros" />
                                   </Picker>
-                            { classificacao == "Defeito" && (
+                            { classificacao == "defeito" && (
                                   <>
                                     <Text style={style.text}>Defeito</Text>
                                               <View>
@@ -409,7 +418,7 @@ const EditaRos = ({route}) => {
                                     </>
                                   ) } 
 
-                                    { classificacao == "Melhoria" && (
+                                    { classificacao == "melhoria" && (
                                   <>  
                                   <Text style={style.text}>Melhoria:</Text>
                                         <View>
@@ -426,7 +435,7 @@ const EditaRos = ({route}) => {
                                         </View>
                                   </>
                                 ) } 
-                                { classificacao == "Outros" && (
+                                { classificacao == "outros" && (
                                     <> 
                                       <Text style={style.text}>Outro</Text>
                                             <View>
@@ -437,8 +446,8 @@ const EditaRos = ({route}) => {
                                                   setOutros(itemValue)
                                                 }>
                                                         <Picker.Item  label={outros} value={outros} enabled={false} />
-                                                        <Picker.Item label="Investigação" value="Investigação" />
-                                                        <Picker.Item label="Causa externa" value="Causa externa" />
+                                                        <Picker.Item label="Investigação" value="investigacao" />
+                                                        <Picker.Item label="Causa externa" value="causaexterna" />
                                                 </Picker>
 
                                             </View>
@@ -478,7 +487,7 @@ const EditaRos = ({route}) => {
                                     ></TextInput>
                               </View>
                       </View>
-                      { fase == "aguardando validacao" ? (
+                      { fase == "validacao"  && usuario.perfil == "cliente" ? (
                           <>
                             <Text style={style.text}>Validação e Fechamento do Ro</Text>
                               <Picker
@@ -497,7 +506,7 @@ const EditaRos = ({route}) => {
                       )}
 
                       {
-                         fase == "aguardando validacao" && usuario.perfil === "admin" ? (
+                         fase == "validacao" && usuario.perfil === "cliente" ? (
                             <View style={style.conatualiza}>
                                 <TouchableOpacity
                                 style={style.atualiza1}
@@ -508,6 +517,7 @@ const EditaRos = ({route}) => {
                             </View>
                       ):(
                         <>
+                           { usuario.perfil === "admin" &&
                             <View style={style.conatualiza}>
                                   <TouchableOpacity
                                   style={style.atualiza1}
@@ -516,7 +526,7 @@ const EditaRos = ({route}) => {
                                         <Text style={{color: '#ffffff', fontSize:22}}>Atualizar RO</Text>
                                   </TouchableOpacity>
                             </View>
-
+                            }
                       </>
                         )} 
               </ScrollView>

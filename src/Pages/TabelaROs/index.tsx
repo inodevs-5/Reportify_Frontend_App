@@ -78,6 +78,9 @@ export const TabelaROs = () =>{
       navigation.navigate('EditaRos' , {_id})
     }
 
+    console.log(usuario._id)
+    console.log(myRos)
+
   return (
 
       <ScrollView 
