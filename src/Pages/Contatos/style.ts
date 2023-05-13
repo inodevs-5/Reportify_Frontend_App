@@ -22,7 +22,7 @@ scroll:{
   //  backgroundColor: 'blue'
 },
  containerchat:{
-  backgroundColor:'##EFF0F3',
+  backgroundColor:'#fff',
   borderRadius:10,
    width:'100%',
    marginVertical:2,
@@ -33,6 +33,15 @@ scroll:{
   flexDirection:'row',
   height:40,
   justifyContent:'space-between',
+  // marginTop:2
+},
+error:{
+  // backgroundColor:'red',
+  flexDirection:'row',
+  height:40,
+  borderRadius:10,
+  justifyContent:'space-between',
+  backgroundColor:"#ef3434"
   // marginTop:2
 },
   naodefinido:{
@@ -50,13 +59,22 @@ scroll:{
   alignItems:'center',
   justifyContent:'center'
  },
+ Id:{
+  width:40,
+  height:40,
+  borderRadius:30,
+  backgroundColor:'#5e0808',
+  alignItems:'center',
+  justifyContent:'center'
+ },
  icone:{
 fontSize:25,
 color:'#fff'
  },
  nome:{
   fontSize:18,
-  fontWeight:"600"
+  fontWeight:"600",
+  color:"black"
  },
  container_nome:{
   // backgroundColor:'green',

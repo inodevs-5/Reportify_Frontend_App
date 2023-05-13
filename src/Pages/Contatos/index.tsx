@@ -52,6 +52,10 @@ export const Contatos = () =>{
     function esperar () : void {
       Alert.alert("Ainda nao há um colaborador")
     }
+
+    function error () : void {
+      Alert.alert("Não é possivel acessar esse Chat")
+    }
     
 
   return (
@@ -66,17 +70,17 @@ export const Contatos = () =>{
             
             
             <TouchableOpacity style={style.containerchat} key={ro._id}   
-            onPress={() => handlePress(ro.relator.id._id)}
+            onPress={() => ro.relator.id ?  handlePress(ro.relator.id._id) : error() }
             >
-              <View style={style.chat} >
-              <View style={style.containerIcone} >
-              <Text style={style.icone}>{ro.relator.id ? ro.relator.id.nome.charAt(0).toUpperCase() : null}
+              <View style={ro.relator.id ? style.chat : style.error} >
+              <View style={ro.relator.id ? style.containerIcone : style.Id} >
+              <Text style={style.icone}>{ro.relator.id ? ro.relator.id.nome.charAt(0).toUpperCase() : "N"}
                    </Text>
               </View>
               <View style={style.container_nome} >
-                <Text style={style.nome}>{ 
-                ro.relator.id ? ro.relator.id.nome : null}</Text>
-                <Text>{ro.tituloOcorrencia}</Text>
+                <Text style={ro.relator.id ? style.nome : style.nome_naodefido }>{ 
+                ro.relator.id ? ro.relator.id.nome : "Não é possivel acessar"}</Text>
+                <Text style={ro.relator.id  ? style.preto : style.branco }>{ro.tituloOcorrencia}</Text>
               </View>
               </View>
 
@@ -92,8 +96,8 @@ export const Contatos = () =>{
               <TouchableOpacity style={style.containerchat} key={ro._id}   
               onPress={() => ro.suporte ? handlePress(ro.suporte.colaboradorIACIT.id) : esperar() }
               >
-                <View style={ro.suporte ? style.chat : style.naodefinido} >
-                <View style={style.containerIcone} >
+                <View style={ro.suporte ? style.chat : style.error} >
+                <View style={ro.suporte ? style.containerIcone : style.Id} >
                 <Text style={style.icone}>{ro.suporte ? ro.suporte.colaboradorIACIT.nome.charAt(0).toUpperCase() : "N"} 
                    </Text>
                 </View>
