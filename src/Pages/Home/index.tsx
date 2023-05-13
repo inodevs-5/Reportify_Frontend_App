@@ -34,7 +34,7 @@ export const Home = () =>{
           </TouchableOpacity>
           <Modal visible={showModal} animationType="slide">
             <View style={style.modal}>
-              <Text style={style.title}>Informações de perfil</Text>
+              <Text style={style.title1}>Informações de perfil</Text>
               <Text style={style.text}>Nome:  {usuario.nome}!</Text>
               <Text style={style.text}>Email:  {usuario.email}!</Text>
               <Text style={style.text}>Tipo de perfil: {usuario.perfil}!</Text>
@@ -107,8 +107,8 @@ export const Home = () =>{
 }
 
 const style = StyleSheet.create({
-  
-  close: {
+
+ close: {
      fontSize: 16,
     textAlign: 'center',
     textAlignVertical:'center',
@@ -131,49 +131,22 @@ const style = StyleSheet.create({
    
     backgroundColor: 'white',
     padding: 20,
+    
   },
-  title: {
-    fontSize: 20,
+  title1: {
+    fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 10,
+    marginTop: 30,
+    textAlign: 'left',
+    color: 'black',
+   
   },
   text: {
-    fontSize: 16,
+    fontSize: 20,
   },
 
-  searchIcon:{
-    color: 'black',
-    // backgroundColor: 'yellow',
-  },
-
-  containermenu:{
-      // position: 'relative',
-      // alignItems: 'center',
-      // width: 300,
-      // height: 70,
-      // backgroundColor: '#2B3467',
-      // // marginBottom: -100,
-      // // marginTop: 160,
-      // borderRadius: 35,
-      // alignSelf: 'flex-end',
-  },
-
-  containerbusca:{
-    // backgroundColor:'yellow',
-    display:'flex',
-    flexDirection:'column',
-  },
-
-  container12:{
-    flexDirection:'row',
-    width: 300,
-    height:40,
-    margin:'auto',
-    alignItems:'center',
-    justifyContent:'space-between'
-  },
-  buttons:{
-    // backgroundColor:'red',
+ buttons:{
     margin:'auto',
     width:300
   },
@@ -191,24 +164,12 @@ const style = StyleSheet.create({
    
   },
   
-  
-  busca:{
-    textAlign: 'left',
-    width: 250,
-    height: 40,
-    // marginBottom: -30,
-    fontWeight: 'bold',
-    paddingTop:10,
-    // backgroundColor:'red',
-  },
-
-  iconNotif:{
+   iconNotif:{
     paddingLeft: 70,
     color: 'white',
   },
   
   iconHome: {
-    // paddingLeft: 90,
     color: 'white',
   },
 
@@ -232,34 +193,7 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  input: {
-    flex: 1,
-    alignItems:'center',
-    flexDirection:'row',
-    backgroundColor: '#2B3467',
-    justifyContent:'space-between',
-    margin:'auto',
-    color: 'black',
-    paddingLeft:6,
-    width:300,
-    height:40,
-    marginBottom: 10,
-    borderRadius:300,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4,
-  },
-
   container: {
-    // backgroundColor: '#F9FbFa',
-    // display:'flex',
-    // margin:'auto',
-    // alignItems: 'center',
     flex: 1,
     ...Platform.select({
       ios: { fontFamily: 'Arial', }, 
@@ -271,32 +205,15 @@ const style = StyleSheet.create({
     flexDirection: 'column'
   },
 
-  hyperlinkStyle: {
-    color: '#72A2FA',
-    marginTop: 25,
-    fontSize: 12
-  },
-
   buttonAdm :{
     alignItems: 'center',
     width: 300,
     padding: 15,
     backgroundColor: '#72A2FA',
     marginBottom: 20,
-    // marginTop: 20,
     borderRadius: 7,
   },
 
-  buttonClt :{
-    alignItems: 'center',
-    width: 300,
-    paddingTop: 60,
-    padding: 15,
-    backgroundColor: '#72A2FA',
-    marginBottom: 20,
-    borderRadius: 7,
-    height: 140,
-  },
 
   buttonClt2 :{
     alignItems: 'center',
@@ -314,14 +231,7 @@ const style = StyleSheet.create({
     color: 'white',
     fontSize: 20,
   },
-
-  bar:{
-    backgroundColor: '#68696C',
-    width: 290,
-    height: 2,
-    // marginTop: -10
-  },
-
+  
   exitIcon: {
     position: 'absolute',
     right: 50,
