@@ -13,25 +13,31 @@ export const Notificacoes = () =>{
   const { usuario } = useAuth();
 
   //Inicio da lógica para as notificações:
-  const [notifications, setNotifications] = useState([ //cria um estado 'notifications' e abaixo adiciona objetos ao array
-    { text: 'Mensagem recebida de RO03', date: new Date() },
-    { text: 'Novo status de RO', date: new Date() },
-    { text: 'RO finalizado', date: new Date() },
-    { text: 'Mensagem recebida de RO02', date: new Date() },
-    { text: 'Mensagem recebida de RO01', date: new Date() },
-    { text: 'Mensagem recebida de RO04', date: new Date() },
-    { text: 'Mensagem recebida de RO05', date: new Date() },
-  ]);
+  const [loading, setLoading] = useState(true);
+  const [notificacoes, setNotificacoes] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await api.get('/usuario/' + usuario._id);
+        console.log(response.data)
+        setNotificacoes(response.data.notificacoes);
+        setLoading(false)
+      } catch (response) {
+        setErrorMessage(response.data.msg);
+      }
+    })();
+  }, []);
   return (
     
     
     <>
         <View style={style.container}>
             <ScrollView>
-              {notifications.map((notification, index) => (
+              {notificacoes && notificacoes.map((notification, index) => (
                 <View key={index}>
-                  <Text style={style.text}>{notification.text}</Text>
-                  <Text style={style.date}>{notification.date.toLocaleString()}</Text>
+                  <Text style={style.text}>{notification.mensagem}</Text>
+                  <Text style={style.date}>{notification.data.toLocaleString()}</Text>
                   <View style={style.separator} />{/*Linha que separa as notificações */}
                 </View>
               ))}

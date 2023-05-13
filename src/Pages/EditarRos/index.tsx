@@ -71,7 +71,7 @@ const EditaRos = ({route}) => {
           setOrgao(response.data.orgao);
           setContrato(response.data.contrato);
           setDataRegistro(response.data.dataRegistro);
-          setNomeRelator(response.data.relator.nome);
+          // setNomeRelator(response.data.relator.nome);
           setNomeResponsavel(response.data.responsavel.nome);
           setPosGradRelator(response.data.relator.posGrad);
           setPosGradResponsavel(response.data.responsavel.posGrad);
