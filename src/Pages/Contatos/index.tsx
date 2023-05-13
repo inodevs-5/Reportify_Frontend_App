@@ -71,10 +71,9 @@ export const Contatos = () =>{
             >
               <View style={style.chat} >
               <View style={style.containerIcone} >
-              <Text style={style.icone}>{ro.relator.id ? ro.relator.id.nome : null}
+              <Text style={style.icone}>{ro.relator.id ? ro.relator.id.nome.charAt(0).toUpperCase() : null}
                    </Text>
               </View>
-              {console.log(ro.relator.id)}
               <View style={style.container_nome} >
                 <Text style={style.nome}>{ 
                 ro.relator.id ? ro.relator.id.nome : null}</Text>
@@ -96,13 +95,11 @@ export const Contatos = () =>{
               >
                 <View style={style.chat} >
                 <View style={style.containerIcone} >
-                <Text style={style.icone}>{ro.suporte.colaboradorIACIT.nome} 
+                <Text style={style.icone}>{ro.suporte ? ro.suporte.colaboradorIACIT.nome.charAt(0).toUpperCase() : "N"} 
                    </Text>
                 </View>
                 <View style={style.container_nome} >
-                  <Text style={style.nome}>{ 
-                  usuario.perfil == 'cliente' ? ro.suporte.colaboradorIACIT.nome
-                   : ro.relator.nome}</Text>
+                  <Text style={style.nome}>{ro.suporte ? ro.suporte.colaboradorIACIT.nome.charAt(0).toUpperCase() : "Colaborador não está defido"} </Text>
                   <Text>{ro.tituloOcorrencia}</Text>
                 </View>
                 </View>
