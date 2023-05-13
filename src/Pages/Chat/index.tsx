@@ -37,6 +37,7 @@ export const Chat = ({route}) =>{
       try {
     const response = await api.get(`/mensagem/${usuario._id}/${destinatario}/`)
     setMessages(response.data)
+    console.log(messages)
     setLoading(false);
     } catch (response) {
       setErrorMessage(response.data.msg);
@@ -85,23 +86,22 @@ setLoading(false)
 }
 
 let giftedChatMessages = messages.map((chatMessage) => {
-  let isUserMessage = chatMessage.remetente === usuario._id;
   let gcm = {
     _id: chatMessage._id,
     text: chatMessage.conteudo,
     createdAt: chatMessage.enviadoEm,
-    user: {
-      _id: usuario._id,
-      name: usuario.nome,
+    user:{
+      _id:chatMessage.destinatario?._id,
+      name: chatMessage.destinatario?.nome,
+      _id:chatMessage.remetente?._id,
+      name: chatMessage.remetente?.nome,
+      // _id:usuario._id,
     },
-    
   }
-
- 
   return gcm;
 });
    
-console.log(giftedChatMessages)
+// console.log(giftedChatMessages)
   const onSend = useCallback((messages = []) => {
     setRefresh(true)
     setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
@@ -174,28 +174,31 @@ console.log(giftedChatMessages)
      onPress={() => 
       navigation.navigate('Contatos')
       }/>
-      {/* {!loading ? <> */}
+      {/* <View> */}
     <GiftedChat
       messages={giftedChatMessages}
       onSend={messages => onSend(messages)}
       user={{
-        _id: usuario._id,
+        _id: usuario._id, // ou qualquer outra propriedade do usuário que você queira utilizar
         name: usuario.nome,
       }}
       renderBubble={renderBubble}
-      // renderMessage={renderMessage}
       locale='pt-br'
       timeFormat='HH:mm'
-      // renderUsernameOnMessage={true}
+      renderUsernameOnMessage={true}
       alwaysShowSend={true}
       renderSend={renderSend}
+      // minInputToolbarHeight={232}
       isLoadingEarlier={true}
       scrollToBottom
       renderInputToolbar={CustomInputToolbar}
       placeholder='Digite sua mensagem'
+      // renderMessageText={renderMessageText}
+      // scrollToBottomComponent={scrollToBottomComponent}
     /> 
-      {/* } */}
-
+    {/* <Text>
+      {messages.conteudo}
+    </Text> */}
     </SafeAreaView>
   )
   }

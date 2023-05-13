@@ -79,7 +79,7 @@ export const Contatos = () =>{
                 <Text style={style.nome}>{ 
                 usuario.perfil == 'cliente' ? ro.suporte.colaboradorIACIT.nome
                  : ro.relator.nome}</Text>
-                <Text>{ro._id}</Text>
+                <Text>{ro.tituloOcorrencia}</Text>
               </View>
               </View>
               
@@ -108,7 +108,6 @@ export const Contatos = () =>{
                   <Text>{ro.tituloOcorrencia}</Text>
                 </View>
                 </View>
-                {console.log(ro.suporte.colaboradorIACIT.id)}
                 <View style={style.bar}/>
                 </TouchableOpacity>
               )) :
