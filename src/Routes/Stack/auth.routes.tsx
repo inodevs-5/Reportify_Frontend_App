@@ -9,6 +9,7 @@ import { propsNavigationStack } from "./Models";
 import EditaRos from "../../Pages/EditarRos";
 import EditarUsuario from "../../Pages/EditarUsuario";
 import RedefinirSenha from "../../Pages/RedefinirSenha";
+import EmailRedefinicao from "../../Pages/EmailRedenificao";
 
 const { Navigator, Screen } = createNativeStackNavigator<propsNavigationStack>()
 
@@ -27,6 +28,7 @@ export default function AuthRoutes () {
             <Screen name="CadastroUsuario" component={CadastroUsuario}/>
             <Screen name="EditarUsuario" component={EditarUsuario}/>
             <Screen name="RedefinirSenha" component={RedefinirSenha}/>
+            <Screen name="EmailRedefinicao" component={EmailRedefinicao}/>
         </Navigator>
     )
 }

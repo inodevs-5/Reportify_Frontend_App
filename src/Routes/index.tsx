@@ -25,19 +25,20 @@ export default function () {
                     path: ""
                 },
                 RedefinirSenha: {
-                    path: "senha/:id",
+                    path: "senha/:id/:firstTime",
                     parse: {
                         id: (id) => `${id}`,
+                        firstTime: (firstTime) => `${firstTime}`
                     }
                 }
             }
         }
     }  
 
-   return(
-    <NavigationContainer linking={linking}>
-        {usuario && usuario.perfil == "admin" ? <AdminRoutes /> : signed ? <AuthRoutes /> : <Routes />}
-    </NavigationContainer>
+   return (
+        <NavigationContainer linking={linking}>
+            {usuario && usuario.perfil == "admin" ? <AdminRoutes /> : signed ? <AuthRoutes /> : <Routes />}
+        </NavigationContainer>
     )
 
 }

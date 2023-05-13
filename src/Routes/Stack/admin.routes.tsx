@@ -9,6 +9,7 @@ import EditaRos from "../../Pages/EditarRos";
 import CadastroUsuario from "../../Pages/CadastroUsuario";
 import EditarUsuario from "../../Pages/EditarUsuario";
 import RedefinirSenha from "../../Pages/RedefinirSenha";
+import EmailRedefinicao from "../../Pages/EmailRedenificao";
 
 const { Navigator, Screen } = createNativeStackNavigator<propsNavigationStack>()
 
@@ -25,6 +26,7 @@ export default function AdminRoutes () {
             <Screen name="MembroSuporte" component={MembroSuporte}/>
             <Screen name="CadastroUsuario" component={CadastroUsuario}/> 
             <Screen name="RedefinirSenha" component={RedefinirSenha}/>
+            <Screen name="EmailRedefinicao" component={EmailRedefinicao}/>
         </Navigator>
     )
 }
