@@ -46,17 +46,7 @@ export const Home = () =>{
           </Modal>
         </View>
 
-        <View style={style.containerbusca}>
-          <View style={style.container12}>
-            <TextInput style={style.busca}
-              placeholder='Buscar RO'
-              value={input}
-              onChangeText={(texto => setInput(texto))}>
-            </TextInput>
-            <Icon name='search' size={21} style={style.searchIcon} />
-          </View>
-          <View style={style.bar} />
-        </View>
+        
 
         <View style={style.buttons}>
 
