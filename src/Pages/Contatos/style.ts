@@ -25,15 +25,23 @@ scroll:{
   backgroundColor:'##EFF0F3',
   borderRadius:10,
    width:'100%',
-   marginVertical:5,
+   marginVertical:2,
    height:45,
  },
  chat:{
   // backgroundColor:'red',
   flexDirection:'row',
   height:40,
-  justifyContent:'space-between'
+  justifyContent:'space-between',
+  // marginTop:2
 },
+  naodefinido:{
+    backgroundColor: "#2A2E30",
+    flexDirection:'row',
+    height:40,
+    borderRadius:10,
+    justifyContent:'space-between'
+  },
  containerIcone:{
   width:40,
   height:40,
@@ -54,11 +62,23 @@ color:'#fff'
   // backgroundColor:'green',
   width:'80%',
  },
+ nome_naodefido:{
+  fontSize:18,
+  fontWeight:"600",
+  color:"white"
+
+ },
  bar:{
   width:"100%",
   height:2,
   backgroundColor:"#666",
   marginVertical:2,
   borderRadius:10,
+},
+preto:{
+  color:"black"
+},
+branco:{
+  color:"white"
 }
 });

@@ -47,14 +47,13 @@ export const Contatos = () =>{
 
     function handlePress(destinatario:number): void {
       navigation.navigate('Chat' , {destinatario})
-      // console.warn(`${destinatario} `)
-      
     }
-    // function handlePresa(): void {
-    //   console.log(myRos)
-    // }
 
-// console.log(myRos)
+    function esperar () : void {
+      Alert.alert("Ainda nao há um colaborador")
+    }
+    
+
   return (
     <View style={style.container}>
       <Text style={style.titulo}>Meus Chats</Text>
@@ -91,16 +90,16 @@ export const Contatos = () =>{
             ros && !loading ? ros.map(ro => (
             
               <TouchableOpacity style={style.containerchat} key={ro._id}   
-              onPress={() => handlePress(ro.suporte.colaboradorIACIT.id)}
+              onPress={() => ro.suporte ? handlePress(ro.suporte.colaboradorIACIT.id) : esperar() }
               >
-                <View style={style.chat} >
+                <View style={ro.suporte ? style.chat : style.naodefinido} >
                 <View style={style.containerIcone} >
                 <Text style={style.icone}>{ro.suporte ? ro.suporte.colaboradorIACIT.nome.charAt(0).toUpperCase() : "N"} 
                    </Text>
                 </View>
                 <View style={style.container_nome} >
-                  <Text style={style.nome}>{ro.suporte ? ro.suporte.colaboradorIACIT.nome.charAt(0).toUpperCase() : "Colaborador não está defido"} </Text>
-                  <Text>{ro.tituloOcorrencia}</Text>
+                  <Text style={ro.suporte ? style.nome : style.nome_naodefido}>{ro.suporte ? ro.suporte.colaboradorIACIT.nome.charAt(0).toUpperCase() : "Colaborador não está defido"} </Text>
+                  <Text style={ro.suporte ? style.preto : style.branco}>{ro.tituloOcorrencia}</Text>
                 </View>
                 </View>
                 <View style={style.bar}/>
