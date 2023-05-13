@@ -8,6 +8,8 @@ import { propsNavigationStack } from "./Models";
 import EditaRos from "../../Pages/EditarRos";
 import CadastroUsuario from "../../Pages/CadastroUsuario";
 import EditarUsuario from "../../Pages/EditarUsuario";
+import Chat from "../../Pages/Chat";
+import Contatos from "../../Pages/Contatos";
 import RedefinirSenha from "../../Pages/RedefinirSenha";
 import EmailRedefinicao from "../../Pages/EmailRedenificao";
 
@@ -20,8 +22,9 @@ export default function AdminRoutes () {
             <Screen name="CadastroRO" component={CadastroRO}/>
             <Screen name="TabelaROs" component={TabelaROs}/>
             <Screen name="EditaRos" component={EditaRos} />
-            {/* <Screen name="Chat" component={Chat}/>
-            <Screen name="Notificacoes" component={Notificacoes}/> */}
+            <Screen name="Chat" component={Chat}/>
+            <Screen name="Contatos" component={Contatos}/>
+            {/* <Screen name="Notificacoes" component={Notificacoes}/> */}
             <Screen name="EditarUsuario" component={EditarUsuario}/>
             <Screen name="MembroSuporte" component={MembroSuporte}/>
             <Screen name="CadastroUsuario" component={CadastroUsuario}/> 

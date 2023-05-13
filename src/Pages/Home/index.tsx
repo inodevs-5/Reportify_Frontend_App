@@ -61,6 +61,13 @@ export const Home = () =>{
             }>
             <Text style={style.enterButton}>Cadastrar Novo Usuário</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={style.buttonChat}
+           onPress={() => 
+            navigation.navigate('Contatos')
+            }>
+              <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
+          </TouchableOpacity>
           </>
         ) : ( 
           <>
@@ -76,6 +83,12 @@ export const Home = () =>{
             navigation.navigate('TabelaROs', {type: "specific"})
             }>
             <Text style={style.enterButton}>Acompanhar Meus Registros de Ocorrência</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={style.buttonChat}
+           onPress={() => 
+            navigation.navigate('Contatos')
+            }>
+              <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
           </TouchableOpacity>
           </>
         )}
@@ -111,18 +124,25 @@ const style = StyleSheet.create({
     // backgroundColor: 'yellow',
   },
 
-  containermenu:{
-      // position: 'relative',
-      // alignItems: 'center',
-      // width: 300,
-      // height: 70,
-      // backgroundColor: '#2B3467',
-      // // marginBottom: -100,
-      // // marginTop: 160,
-      // borderRadius: 35,
-      // alignSelf: 'flex-end',
-  },
+  buttonChat:{
+      backgroundColor: '#72A2FA',
+      flexDirection:'row',
+      justifyContent:'space-around',
+      // width:'18%',
+      alignItems:'center',
+      width: 300,
+      padding: 15,
+      marginBottom: 20,
+      borderRadius: 7,
 
+  },
+icon:{
+ padding:10
+},
+iconchat:{
+  // padding:10,
+  color:'white'
+ },
   containerbusca:{
     // backgroundColor:'yellow',
     display:'flex',
