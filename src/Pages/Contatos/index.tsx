@@ -102,7 +102,7 @@ export const Contatos = () =>{
                    </Text>
                 </View>
                 <View style={style.container_nome} >
-                  <Text style={ro.suporte ? style.nome : style.nome_naodefido}>{ro.suporte ? ro.suporte.colaboradorIACIT.nome.charAt(0).toUpperCase() : "Colaborador não está defido"} </Text>
+                  <Text style={ro.suporte ? style.nome : style.nome_naodefido}>{ro.suporte ? ro.suporte.colaboradorIACIT.nome : "Colaborador não está defido"} </Text>
                   <Text style={ro.suporte ? style.preto : style.branco}>{ro.tituloOcorrencia}</Text>
                 </View>
                 </View>
