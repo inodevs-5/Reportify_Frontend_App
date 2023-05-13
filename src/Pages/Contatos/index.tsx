@@ -55,7 +55,6 @@ export const Contatos = () =>{
     // }
 
 // console.log(myRos)
-
   return (
     <View style={style.container}>
       <Text style={style.titulo}>Meus Chats</Text>
@@ -66,23 +65,23 @@ export const Contatos = () =>{
 
           myRos && !loading ? myRos.map(ro => (
             
+            
             <TouchableOpacity style={style.containerchat} key={ro._id}   
             onPress={() => handlePress(ro.relator.id._id)}
             >
               <View style={style.chat} >
               <View style={style.containerIcone} >
-                <Text style={style.icone}>{ 
-                usuario.perfil == 'cliente' ? ro.suporte.colaboradorIACIT.nome.charAt(0).toUpperCase()
-                 : ro.relator.nome.charAt(0).toUpperCase()}</Text>
+              <Text style={style.icone}>{ro.relator.id ? ro.relator.id.nome : null}
+                   </Text>
               </View>
+              {console.log(ro.relator.id)}
               <View style={style.container_nome} >
                 <Text style={style.nome}>{ 
-                usuario.perfil == 'cliente' ? ro.suporte.colaboradorIACIT.nome
-                 : ro.relator.nome}</Text>
+                ro.relator.id ? ro.relator.id.nome : null}</Text>
                 <Text>{ro.tituloOcorrencia}</Text>
               </View>
               </View>
-              
+
               <View style={style.bar}/>
               </TouchableOpacity>
             )) :
@@ -97,9 +96,8 @@ export const Contatos = () =>{
               >
                 <View style={style.chat} >
                 <View style={style.containerIcone} >
-                  <Text style={style.icone}>{ 
-                  usuario.perfil == 'cliente' ? ro.suporte.colaboradorIACIT.nome.charAt(0).toUpperCase()
-                   : ro.relator.nome.charAt(0).toUpperCase()}</Text>
+                <Text style={style.icone}>{ro.suporte.colaboradorIACIT.nome} 
+                   </Text>
                 </View>
                 <View style={style.container_nome} >
                   <Text style={style.nome}>{ 
