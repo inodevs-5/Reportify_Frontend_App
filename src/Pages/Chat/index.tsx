@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { Bubble, GiftedChat, InputToolbar, Message, MessageText, Send } from 'react-native-gifted-chat'
 import style from './style';
 import Icon from 'react-native-vector-icons/Ionicons'
-import { Alert, Platform, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Platform, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Menu from '../../components/menu';
 import { useNavigation } from '@react-navigation/native';
@@ -13,7 +13,7 @@ export const Chat = ({route}) =>{
 
   interface Imessage{
     conteudo?:string,
-    Enviado?:Date,
+    enviadoEm?:Date,
     remetente?:{
       _id?:number;
       nome?:string;
@@ -29,6 +29,7 @@ export const Chat = ({route}) =>{
   const [refresh, setRefresh] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loading1, setLoading1] = useState(true);
   const destinatario = route.params.destinatario
 
 
@@ -56,15 +57,16 @@ useEffect(() => {
     } catch (response) {
       setErrorMessage(response.data.msg);
     }
+    setLoading1(false)
   })();
 }, [refresh]);
 
 const uniqueId = Math.floor(Math.random() * 1000000000000000).toString(16);
-const now = new Date();
-const options = { timeZone: "Europe/London" };
-const horarioAtual = now.toLocaleTimeString("en-GB", options);
+// const now = new Date();
+// const options = { timeZone: "Europe/London" };
+// const horarioAtual = now.toLocaleTimeString("en-GB", options);
 
-console.log(horarioAtual)
+console.log(messages)
 
 async function enviarMensagem (novaMensagem) {
   setLoading(true);
@@ -75,11 +77,9 @@ async function enviarMensagem (novaMensagem) {
     enviadoEm: new Date(),
     remetente: usuario._id,
     destinatario: destinatario,
-    // enviadoEm: new Date(),
   })
   Alert.alert(reponse2.data.msg)
 }catch(reponse2){
-  // Alert.alert(reponse2.data.msg)
 }
 setLoading(false)
 
@@ -103,6 +103,7 @@ let giftedChatMessages = messages.map((chatMessage) => {
    
 // console.log(giftedChatMessages)
   const onSend = useCallback((messages = []) => {
+    setLoading1(true)
     setRefresh(true)
     setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
     enviarMensagem(messages);
@@ -174,7 +175,8 @@ let giftedChatMessages = messages.map((chatMessage) => {
      onPress={() => 
       navigation.navigate('Contatos')
       }/>
-      {/* <View> */}
+      { !loading ? <>
+        { !loading1 ? <>
     <GiftedChat
       messages={giftedChatMessages}
       onSend={messages => onSend(messages)}
@@ -185,7 +187,7 @@ let giftedChatMessages = messages.map((chatMessage) => {
       renderBubble={renderBubble}
       locale='pt-br'
       timeFormat='HH:mm'
-      renderUsernameOnMessage={true}
+      // renderUsernameOnMessage={true}
       alwaysShowSend={true}
       renderSend={renderSend}
       // minInputToolbarHeight={232}
@@ -196,9 +198,16 @@ let giftedChatMessages = messages.map((chatMessage) => {
       // renderMessageText={renderMessageText}
       // scrollToBottomComponent={scrollToBottomComponent}
     /> 
-    {/* <Text>
-      {messages.conteudo}
-    </Text> */}
+    </> :
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#666"/>
+    </View>
+     }
+    </> :
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#666"/>
+    </View>
+     }
     </SafeAreaView>
   )
   }
