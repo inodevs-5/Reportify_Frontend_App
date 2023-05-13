@@ -35,9 +35,10 @@ export const Home = () =>{
           <Modal visible={showModal} animationType="slide">
             <View style={style.modal}>
               <Text style={style.title}>Informações de perfil</Text>
-              <Text style={style.text}>Nome: João da Silva</Text>
-              <Text style={style.text}>Email: joao.silva@example.com</Text>
-              <Text style={style.text}>Tipo de perfil: Usuário</Text>
+              <Text style={style.text}>Nome:  {usuario.nome}!</Text>
+              <Text style={style.text}>Email:  {usuario.email}!</Text>
+              <Text style={style.text}>Tipo de perfil: {usuario.perfil}!</Text>
+              <Text style={style.text}>Empresa: {usuario.empresa}!</Text>
               <TouchableOpacity onPress={() => setShowModal(false)}>
                 <Text style={style.close}>Fechar</Text>
               </TouchableOpacity>
@@ -118,9 +119,16 @@ export const Home = () =>{
 const style = StyleSheet.create({
   
   close: {
-    fontSize: 16,
-    color: 'blue',
+     fontSize: 16,
+    textAlign: 'center',
+    textAlignVertical:'center',
     textDecorationLine: 'underline',
+    width:130,
+    borderRadius:300,
+    height: 40,
+    backgroundColor: '#72A2FA',
+    marginTop:10,
+    marginBottom:10
   },
   containericone: {
     position: 'absolute',
