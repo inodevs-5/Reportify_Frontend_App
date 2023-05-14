@@ -203,7 +203,6 @@ const EditaRos = ({route}) => {
                   posGradResponsavel,
                   nomeResponsavel,
                   idRelator: usuario._id
-                  idRelator: usuario._id
           }, );
         Alert.alert(response.data.msg)
         navigation.navigate('Home')
@@ -439,7 +438,6 @@ const EditaRos = ({route}) => {
                                         <Picker.Item label="Outros" value="outros" />
                                   </Picker>
                             { classificacao == "defeito" && (
-                            { classificacao == "defeito" && (
                                   <>
                                     <Text style={style.text}>Defeito: </Text>
                                               <View>
@@ -459,7 +457,6 @@ const EditaRos = ({route}) => {
                                   ) } 
 
                                     { classificacao == "melhoria" && (
-                                    { classificacao == "melhoria" && (
                                   <>  
                                   <Text style={style.text}>Melhoria: </Text>
                                         <View>
@@ -476,7 +473,6 @@ const EditaRos = ({route}) => {
                                         </View>
                                   </>
                                 ) } 
-                                { classificacao == "outros" && (
                                 { classificacao == "outros" && (
                                     <> 
                                       <Text style={style.text}>Outros: </Text>

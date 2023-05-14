@@ -35,12 +35,40 @@ export const TabelaROs = () =>{
             setRos(response.data);
           }
 
-          setLoading(false);
         } catch (response) {
           setErrorMessage(response.data.msg);
         }
+
+        setLoading(false);
       })();
     }, []);
+
+    async function cancel () {
+      setLoading(true)
+      setInput('')
+      try{
+        if (usuario.perfil == "admin") {
+          const response = await api.get('/ro');
+          setAllRos(response.data);
+
+          const response2 = await api.get('/ro/atribuido/' + usuario._id);
+          setMyRos(response2.data);
+
+          if (selectedFirstButton) {
+            setRos(response.data);
+          } else {
+            setRos(response2.data)
+          }
+        } else {
+          setSelectedFirstButton(false);
+          const response = await api.get('/ro/relator/' + usuario._id);
+          setRos(response.data);
+        }
+      } catch (response) {
+        setErrorMessage(response.data.msg);
+      }
+      setLoading(false)
+    }
 
     function changeToAll() {
       if (!selectedFirstButton) {
@@ -65,22 +93,34 @@ export const TabelaROs = () =>{
     }
 
     async function pesquisar() {
+      setLoading(true)
       try {
-        const response = await api.get('/ro/search/' + input);
-        setRos(response.data);
+        if (usuario.perfil == "admin") {
+            const response = await api.get('/ro/search/' + input);
+            setAllRos(response.data);
+            const response2 = await api.get('/ro/atribuido/search/' + usuario._id + '/' + input);
+            setMyRos(response2.data)
+            if (selectedFirstButton) {
+              setRos(response.data);
+            } else {
+              setRos(response2.data);
+            }
+        } else {
+          const response = await api.get('/ro/relator/search/' + usuario._id + '/' + input);
+
+          if (response.data) {
+            setRos(response.data)
+          }
+        }
       } catch (response) {
         setErrorMessage(response.data.msg);
       }
+      setLoading(false)
     }
 
     function handlePress(_id:Ro): void {
       navigation.navigate('EditaRos' , {_id})
     }
-
-
-    console.log(usuario._id)
-    console.log(myRos)
-
 
   return (
 
@@ -96,8 +136,11 @@ export const TabelaROs = () =>{
               value={input} 
               onChangeText={(texto => setInput(texto))}>
               </TextInput>
+              <TouchableOpacity onPress={cancel}>
+                <Text style={style.cancel}>X</Text>
+              </TouchableOpacity>
               <TouchableOpacity onPress={pesquisar}>
-              <Icon name='search' size={21} style={style.searchIcon}/>
+                <Icon name='search' size={21} style={style.searchIcon}/>
               </TouchableOpacity>
             </View>
             <View style={style.bar}/>
@@ -127,7 +170,7 @@ export const TabelaROs = () =>{
             <View key={ro._id} style={style.square}>
               <TouchableOpacity onPress={() => handlePress(ro._id)}>
               <Text style={style.square}> <Text style={style.bold}>#{ro._id} </Text>
-                  {'\n'} <Text style={style.bold}>Título: </Text>{ro._id}
+                  {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
                   {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
                   
                   {!selectedFirstButton ? (
@@ -145,6 +188,7 @@ export const TabelaROs = () =>{
               <ActivityIndicator size="large" color="#666"/>
           </View>
           }
+          {ros.length < 1 && <Text style={{ marginTop: 20 }}>Não foi encontrado nenhum Registro de Ocorrência</Text>}
           </ScrollView>
         </View>
     {/* <View style={fler}> */}
@@ -354,6 +398,11 @@ squareContainer: {
   bold: {
     fontWeight: 'bold',
     color: '#000',
+  },
+  cancel: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginLeft: -20
   }
 });
 
