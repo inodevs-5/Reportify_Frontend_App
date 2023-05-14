@@ -75,20 +75,14 @@ export const TabelaROs = () =>{
 
     function handlePress(_id:Ro): void {
       navigation.navigate('EditaRos' , {_id})
-
-      // console.warn(_id)
     }
+
+
+    console.log(usuario._id)
+    console.log(myRos)
+
+
   return (
-    // <View style={style.container}>
-    // <TextInput style={style.busca}  
-    //   placeholder='Buscar RO'  
-    //   value={input} 
-    //   onChangeText={(texto => setInput(texto))}>
-    // </TextInput> 
-    // <TouchableOpacity onPress={pesquisar}>
-    //   <Icon name='search' size={21} style={style.searchIcon}/>
-    // </TouchableOpacity>
-    // <View style={style.bar}/> 
 
       <ScrollView 
     contentContainerStyle={{ flexGrow: 1 }} 
@@ -123,13 +117,6 @@ export const TabelaROs = () =>{
             </View>
           }
 
-        {/* <TextInput style={style.busca}  
-            placeholder='Buscar RO'  
-            value={input} 
-            onChangeText={(texto => setInput(texto))}>
-          </TextInput>
-          <Icon name='search' size={21} style={style.searchIcon}/>
-          <View style={style.bar}/>  */}
 
         <View style={style.squareContainer}>
         <View style={usuario.perfil == 'cliente' ? {height: 520} : {height: 460}}>
@@ -138,10 +125,10 @@ export const TabelaROs = () =>{
           {
             ros && !loading ? ros.map(ro => (
             <View key={ro._id} style={style.square}>
-              <TouchableOpacity onPress={() => handlePress(ro._id) }>
+              <TouchableOpacity onPress={() => handlePress(ro._id)}>
               <Text style={style.square}> <Text style={style.bold}>#{ro._id} </Text>
-                  {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
-                  {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte && ro.suporte.fase ? ro.suporte.fase : "Pendente"}
+                  {'\n'} <Text style={style.bold}>Título: </Text>{ro._id}
+                  {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
                   
                   {!selectedFirstButton ? (
                     <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.suporte && ro.suporte.colaboradorIACIT ? ro.suporte.colaboradorIACIT.nome : "A definir"}</>
