@@ -17,7 +17,6 @@ export const TabelaROs = () =>{
     const [myRos, setMyRos] = useState();
     const [loading, setLoading] = useState(true);
     const [selectedFirstButton, setSelectedFirstButton] = useState(true);
-
     const [inputFocus, setInputFocus] = useState(false);
 
     useEffect(() => {
@@ -78,8 +77,10 @@ export const TabelaROs = () =>{
       navigation.navigate('EditaRos' , {_id})
     }
 
+
     console.log(usuario._id)
     console.log(myRos)
+
 
   return (
 
@@ -130,10 +131,10 @@ export const TabelaROs = () =>{
                   {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
                   
                   {!selectedFirstButton ? (
-                    <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.responsavel ? ro.responsavel.nome : "A definir"}</>
+                    <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.suporte && ro.suporte.colaboradorIACIT ? ro.suporte.colaboradorIACIT.nome : "A definir"}</>
 
                   ) : (
-                    <>{'\n'} <Text style={style.bold}>Categoria: </Text>{ro.suporte ? ro.suporte.fase : "A definir"}</>
+                    <>{'\n'} <Text style={style.bold}>Categoria: </Text>{ro.suporte ? ro.suporte.categoria : "A definir"}</>
                   )}
 
               </Text>

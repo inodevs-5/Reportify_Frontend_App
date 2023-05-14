@@ -22,16 +22,15 @@ export default function AuthRoutes () {
             <Screen name="CadastroRO" component={CadastroRO}/>
             <Screen name="MembroSuporte" component={MembroSuporte}/>
             <Screen name="TabelaROs" component={TabelaROs}/>
-            
             <Screen name="Chat" component={Chat}/>
             <Screen name="Contatos" component={Contatos}/>
             {/* <Screen name="Notificacoes" component={Notificacoes}/>  */}
-           
             <Screen name="EditaRos" component={EditaRos} />
             <Screen name="CadastroUsuario" component={CadastroUsuario}/>
             <Screen name="EditarUsuario" component={EditarUsuario}/>
             <Screen name="RedefinirSenha" component={RedefinirSenha}/>
             <Screen name="EmailRedefinicao" component={EmailRedefinicao}/>
+
         </Navigator>
     )
 }

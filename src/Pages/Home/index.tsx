@@ -1,67 +1,75 @@
 /* eslint-disable quotes */
 import React, { useState } from 'react';
-import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'
+import {StyleSheet,Modal, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
-
+import Icone from 'react-native-vector-icons/FontAwesome';
 export const Home = () =>{
   const { usuario, signOut } = useAuth();
 
   const navigation = useNavigation<propsStack>()
   const [input, setInput] = useState('');
 
+  const [showModal, setShowModal] = useState(false);
+
+  const handlePress = () => {
+    setShowModal(true);
+  }
   return (
     <View style={style.container}>
-      <Text style={style.title}>Olá, {usuario.nome}!</Text>
-      <TouchableOpacity onPress={signOut} style={style.exitIcon} >
-        <Icon name='exit-outline' size={30} />
-      </TouchableOpacity>
-      <View style={style.containerbusca}>
-        <View style={style.container12}>
-      <TextInput style={style.busca}  
-        placeholder='Buscar RO'  
-        value={input} 
-        onChangeText={(texto => setInput(texto))}>
-      </TextInput>
-      <Icon name='search' size={21} style={style.searchIcon}/>
-      </View>
-      <View style={style.bar}/> 
-       </View>
+        <Text style={style.title}>Olá, {usuario.nome}!</Text>
+        <TouchableOpacity onPress={signOut} style={style.exitIcon}>
+          <Icon name='exit-outline' size={30} />
+        </TouchableOpacity>
+        
 
-     <View style={style.buttons}>
+        <View style={style.containericone}>
+          <TouchableOpacity onPress={handlePress} style={style.userIcon}>
+            
+            <Icone name='user-circle' size={30}  />
+          </TouchableOpacity>
+          <Modal visible={showModal} animationType="slide">
+            <View style={style.modal}>
+              <Text style={style.title1}>Informações de perfil</Text>
+              <Text style={style.text}>Nome:  {usuario.nome}!</Text>
+              <Text style={style.text}>Email:  {usuario.email}!</Text>
+              <Text style={style.text}>Tipo de perfil: {usuario.perfil}!</Text>
+              <Text style={style.text}>Empresa: {usuario.empresa}!</Text>
+              <TouchableOpacity onPress={() => setShowModal(false)}>
+                <Text style={style.close}>Fechar</Text>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        </View>
 
-        {usuario.perfil === "admin" ? ( 
-          <>
-          <TouchableOpacity style={style.buttonAdm}
-            onPress={() => 
-            navigation.navigate('TabelaROs')
-            }>
-            <Text style={style.enterButton}>Registro de Ocorrência</Text>
-          </TouchableOpacity>
-    
-          <TouchableOpacity style={style.buttonAdm}
-            onPress={() => 
-            navigation.navigate('MembroSuporte')
-            }>
-            <Text style={style.enterButton}>Membros do Suporte</Text>
-          </TouchableOpacity>
+        
 
-          <TouchableOpacity style={style.buttonAdm}
-            onPress={() => 
-            navigation.navigate('CadastroRO')
-            }>
-            <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={style.buttonAdm}
-            onPress={() => 
-            navigation.navigate('CadastroUsuario')
-            }>
-            <Text style={style.enterButton}>Cadastrar Novo Usuário</Text>
-          </TouchableOpacity>
+        <View style={style.buttons}>
 
+          {usuario.perfil === "admin" ? (
+            <>
+              <TouchableOpacity style={style.buttonAdm}
+                onPress={() => navigation.navigate('TabelaROs')}>
+                <Text style={style.enterButton}>Registro de Ocorrência</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={style.buttonAdm}
+                onPress={() => navigation.navigate('MembroSuporte')}>
+                <Text style={style.enterButton}>Membros do Suporte</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={style.buttonAdm}
+                onPress={() => navigation.navigate('CadastroRO')}>
+                <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={style.buttonAdm}
+                onPress={() => navigation.navigate('CadastroUsuario')}>
+                <Text style={style.enterButton}>Cadastrar Novo Usuário</Text>
+              </TouchableOpacity>
+  
           <TouchableOpacity style={style.buttonChat}
            onPress={() => 
             navigation.navigate('Contatos')
@@ -69,31 +77,27 @@ export const Home = () =>{
               <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
           </TouchableOpacity>
           </>
-        ) : ( 
-          <>
-          <TouchableOpacity style={style.buttonClt}
-            onPress={() => 
-            navigation.navigate('CadastroRO')
-            }>
-            <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
-          </TouchableOpacity>
-    
-          <TouchableOpacity style={style.buttonClt2}
-            onPress={() => 
-            navigation.navigate('TabelaROs', {type: "specific"})
-            }>
-            <Text style={style.enterButton}>Acompanhar Meus Registros de Ocorrência</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={style.buttonChat}
+          ) : (
+            <>
+              <TouchableOpacity style={style.buttonClt}
+                onPress={() => navigation.navigate('CadastroRO')}>
+                <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={style.buttonClt2}
+                onPress={() => navigation.navigate('TabelaROs', { type: "specific" })}>
+                <Text style={style.enterButton}>Acompanhar Meus Registros de Ocorrência</Text>
+              </TouchableOpacity>
+            <TouchableOpacity style={style.buttonChat}
            onPress={() => 
             navigation.navigate('Contatos')
             }>
               <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
           </TouchableOpacity>
           </>
-        )}
+          )}
 
-      </View>
+        </View>
 
   <View style={style.containermenu}>
       <View style={style.menu}>
@@ -103,26 +107,136 @@ export const Home = () =>{
             navigation.navigate('Login')
             }/>
         </TouchableOpacity>
-   
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='notifications' size={27} style={style.iconNotif}
-          onPress={() => 
-            navigation.navigate('Login')
-            }/>
-        </TouchableOpacity>
-      </View>
-      </View>
 
-    </View>
+   
+    <View style={style.container}>
+        <Text style={style.title}>Olá, {usuario.nome}!</Text>
+        <TouchableOpacity onPress={signOut} style={style.exitIcon}>
+          <Icon name='exit-outline' size={30} />
+        </TouchableOpacity>
+        
+
+        <View style={style.containericone}>
+          <TouchableOpacity onPress={handlePress} style={style.userIcon}>
+            
+            <Icone name='user-circle' size={30}  />
+          </TouchableOpacity>
+          <Modal visible={showModal} animationType="slide">
+            <View style={style.modal}>
+              <Text style={style.title1}>Informações de perfil</Text>
+              <Text style={style.text}>Nome:  {usuario.nome}!</Text>
+              <Text style={style.text}>Email:  {usuario.email}!</Text>
+              <Text style={style.text}>Tipo de perfil: {usuario.perfil}!</Text>
+              <Text style={style.text}>Empresa: {usuario.empresa}!</Text>
+              <TouchableOpacity onPress={() => setShowModal(false)}>
+                <Text style={style.close}>Fechar</Text>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        </View>
+
+        
+
+        <View style={style.buttons}>
+
+          {usuario.perfil === "admin" ? (
+            <>
+              <TouchableOpacity style={style.buttonAdm}
+                onPress={() => navigation.navigate('TabelaROs')}>
+                <Text style={style.enterButton}>Registro de Ocorrência</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={style.buttonAdm}
+                onPress={() => navigation.navigate('MembroSuporte')}>
+                <Text style={style.enterButton}>Membros do Suporte</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={style.buttonAdm}
+                onPress={() => navigation.navigate('CadastroRO')}>
+                <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={style.buttonAdm}
+                onPress={() => navigation.navigate('CadastroUsuario')}>
+                <Text style={style.enterButton}>Cadastrar Novo Usuário</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <>
+              <TouchableOpacity style={style.buttonClt}
+                onPress={() => navigation.navigate('CadastroRO')}>
+                <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={style.buttonClt2}
+                onPress={() => navigation.navigate('TabelaROs', { type: "specific" })}>
+                <Text style={style.enterButton}>Acompanhar Meus Registros de Ocorrência</Text>
+              </TouchableOpacity>
+            </>
+          )}
+
+        </View>
+
+        <View style={style.containermenu}>
+          <View style={style.menu}>
+            <TouchableOpacity style={style.enterButton}>
+              <Icon name='home' size={27} style={style.iconHome}
+                onPress={() => navigation.navigate('Login')} />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={style.enterButton}>
+              <Icon name='notifications' size={27} style={style.iconNotif}
+                onPress={() => navigation.navigate('Notificacoes')} />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+      </View>
   );
 }
 
 const style = StyleSheet.create({
 
-  searchIcon:{
-    color: 'black',
-    // backgroundColor: 'yellow',
+ close: {
+     fontSize: 16,
+    textAlign: 'center',
+    textAlignVertical:'center',
+    textDecorationLine: 'underline',
+    width:130,
+    borderRadius:300,
+    height: 40,
+    backgroundColor: '#72A2FA',
+    marginTop:10,
+    marginBottom:10
   },
+  containericone: {
+    position: 'absolute',
+    top: '2.5%',
+    right: '2%',
+    padding: 10,
+  },
+  modal: {
+    flex: 1,
+   
+    backgroundColor: 'white',
+    padding: 20,
+    
+  },
+  title1: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: 30,
+    textAlign: 'left',
+    color: 'black',
+   
+  },
+  text: {
+    fontSize: 20,
+  },
+
+
+ buttons:{
 
   buttonChat:{
       backgroundColor: '#72A2FA',
@@ -136,29 +250,27 @@ const style = StyleSheet.create({
       borderRadius: 7,
 
   },
-icon:{
+  title1: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: 30,
+    textAlign: 'left',
+    color: 'black',
+   icon:{
  padding:10
 },
 iconchat:{
   // padding:10,
   color:'white'
  },
-  containerbusca:{
-    // backgroundColor:'yellow',
-    display:'flex',
-    flexDirection:'column',
   },
-
-  container12:{
-    flexDirection:'row',
-    width: 300,
-    height:40,
-    margin:'auto',
-    alignItems:'center',
-    justifyContent:'space-between'
+  text: {
+    fontSize: 20,
   },
   buttons:{
     // backgroundColor:'red',
+
     margin:'auto',
     width:300
   },
@@ -176,24 +288,12 @@ iconchat:{
    
   },
   
-  
-  busca:{
-    textAlign: 'left',
-    width: 250,
-    height: 40,
-    // marginBottom: -30,
-    fontWeight: 'bold',
-    paddingTop:10,
-    // backgroundColor:'red',
-  },
-
-  iconNotif:{
+   iconNotif:{
     paddingLeft: 70,
     color: 'white',
   },
   
   iconHome: {
-    // paddingLeft: 90,
     color: 'white',
   },
 
@@ -217,34 +317,7 @@ iconchat:{
     fontWeight: 'bold',
   },
 
-  input: {
-    flex: 1,
-    alignItems:'center',
-    flexDirection:'row',
-    backgroundColor: '#2B3467',
-    justifyContent:'space-between',
-    margin:'auto',
-    color: 'black',
-    paddingLeft:6,
-    width:300,
-    height:40,
-    marginBottom: 10,
-    borderRadius:300,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4,
-  },
-
   container: {
-    // backgroundColor: '#F9FbFa',
-    // display:'flex',
-    // margin:'auto',
-    // alignItems: 'center',
     flex: 1,
     ...Platform.select({
       ios: { fontFamily: 'Arial', }, 
@@ -256,32 +329,15 @@ iconchat:{
     flexDirection: 'column'
   },
 
-  hyperlinkStyle: {
-    color: '#72A2FA',
-    marginTop: 25,
-    fontSize: 12
-  },
-
   buttonAdm :{
     alignItems: 'center',
     width: 300,
     padding: 15,
     backgroundColor: '#72A2FA',
     marginBottom: 20,
-    // marginTop: 20,
     borderRadius: 7,
   },
 
-  buttonClt :{
-    alignItems: 'center',
-    width: 300,
-    paddingTop: 60,
-    padding: 15,
-    backgroundColor: '#72A2FA',
-    marginBottom: 20,
-    borderRadius: 7,
-    height: 140,
-  },
 
   buttonClt2 :{
     alignItems: 'center',
@@ -299,14 +355,7 @@ iconchat:{
     color: 'white',
     fontSize: 20,
   },
-
-  bar:{
-    backgroundColor: '#68696C',
-    width: 290,
-    height: 2,
-    // marginTop: -10
-  },
-
+  
   exitIcon: {
     position: 'absolute',
     right: 50,

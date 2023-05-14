@@ -71,11 +71,38 @@ const EditaRos = ({route}) => {
           setOrgao(response.data.orgao);
           setContrato(response.data.contrato);
           setDataRegistro(response.data.dataRegistro);
-          setNomeRelator(response.data.relator.nome);
+          // setNomeRelator(response.data.relator.nome);
           setNomeResponsavel(response.data.responsavel.nome);
           setPosGradRelator(response.data.relator.posGrad);
           setPosGradResponsavel(response.data.responsavel.posGrad);
           setClassDefeito(response.data.classDefeito);
+          setDescricaoOcorrencia(response.data.descricaoOcorrencia);
+          setValidacaoFechamentoRo(response.data.validacaoFechamentoRo);
+          if (response.data.classDefeito === "hardware") {
+            setEquipamento(response.data.opcoesHardware.equipamento);
+            setEquipPosicao(response.data.opcoesHardware.equipPosicao);
+            setPartNumber(response.data.opcoesHardware.partNumber);
+            setSerialNumber(response.data.opcoesHardware.serialNumber);
+          }
+          if (response.data.classDefeito === "software") {
+            setVersaoBaseDados(response.data.opcoesSoftware.versaoBaseDados);
+            setVersaoSoftware(response.data.opcoesSoftware.versaoSoftware);
+            setLogsAnexado(response.data.opcoesSoftware.logsAnexado);
+          }
+          if (response.data.suporte) {
+            setFase(response.data.suporte.fase);
+            setDefeito(response.data.suporte.defeito);
+            setClassificacao(response.data.suporte.classificacao);
+            setCategoria(response.data.suporte.categoria);
+            setMelhoria(response.data.suporte.melhoria);
+            setOutros(response.data.suporte.outros);
+            setJustificativaReclassificacao(response.data.suporte.justificativaReclassificacao);
+            if (response.data.suporte.colaboradorIACIT) {
+              setNome(response.data.suporte.colaboradorIACIT.nome);
+              setIdColaboradorIACIT(response.data.suporte.colaboradorIACIT.id);
+            }
+          }
+          
           setDescricaoOcorrencia(response.data.descricaoOcorrencia);
           setValidacaoFechamentoRo(response.data.validacaoFechamentoRo);
           if (response.data.classDefeito === "hardware") {
@@ -108,6 +135,7 @@ const EditaRos = ({route}) => {
           setLoading(false)
         } catch (response) {
           Alert.alert(response.data.msg);
+          Alert.alert(response.data.msg);
         }
         setLoading(false)
       })();
@@ -116,12 +144,16 @@ const EditaRos = ({route}) => {
     async function handelAtualizar() {
       setLoading(true)
 
+
       try{
         const response = await api.patch(`/ro/suporte/${numer}`,
         {
             categoria,
             fase, 
+            
             idcolaboradorIACIT,
+            melhoria,
+            classificacao, 
             melhoria,
             classificacao, 
             nome,
@@ -134,6 +166,7 @@ const EditaRos = ({route}) => {
 
         Alert.alert(response.data.msg)
         navigation.navigate('TabelaROs')
+        
       }catch (response){
         Alert.alert(response.data.msg);
       }
@@ -169,6 +202,7 @@ const EditaRos = ({route}) => {
                   posGradRelator,
                   posGradResponsavel,
                   nomeResponsavel,
+                  idRelator: usuario._id
                   idRelator: usuario._id
           }, );
         Alert.alert(response.data.msg)
@@ -382,10 +416,10 @@ const EditaRos = ({route}) => {
                                 }>
                           
                                         <Picker.Item  label={fase} value={fase} enabled={false} />
-                                        <Picker.Item label="Pendente" value="Fase atual: Pendente" />
-                                        <Picker.Item label="Em andamento" value="Fase atual: Em andamento" />
-                                        <Picker.Item label="Aguardando validação" value="Fase atual: Aguardando validação" />
-                                        <Picker.Item label="Concluído" value="Fase atual: Concluído" />
+                                        <Picker.Item label="Pendente" value="pendente" />
+                                        <Picker.Item label="Em andamento" value="andamento" />
+                                        <Picker.Item label="Aguardando validação" value="validacao" />
+                                        <Picker.Item label="Concluido" value="concluido" />
                                 </Picker>
                           </View>
                           
@@ -400,7 +434,11 @@ const EditaRos = ({route}) => {
                                         <Picker.Item label="Defeito" value="defeito" />
                                         <Picker.Item label="Melhoria" value="melhoria" /> 
                                         <Picker.Item label="Outros" value="outros" />
+                                        <Picker.Item label="Defeito" value="defeito" />
+                                        <Picker.Item label="Melhoria" value="melhoria" /> 
+                                        <Picker.Item label="Outros" value="outros" />
                                   </Picker>
+                            { classificacao == "defeito" && (
                             { classificacao == "defeito" && (
                                   <>
                                     <Text style={style.text}>Defeito: </Text>
@@ -421,6 +459,7 @@ const EditaRos = ({route}) => {
                                   ) } 
 
                                     { classificacao == "melhoria" && (
+                                    { classificacao == "melhoria" && (
                                   <>  
                                   <Text style={style.text}>Melhoria: </Text>
                                         <View>
@@ -438,6 +477,7 @@ const EditaRos = ({route}) => {
                                   </>
                                 ) } 
                                 { classificacao == "outros" && (
+                                { classificacao == "outros" && (
                                     <> 
                                       <Text style={style.text}>Outros: </Text>
                                             <View>
@@ -450,6 +490,7 @@ const EditaRos = ({route}) => {
                                                         <Picker.Item  label={outros} value={outros} enabled={false} />
                                                         <Picker.Item label="Investigação" value="investigacao" />
                                                         <Picker.Item label="Causa externa" value="causaexterna" />
+                                
                                                 </Picker>
 
                                             </View>
@@ -491,6 +532,7 @@ const EditaRos = ({route}) => {
                               </View>
                       </View>
                       { fase == "validacao"  && usuario.perfil == "cliente" ? (
+                      
                           <>
                             <Text style={style.text}>Validação e Fechamento do Ro</Text>
                               <Picker
@@ -510,6 +552,7 @@ const EditaRos = ({route}) => {
 
                       {
                          fase == "validacao" && usuario.perfil === "cliente" ? (
+                         
                             <View style={style.conatualiza}>
                                 <TouchableOpacity
                                 style={style.atualiza1}
@@ -521,6 +564,7 @@ const EditaRos = ({route}) => {
                       ):(
                         <>
                            { usuario.perfil === "admin" &&
+                          
                             <View style={style.conatualiza}>
                                   <TouchableOpacity
                                   style={style.atualiza1}
@@ -530,6 +574,7 @@ const EditaRos = ({route}) => {
                                   </TouchableOpacity>
                             </View>
                             }
+                            
                       </>
                         )} 
               </ScrollView>
