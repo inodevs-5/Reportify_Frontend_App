@@ -233,8 +233,7 @@ const style = StyleSheet.create({
   scrollView: {
     height: '20%',
     width: '90%',
-    marginTop: '10%',
-    marginBottom: '15%',
+    marginTop: '3%',
     alignSelf: 'center',
     padding: 10,
     backgroundColor: '#C3C9D0',

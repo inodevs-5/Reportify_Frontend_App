@@ -768,7 +768,7 @@ display: 'none'
   container_r:{
     flexDirection:'row',
     justifyContent:'center',
-    width:"99%"
+    width:"99%",
   },
   
   text1:{

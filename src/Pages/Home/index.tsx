@@ -71,6 +71,13 @@ export const Home = () =>{
                 onPress={() => navigation.navigate('CadastroUsuario')}>
                 <Text style={style.enterButton}>Cadastrar Novo Usuário</Text>
               </TouchableOpacity>
+
+              <TouchableOpacity style={style.buttonChat}
+                onPress={() => 
+                  navigation.navigate('Contatos')
+                }>
+              <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
+          </TouchableOpacity>
             </>
           ) : (
             <>
@@ -80,15 +87,22 @@ export const Home = () =>{
               </TouchableOpacity>
 
               <TouchableOpacity style={style.buttonClt2}
-                onPress={() => navigation.navigate('TabelaROs', { type: "specific" })}>
+                onPress={() => navigation.navigate('TabelaROs')}>
                 <Text style={style.enterButton}>Acompanhar Meus Registros de Ocorrência</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={style.buttonChat2}
+                onPress={() => 
+                  navigation.navigate('Contatos')
+                  }>
+                    <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
               </TouchableOpacity>
             </>
           )}
 
         </View>
 
-        <View style={style.containermenu}>
+        <View>
           <View style={style.menu}>
             <TouchableOpacity style={style.enterButton}>
               <Icon name='home' size={27} style={style.iconHome}
@@ -109,7 +123,7 @@ export const Home = () =>{
 const style = StyleSheet.create({
 
  close: {
-     fontSize: 16,
+    fontSize: 16,
     textAlign: 'center',
     textAlignVertical:'center',
     textDecorationLine: 'underline',
@@ -122,7 +136,7 @@ const style = StyleSheet.create({
   },
   containericone: {
     position: 'absolute',
-    top: '2.5%',
+    top: '3.2%',
     right: '2%',
     padding: 10,
   },
@@ -214,8 +228,7 @@ const style = StyleSheet.create({
     borderRadius: 7,
   },
 
-
-  buttonClt2 :{
+  buttonClt :{
     alignItems: 'center',
     width: 300,
     paddingTop: 40,
@@ -223,7 +236,18 @@ const style = StyleSheet.create({
     backgroundColor: '#72A2FA',
     marginBottom: 20,
     borderRadius: 7,
-    height: 140,
+    height: 100,
+  },
+
+  buttonClt2 :{
+    alignItems: 'center',
+    width: 300,
+    paddingTop: 25,
+    padding: 15,
+    backgroundColor: '#72A2FA',
+    marginBottom: 20,
+    borderRadius: 7,
+    height: 100,
   },
 
   enterButton:{
@@ -234,9 +258,38 @@ const style = StyleSheet.create({
   
   exitIcon: {
     position: 'absolute',
-    right: 50,
+    right: 60,
     top: 30
-  }
+  },
+
+  buttonChat:{
+      backgroundColor: '#72A2FA',
+      flexDirection:'row',
+      justifyContent:'space-around',
+      // width:'18%',
+      alignItems:'center',
+      width: 300,
+      padding: 15,
+      marginBottom: 20,
+      borderRadius: 7,
+  },
+
+  buttonChat2:{
+    backgroundColor: '#72A2FA',
+    flexDirection:'row',
+    justifyContent:'space-around',
+    // width:'18%',
+    alignItems:'center',
+    width: 300,
+    padding: 15,
+    marginBottom: 20,
+    borderRadius: 7,
+    height: 100,
+},
+
+  iconchat:{
+    color:'white'
+  },
 });
 
 

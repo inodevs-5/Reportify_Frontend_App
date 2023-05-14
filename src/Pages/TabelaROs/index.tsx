@@ -188,7 +188,7 @@ export const TabelaROs = () =>{
               <ActivityIndicator size="large" color="#666"/>
           </View>
           }
-          {ros.length < 1 && <Text style={{ marginTop: 20 }}>Não foi encontrado nenhum Registro de Ocorrência</Text>}
+          {ros && !loading && ros.length < 1 && <Text style={{ marginTop: 20 }}>Não foi encontrado nenhum Registro de Ocorrência</Text>}
           </ScrollView>
         </View>
     {/* <View style={fler}> */}
