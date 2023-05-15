@@ -68,7 +68,8 @@ export const EditarUsuario = ({route}) =>{
 
 
   return (
-
+    <>
+    {!loading ?
     <View style={style.container}><Text style={style.title}>Editar Usuário</Text>
      {/* ScrollView = parte rolavel */}
     <ScrollView style={style.scrollView}> 
@@ -173,6 +174,12 @@ export const EditarUsuario = ({route}) =>{
       </View>
       </View>
     </View>
+    :
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <ActivityIndicator size="large" color="#666"/>
+    </View>
+    }
+    </>
   );
 }
 

@@ -11,7 +11,7 @@ import style from './style';
 export const Contatos = () =>{
 
   interface myro{
-    destinatario?:number
+    destinatario?:string
   }
 
 
@@ -35,6 +35,7 @@ export const Contatos = () =>{
           setLoading(false);
         }else{
           const response2 = await api.get('/ro/relator/' + usuario._id);
+          console.log(response2.data[0].relator.id._id)
           setRos(response2.data);
         }
         setLoading(false);
@@ -45,7 +46,7 @@ export const Contatos = () =>{
     })();
     }, []);
 
-    function handlePress(destinatario:number): void {
+    function handlePress(destinatario:string): void {
       navigation.navigate('Chat' , {destinatario})
     }
 
@@ -94,15 +95,15 @@ export const Contatos = () =>{
             ros && !loading ? ros.map(ro => (
             
               <TouchableOpacity style={style.containerchat} key={ro._id}   
-              onPress={() => ro.suporte ? handlePress(ro.suporte.colaboradorIACIT.id) : esperar() }
+              onPress={() => ro.suporte && ro.suporte.colaboradorIACIT ? handlePress(ro.suporte.colaboradorIACIT.id._id) : esperar() }
               >
                 <View style={ro.suporte ? style.chat : style.error} >
                 <View style={ro.suporte ? style.containerIcone : style.Id} >
-                <Text style={style.icone}>{ro.suporte ? ro.suporte.colaboradorIACIT.nome.charAt(0).toUpperCase() : "N"} 
+                <Text style={style.icone}>{ro.suporte && ro.suporte.colaboradorIACIT ? ro.suporte.colaboradorIACIT.id.nome.charAt(0).toUpperCase() : "N"} 
                    </Text>
                 </View>
                 <View style={style.container_nome} >
-                  <Text style={ro.suporte ? style.nome : style.nome_naodefido}>{ro.suporte ? ro.suporte.colaboradorIACIT.nome : "Colaborador não está defido"} </Text>
+                  <Text style={ro.suporte ? style.nome : style.nome_naodefido}>{ro.suporte && ro.suporte.colaboradorIACIT ? ro.suporte.colaboradorIACIT.id.nome : "Colaborador não está defido"} </Text>
                   <Text style={ro.suporte ? style.preto : style.branco}>{ro.tituloOcorrencia}</Text>
                 </View>
                 </View>

@@ -30,9 +30,9 @@ export const Notificacoes = () =>{
   }, []);
   return (
     
-    
     <>
         <View style={style.container}>
+            {notificacoes && !loading && notificacoes.length < 1 && <Text>Não há nenhuma notificação</Text>}
             <ScrollView>
               {notificacoes && notificacoes.map((notification, index) => (
                 <View key={index}>
@@ -48,11 +48,6 @@ export const Notificacoes = () =>{
         </View>  
        
       </>
-          
-     
-          
-          
-        
         
   );
 }

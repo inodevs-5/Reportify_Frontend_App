@@ -5,11 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
 import api from '../../services/api';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useAuth } from '../../contexts/auth';
 
 
 export const RedefinirSenha = ({ route }) =>{
   const { id } = route.params;
   const { firstTime } = route.params;
+  
+  const { signOut } = useAuth()
 
   const navigation = useNavigation<propsStack>();
 
@@ -28,6 +31,7 @@ export const RedefinirSenha = ({ route }) =>{
   };
 
   const salvarSenha = async() => {
+    signOut()
     setErrorMessage('');
     setErrorTermoMessage('');
     setLoading(true);
@@ -36,6 +40,8 @@ export const RedefinirSenha = ({ route }) =>{
           const response = await api.patch('/usuario/password/' + id, {senha, confirmarSenha});
 
           Alert.alert(response.data.msg);
+          setSenha('')
+          setConfirmarSenha('')
           navigation.navigate('Login');
         } else {
           setErrorTermoMessage('É necessário aceitar o termo.');

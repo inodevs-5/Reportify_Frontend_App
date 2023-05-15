@@ -14,6 +14,10 @@ export const Home = () =>{
 
   const [showModal, setShowModal] = useState(false);
 
+  const sair = () => {
+    signOut()
+  }
+
   const handlePress = () => {
     setShowModal(true);
   }
@@ -22,7 +26,7 @@ export const Home = () =>{
    
     <View style={style.container}>
         <Text style={style.title}>Olá, {usuario.nome}!</Text>
-        <TouchableOpacity onPress={signOut} style={style.exitIcon}>
+        <TouchableOpacity onPress={sair} style={style.exitIcon}>
           <Icon name='exit-outline' size={30} />
         </TouchableOpacity>
         
@@ -39,6 +43,7 @@ export const Home = () =>{
               <Text style={style.text}>Email:  {usuario.email}!</Text>
               <Text style={style.text}>Tipo de perfil: {usuario.perfil}!</Text>
               <Text style={style.text}>Empresa: {usuario.empresa}!</Text>
+              <Text style={style.text}>Contato da Empresa: {usuario.contato_empresa}!</Text>
               <TouchableOpacity onPress={() => setShowModal(false)}>
                 <Text style={style.close}>Fechar</Text>
               </TouchableOpacity>

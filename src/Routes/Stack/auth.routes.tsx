@@ -12,6 +12,7 @@ import Chat from "../../Pages/Chat";
 import Contatos from "../../Pages/Contatos";
 import RedefinirSenha from "../../Pages/RedefinirSenha";
 import EmailRedefinicao from "../../Pages/EmailRedenificao";
+import Notificacoes from "../../Pages/Notificacoes";
 
 const { Navigator, Screen } = createNativeStackNavigator<propsNavigationStack>()
 
@@ -30,7 +31,7 @@ export default function AuthRoutes () {
             <Screen name="EditarUsuario" component={EditarUsuario}/>
             <Screen name="RedefinirSenha" component={RedefinirSenha}/>
             <Screen name="EmailRedefinicao" component={EmailRedefinicao}/>
-
+            <Screen name="Notificacoes" component={Notificacoes}/>
         </Navigator>
     )
 }

@@ -174,10 +174,10 @@ export const TabelaROs = () =>{
                   {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
                   
                   {!selectedFirstButton ? (
-                    <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.suporte && ro.suporte.colaboradorIACIT ? ro.suporte.colaboradorIACIT.nome : "A definir"}</>
+                    <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.suporte && ro.suporte.colaboradorIACIT && ro.suporte.colaboradorIACIT.id ? ro.suporte.colaboradorIACIT.id.nome : "A definir"}</>
 
                   ) : (
-                    <>{'\n'} <Text style={style.bold}>Categoria: </Text>{ro.suporte ? ro.suporte.categoria : "A definir"}</>
+                    <>{'\n'} <Text style={style.bold}>Categoria: </Text>{ro.suporte && ro.suporte.categoria ? ro.suporte.categoria : "A definir"}</>
                   )}
 
               </Text>
@@ -204,7 +204,7 @@ export const TabelaROs = () =>{
             <TouchableOpacity style={style.enterButton}>
             <Icon name='notifications' size={27} style={style.iconNotif}
               onPress={() => 
-                navigation.navigate('Login')
+                navigation.navigate('Notificacoes')
                 }/>
             </TouchableOpacity>
           </View>

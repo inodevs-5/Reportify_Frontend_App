@@ -37,8 +37,8 @@ export const Chat = ({route}) =>{
     (async () => {
       try {
     const response = await api.get(`/mensagem/${usuario._id}/${destinatario}/`)
+    console.log(usuario._id, destinatario)
     setMessages(response.data)
-    console.log(messages)
     setLoading(false);
     } catch (response) {
       setErrorMessage(response.data.msg);
@@ -50,7 +50,9 @@ export const Chat = ({route}) =>{
 useEffect(() => {
   (async () => {
     try {
+      console.log(usuario._id, destinatario)
       const response = await api.get(`/mensagem/${usuario._id}/${destinatario}`)
+
       setMessages(response.data)
       setLoading(false);
       setRefresh(false);
@@ -66,7 +68,6 @@ const uniqueId = Math.floor(Math.random() * 1000000000000000).toString(16);
 // const options = { timeZone: "Europe/London" };
 // const horarioAtual = now.toLocaleTimeString("en-GB", options);
 
-console.log(messages)
 
 async function enviarMensagem (novaMensagem) {
   setLoading(true);
@@ -107,7 +108,6 @@ let giftedChatMessages = messages.map((chatMessage) => {
     setRefresh(true)
     setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
     enviarMensagem(messages);
-    console.log(messages)
   }, [enviarMensagem]);  
     
     

@@ -28,6 +28,7 @@ export const Login = () =>{
     setLoading(true);
     try {
       await signIn(email, senha);
+      navigation.navigate('Home')
     } catch (response) {
       setErrorMessage(response.data.msg);
     }

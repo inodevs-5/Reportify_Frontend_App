@@ -71,7 +71,7 @@ const EditaRos = ({route}) => {
           setOrgao(response.data.orgao);
           setContrato(response.data.contrato);
           setDataRegistro(response.data.dataRegistro);
-          // setNomeRelator(response.data.relator.nome);
+          setNomeRelator(response.data.relator.id.nome);
           setNomeResponsavel(response.data.responsavel.nome);
           setPosGradRelator(response.data.relator.posGrad);
           setPosGradResponsavel(response.data.responsavel.posGrad);
@@ -125,7 +125,7 @@ const EditaRos = ({route}) => {
             setOutros(response.data.suporte.outros);
             setJustificativaReclassificacao(response.data.suporte.justificativaReclassificacao);
             if (response.data.suporte.colaboradorIACIT) {
-              setNome(response.data.suporte.colaboradorIACIT.nome);
+              setNome(response.data.suporte.colaboradorIACIT.id.nome);
               setIdColaboradorIACIT(response.data.suporte.colaboradorIACIT.id);
             }
           }
@@ -143,7 +143,6 @@ const EditaRos = ({route}) => {
     },[] );
     async function handelAtualizar() {
       setLoading(true)
-
 
       try{
         const response = await api.patch(`/ro/suporte/${numer}`,
@@ -368,9 +367,11 @@ const EditaRos = ({route}) => {
                               </View>
                               <View style={style.campos}>
                                 <Text style={style.text}>Logs Anexados: </Text>
-                                    <TextInput defaultValue={logsAnexado} editable={isEditable} style={style.info}
-                                    onChangeText={logsAnexado => setLogsAnexado(logsAnexado)}
-                                    ></TextInput>
+                                    {logsAnexado && logsAnexado.map(l => (
+                                        <TextInput key={l.idAnexo} defaultValue={l.nomeAnexo} editable={isEditable} style={style.info}
+                                        onChangeText={logsAnexado => setLogsAnexado(logsAnexado)}
+                                        ></TextInput>
+                                    ))}
                               </View>
                             </>
                           )}
@@ -408,6 +409,7 @@ const EditaRos = ({route}) => {
                         <Text style={style.text}>Situação: </Text>
                           <View>
                                 <Picker
+                                  enabled={usuario.perfil === "admin" ? true : false}
                                   style={style.picker}
                                   selectedValue={fase}
                                   onValueChange={(itemValue, itemIndex) =>
@@ -424,6 +426,7 @@ const EditaRos = ({route}) => {
                           
                         <Text style={style.text}>Classificação: </Text>
                                   <Picker
+                                      enabled={usuario.perfil === "admin" ? true : false}
                                       style={style.picker}
                                         selectedValue={classificacao}
                                         onValueChange={(itemValue, itemIndex) =>
@@ -433,24 +436,22 @@ const EditaRos = ({route}) => {
                                         <Picker.Item label="Defeito" value="defeito" />
                                         <Picker.Item label="Melhoria" value="melhoria" /> 
                                         <Picker.Item label="Outros" value="outros" />
-                                        <Picker.Item label="Defeito" value="defeito" />
-                                        <Picker.Item label="Melhoria" value="melhoria" /> 
-                                        <Picker.Item label="Outros" value="outros" />
                                   </Picker>
                             { classificacao == "defeito" && (
                                   <>
                                     <Text style={style.text}>Defeito: </Text>
                                               <View>
                                                     <Picker
+                                                      enabled={usuario.perfil === "admin" ? true : false}
                                                       style={style.picker}
                                                       selectedValue={defeito}
                                                       onValueChange={(itemValue, itemIndex) =>
                                                       setDefeito(itemValue)
                                                     }>
                                                             <Picker.Item  label={defeito} value={defeito} enabled={false} />
-                                                            <Picker.Item label="Crítico" value="Crítico" />
-                                                            <Picker.Item label="Alto" value="Alto" /> 
-                                                            <Picker.Item label="Baixo" value="Baixo" />
+                                                            <Picker.Item label="Crítico" value="critico" />
+                                                            <Picker.Item label="Alto" value="alto" /> 
+                                                            <Picker.Item label="Baixo" value="baixo" />
                                                     </Picker>
                                             </View>
                                     </>
@@ -461,14 +462,15 @@ const EditaRos = ({route}) => {
                                   <Text style={style.text}>Melhoria: </Text>
                                         <View>
                                                 <Picker
+                                                  enabled={usuario.perfil === "admin" ? true : false}
                                                   style={style.picker}
                                                   selectedValue={melhoria}
                                                   onValueChange={(itemValue, itemIndex) =>
                                                   setMelhoria(itemValue)
                                                 }>
                                                         <Picker.Item  label={melhoria} value={melhoria} enabled={false} />
-                                                        <Picker.Item label="Funcinalidade existente" value="Funcinalidade existente" />
-                                                        <Picker.Item label="Funcionalidade não existente" value="Funcionalidade não existente"/>
+                                                        <Picker.Item label="Funcinalidade existente" value="funcionalidadeexistente" />
+                                                        <Picker.Item label="Funcionalidade não existente" value="funcionalidadenaoexistente"/>
                                                 </Picker>
                                         </View>
                                   </>
@@ -478,6 +480,7 @@ const EditaRos = ({route}) => {
                                       <Text style={style.text}>Outros: </Text>
                                             <View>
                                                 <Picker
+                                                enabled={usuario.perfil === "admin" ? true : false}
                                                 style={style.picker}
                                                   selectedValue={outros}
                                                   onValueChange={(itemValue, itemIndex) =>
@@ -496,12 +499,14 @@ const EditaRos = ({route}) => {
                       <Text style={style.text}>Categoria: </Text>
                             <TextInput style={style.input}
                             defaultValue={categoria}
-                            onChangeText={categoria => setCategoria(categoria)} >
+                            onChangeText={categoria => setCategoria(categoria)} 
+                            editable={usuario.perfil === "admin" ? true : false}>
                             </TextInput> 
                             
                             <Text style={style.text}>Responsável: </Text>
                             <View>
                               <Picker
+                                enabled={usuario.perfil === "admin" ? true : false}
                                 style={style.picker}
                                 selectedValue={idcolaboradorIACIT}
                                 onValueChange={(itemValue, itemIndex) =>{
@@ -524,6 +529,7 @@ const EditaRos = ({route}) => {
                                     defaultValue={justificativaReclassificacao}
                                     onChangeText={(justificativaReclassificacao) => setJustificativaReclassificacao(justificativaReclassificacao)}
                                     placeholder=''
+                                    editable={usuario.perfil === "admin" ? true : false}
                                     ></TextInput>
                               </View>
                       </View>
