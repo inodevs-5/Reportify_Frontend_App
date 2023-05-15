@@ -9,8 +9,11 @@ import React, { useState } from 'react';
 import {StyleSheet, View,Text,TextInput,TouchableOpacity,Platform, Linking, ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useAuth } from '../../contexts/auth';
+import { useNavigation } from '@react-navigation/native';
+import { propsStack } from '../../Routes/Stack/Models';
 
 export const Login = () =>{
+  const navigation = useNavigation<propsStack>();
 
   const [hidepass,setHidepass] = useState(true);
   
@@ -25,6 +28,7 @@ export const Login = () =>{
     setLoading(true);
     try {
       await signIn(email, senha);
+      navigation.navigate('Home')
     } catch (response) {
       setErrorMessage(response.data.msg);
     }
@@ -68,7 +72,7 @@ export const Login = () =>{
             <Text style={style.valeu}>Send</Text>
           </TouchableOpacity>
         ) : (
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{justifyContent: 'center'}}>
             <ActivityIndicator size="large" color="#666"/>
           </View>
         )
@@ -77,7 +81,7 @@ export const Login = () =>{
       <Text
             style={style.hyperlinkStyle}
             onPress={() => {
-              Linking.openURL('');
+              navigation.navigate('EmailRedefinicao');
           }}>
              Forgot your passaword?
           </Text>

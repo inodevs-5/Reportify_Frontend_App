@@ -68,7 +68,8 @@ export const EditarUsuario = ({route}) =>{
 
 
   return (
-
+    <>
+    {!loading ?
     <View style={style.container}><Text style={style.title}>Editar Usuário</Text>
      {/* ScrollView = parte rolavel */}
     <ScrollView style={style.scrollView}> 
@@ -173,6 +174,12 @@ export const EditarUsuario = ({route}) =>{
       </View>
       </View>
     </View>
+    :
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <ActivityIndicator size="large" color="#666"/>
+    </View>
+    }
+    </>
   );
 }
 
@@ -233,8 +240,7 @@ const style = StyleSheet.create({
   scrollView: {
     height: '20%',
     width: '90%',
-    marginTop: '10%',
-    marginBottom: '15%',
+    marginTop: '3%',
     alignSelf: 'center',
     padding: 10,
     backgroundColor: '#C3C9D0',

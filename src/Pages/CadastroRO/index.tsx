@@ -39,7 +39,7 @@ export const CadastroRO = () =>{
     const [titulo, setTitulo] = useState('');
     const [logsAnexados, setLogsAnexados] = useState([]);
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const [usuarios, setUsuarios] = useState([]);
 
@@ -179,7 +179,8 @@ export const CadastroRO = () =>{
         <Text style={style.paragraph}>
           Relator*
         </Text>
-        <Picker
+        {!loading ?
+          <Picker
           selectedValue={selectedUser}
           onValueChange={(itemValue, itemIndex) => {
             setSelectedUser(itemValue)
@@ -187,11 +188,15 @@ export const CadastroRO = () =>{
           }
           style={{ width: '82%', marginVertical:10}}
         >
-
           {usuarios && usuarios.map((relator) => (
             <Picker.Item style={style.input} label={relator.nome} value={relator._id} key={relator._id} />
           ))}
-        </Picker>
+        </Picker>:
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <ActivityIndicator size="large" color="#666"/>
+            </View>
+        }
+
       </View>
       }
 
@@ -501,7 +506,6 @@ const style = StyleSheet.create({
     height: '20%',
     width: '90%',
     marginTop:'1%',
-    marginBottom:'27%',
     alignSelf: 'center',
     padding:10,
     backgroundColor: '#C3C9D0',

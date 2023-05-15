@@ -35,12 +35,40 @@ export const TabelaROs = () =>{
             setRos(response.data);
           }
 
-          setLoading(false);
         } catch (response) {
           setErrorMessage(response.data.msg);
         }
+
+        setLoading(false);
       })();
     }, []);
+
+    async function cancel () {
+      setLoading(true)
+      setInput('')
+      try{
+        if (usuario.perfil == "admin") {
+          const response = await api.get('/ro');
+          setAllRos(response.data);
+
+          const response2 = await api.get('/ro/atribuido/' + usuario._id);
+          setMyRos(response2.data);
+
+          if (selectedFirstButton) {
+            setRos(response.data);
+          } else {
+            setRos(response2.data)
+          }
+        } else {
+          setSelectedFirstButton(false);
+          const response = await api.get('/ro/relator/' + usuario._id);
+          setRos(response.data);
+        }
+      } catch (response) {
+        setErrorMessage(response.data.msg);
+      }
+      setLoading(false)
+    }
 
     function changeToAll() {
       if (!selectedFirstButton) {
@@ -65,30 +93,36 @@ export const TabelaROs = () =>{
     }
 
     async function pesquisar() {
+      setLoading(true)
       try {
-        const response = await api.get('/ro/search/' + input);
-        setRos(response.data);
+        if (usuario.perfil == "admin") {
+            const response = await api.get('/ro/search/' + input);
+            setAllRos(response.data);
+            const response2 = await api.get('/ro/atribuido/search/' + usuario._id + '/' + input);
+            setMyRos(response2.data)
+            if (selectedFirstButton) {
+              setRos(response.data);
+            } else {
+              setRos(response2.data);
+            }
+        } else {
+          const response = await api.get('/ro/relator/search/' + usuario._id + '/' + input);
+
+          if (response.data) {
+            setRos(response.data)
+          }
+        }
       } catch (response) {
         setErrorMessage(response.data.msg);
       }
+      setLoading(false)
     }
 
     function handlePress(_id:Ro): void {
       navigation.navigate('EditaRos' , {_id})
-
-      // console.warn(_id)
     }
+
   return (
-    // <View style={style.container}>
-    // <TextInput style={style.busca}  
-    //   placeholder='Buscar RO'  
-    //   value={input} 
-    //   onChangeText={(texto => setInput(texto))}>
-    // </TextInput> 
-    // <TouchableOpacity onPress={pesquisar}>
-    //   <Icon name='search' size={21} style={style.searchIcon}/>
-    // </TouchableOpacity>
-    // <View style={style.bar}/> 
 
       <ScrollView 
     contentContainerStyle={{ flexGrow: 1 }} 
@@ -102,8 +136,11 @@ export const TabelaROs = () =>{
               value={input} 
               onChangeText={(texto => setInput(texto))}>
               </TextInput>
+              <TouchableOpacity onPress={cancel}>
+                <Text style={style.cancel}>X</Text>
+              </TouchableOpacity>
               <TouchableOpacity onPress={pesquisar}>
-              <Icon name='search' size={21} style={style.searchIcon}/>
+                <Icon name='search' size={21} style={style.searchIcon}/>
               </TouchableOpacity>
             </View>
             <View style={style.bar}/>
@@ -123,13 +160,6 @@ export const TabelaROs = () =>{
             </View>
           }
 
-        {/* <TextInput style={style.busca}  
-            placeholder='Buscar RO'  
-            value={input} 
-            onChangeText={(texto => setInput(texto))}>
-          </TextInput>
-          <Icon name='search' size={21} style={style.searchIcon}/>
-          <View style={style.bar}/>  */}
 
         <View style={style.squareContainer}>
         <View style={usuario.perfil == 'cliente' ? {height: 520} : {height: 460}}>
@@ -138,16 +168,16 @@ export const TabelaROs = () =>{
           {
             ros && !loading ? ros.map(ro => (
             <View key={ro._id} style={style.square}>
-              <TouchableOpacity onPress={() => handlePress(ro._id) }>
+              <TouchableOpacity onPress={() => handlePress(ro._id)}>
               <Text style={style.square}> <Text style={style.bold}>#{ro._id} </Text>
                   {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
-                  {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte && ro.suporte.fase ? ro.suporte.fase : "Pendente"}
+                  {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
                   
                   {!selectedFirstButton ? (
-                    <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.suporte && ro.suporte.colaboradorIACIT ? ro.suporte.colaboradorIACIT.nome : "A definir"}</>
+                    <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.suporte && ro.suporte.colaboradorIACIT && ro.suporte.colaboradorIACIT.id ? ro.suporte.colaboradorIACIT.id.nome : "A definir"}</>
 
                   ) : (
-                    <>{'\n'} <Text style={style.bold}>Categoria: </Text>{ro.suporte ? ro.suporte.categoria : "A definir"}</>
+                    <>{'\n'} <Text style={style.bold}>Categoria: </Text>{ro.suporte && ro.suporte.categoria ? ro.suporte.categoria : "A definir"}</>
                   )}
 
               </Text>
@@ -158,6 +188,7 @@ export const TabelaROs = () =>{
               <ActivityIndicator size="large" color="#666"/>
           </View>
           }
+          {ros && !loading && ros.length < 1 && <Text style={{ marginTop: 20 }}>Não foi encontrado nenhum Registro de Ocorrência</Text>}
           </ScrollView>
         </View>
     {/* <View style={fler}> */}
@@ -173,7 +204,7 @@ export const TabelaROs = () =>{
             <TouchableOpacity style={style.enterButton}>
             <Icon name='notifications' size={27} style={style.iconNotif}
               onPress={() => 
-                navigation.navigate('Login')
+                navigation.navigate('Notificacoes')
                 }/>
             </TouchableOpacity>
           </View>
@@ -367,6 +398,11 @@ squareContainer: {
   bold: {
     fontWeight: 'bold',
     color: '#000',
+  },
+  cancel: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginLeft: -20
   }
 });
 

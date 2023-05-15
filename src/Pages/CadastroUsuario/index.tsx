@@ -25,12 +25,11 @@ export const CadastroUsuario = () =>{
   const [empresa, setEmpresa] = useState('');
   const [contato_empresa, setContatoEmpresa] = useState('');
 
-  // const [empresa, setEmpresa] = useState('');
-  const [senha, setSenha] = useState('');
+  // const [senha, setSenha] = useState('');
   const [perfil, setPerfil] = useState('cliente');
   const [loading, setLoading] = useState(false);// do botão de enviar
 
-   const [selectedPerfil, setSelectedPerfil] = useState('admin');
+   const [selectedPerfil, setSelectedPerfil] = useState('cliente');
    const perfis: Perfil[] = [
     { label: 'Administrador', value: 'admin' },
     { label: 'Cliente', value: 'cliente' },
@@ -41,7 +40,8 @@ export const CadastroUsuario = () =>{
       setLoading(true);
       try {
         
-        const response = await api.post('/usuario', {nome, email, perfil, empresa, contato_empresa, senha})
+        const response = await api.post('/usuario', {nome, 
+          email, perfil, empresa, contato_empresa })
         console.log(nome)
 
         Alert.alert(response.data.msg)
@@ -131,23 +131,20 @@ export const CadastroUsuario = () =>{
           ></TextInput>
         </View>
 
-        <View style={style.campos2}>
+        {/* <View style={style.campos2}>
           <Text style={style.paragraph}>
             Senha*
           </Text>
           <TextInput style={style.input} 
           placeholder='' onChangeText={texto => setSenha(texto)} secureTextEntry={true}
           ></TextInput>
-        </View>
+        </View> */}
 
-        
-          
-        
         <View style={style.botaoalinha}>
           {!loading ? (
               <TouchableOpacity style={style.button}
                 onPress={cadastrarUser}>
-                <Text style={style.cadastra}>Enviar</Text>
+                <Text style={style.cadastra}>Cadastrar</Text>
               </TouchableOpacity>
           ) : (
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -192,8 +189,8 @@ const style = StyleSheet.create({
   
  
   botaoalinha:{
-
-    marginLeft:'40%',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   button:{
@@ -202,15 +199,15 @@ const style = StyleSheet.create({
     borderRadius:300,
     height: 40,
     backgroundColor: '#72A2FA',
-    marginTop:10,
-    marginBottom:10
+    marginTop:15,
+    marginBottom:15,
     
   },
 
   cadastra:{   //texto do botão de enviar
     textAlign:'center',
-   paddingTop:8,
-   color:'white'
+    paddingTop: 10,
+    color:'white'
   },
 
   campos:{
@@ -242,10 +239,9 @@ const style = StyleSheet.create({
     textAlign: 'left',
   },
   scrollView: {
-    height: '20%',
+    height: '30%',
     width: '90%',
     marginTop:'3%',
-    marginBottom:'15%',
     alignSelf: 'center',
     padding:10,
     backgroundColor: '#C3C9D0',
@@ -255,10 +251,8 @@ const style = StyleSheet.create({
 
   contentContainer: {  //Faz parte do estilo da scrollview
     justifyContent: 'center',
-    
     backgroundColor: '#C3C9D0',
     paddingBottom: 30,
-   
   },
 
   title2:{ //titulos das divisões dos campos
@@ -381,7 +375,7 @@ const style = StyleSheet.create({
     width:300,
     height:60,
     borderRadius:20,
-    marginBottom:'20%',
+    marginBottom: 10,
    },
 });
 

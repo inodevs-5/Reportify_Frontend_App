@@ -5,9 +5,10 @@ import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
 import api from '../../services/api';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export const Membro_suporte = () =>{
-  const { usuario, signOut } = useAuth();
+  const { signOut } = useAuth();
 
   const [usuarios, setUsuarios] = useState()
 
@@ -23,17 +24,42 @@ export const Membro_suporte = () =>{
         setUsuarios(response.data);
         setLoading(false)
       } catch (response) {
-        setErrorMessage(response.data.msg);
+        Alert.alert(response.data.msg);
       }
     })();
   }, []);
 
+  async function pesquisar() {
+    setLoading(true)
+    try {
+      const response = await api.get('/usuario/search/' + input);
+
+      setUsuarios(response.data);
+    } catch (response) {
+      Alert.alert(response.data.msg);
+    }
+    setLoading(false)
+  }
+
+  async function cancel() {
+    setLoading(true)
+    setInput('')
+    try {
+      const response = await api.get('/usuario');
+
+      setUsuarios(response.data);
+    } catch (response) {
+      Alert.alert(response.data.msg);
+    }
+    setLoading(false)
+  }
+
   return (
     <View style={style.container}>
       <Text style={style.title}>Membros do Suporte:</Text>
-      <TouchableOpacity onPress={signOut} style={style.exitIcon} >
+      {/* <TouchableOpacity onPress={signOut} style={style.exitIcon} >
         <Icon name='exit-outline' size={30} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <View style={style.containerbusca}>
         <View style={style.container12}>
       <TextInput style={style.busca}  
@@ -41,26 +67,37 @@ export const Membro_suporte = () =>{
         value={input} 
         onChangeText={(texto => setInput(texto))}>
       </TextInput>
-      <Icon name='search' size={21} style={style.searchIcon}/>
+      <TouchableOpacity onPress={cancel}>
+        <Text style={style.cancel}>X</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={pesquisar}>
+        <Icon name='search' size={21} style={style.searchIcon}/>
+      </TouchableOpacity>
       </View>
       <View style={style.bar}/> 
        </View>
       
-      { 
-        usuarios && !loading ? usuarios.map(usuario => (
-      <View style={style.buttons} key={usuario._id}>
-        <TouchableOpacity style={style.button}
-          key={usuario._id}
-          onPress={() => 
-          navigation.navigate('EditarUsuario', {id:usuario._id})
-          }>
-          <Text key={usuario._id} style={style.enterButton}>{usuario.nome}</Text>
-        </TouchableOpacity> 
-      </View>
-   )) : <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <ActivityIndicator size="large" color="#666"/>
-      </View>
-      }
+        <ScrollView 
+          contentContainerStyle={{ flexGrow: 1, marginTop: 10 }} 
+          keyboardShouldPersistTaps="always"
+        >
+        {usuarios && !loading && usuarios.length < 1 && <Text style={{marginTop: 20}}>Não há nenhum usuario cadastrado.</Text>}
+        { 
+          usuarios && !loading ? usuarios.map(usuario => (
+        <View style={style.buttons} key={usuario._id}>
+          <TouchableOpacity style={style.button}
+            key={usuario._id}
+            onPress={() => 
+            navigation.navigate('EditarUsuario', {id:usuario._id})
+            }>
+            <Text key={usuario._id} style={style.enterButton}>{usuario.nome}</Text>
+          </TouchableOpacity> 
+        </View>
+        )) : <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <ActivityIndicator size="large" color="#666"/>
+        </View>
+        }
+      </ScrollView>
 
       <View >
       <View style={style.menu}>
@@ -74,7 +111,7 @@ export const Membro_suporte = () =>{
         <TouchableOpacity style={style.enterButton}>
         <Icon name='notifications' size={27} style={style.iconNotif}
           onPress={() => 
-            navigation.navigate('Login')
+            navigation.navigate('Notificacoes')
             }/>
         </TouchableOpacity>
       </View>
@@ -88,6 +125,7 @@ const style = StyleSheet.create({
 
   searchIcon:{
     color: 'black',
+    marginLeft: 10,
     // backgroundColor: 'yellow',
   },
 
@@ -246,6 +284,11 @@ const style = StyleSheet.create({
     position: 'absolute',
     right: 50,
     top: 30
+  }, 
+  cancel: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginLeft: 25,
   }
 });
 

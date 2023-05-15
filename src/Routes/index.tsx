@@ -17,10 +17,28 @@ export default function () {
         )
     }
 
-   return(
-    <NavigationContainer>
-        {usuario && usuario.perfil == "admin" ? <AdminRoutes /> : signed ? <AuthRoutes /> : <Routes />}
-    </NavigationContainer>
+    const linking = {
+        prefixes: ["app://reportify", "http://reportify-app-inodevs-2023"],
+        config: {
+            screens: {
+                Login: {
+                    path: ""
+                },
+                RedefinirSenha: {
+                    path: "senha/:id/:firstTime",
+                    parse: {
+                        id: (id) => `${id}`,
+                        firstTime: (firstTime) => `${firstTime}`
+                    }
+                }
+            }
+        }
+    }  
+
+   return (
+        <NavigationContainer linking={linking}>
+            {usuario && usuario.perfil == "admin" ? <AdminRoutes /> : signed ? <AuthRoutes /> : <Routes />}
+        </NavigationContainer>
     )
 
 }
