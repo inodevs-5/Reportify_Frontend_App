@@ -15,6 +15,7 @@ export const Home = () =>{
   const [showModal, setShowModal] = useState(false);
 
   const sair = () => {
+    navigation.navigate('Home')
     signOut()
   }
 
