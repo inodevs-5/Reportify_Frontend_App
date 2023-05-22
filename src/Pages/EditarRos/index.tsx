@@ -605,7 +605,7 @@ const EditaRos = ({route}) => {
                               defaultValue={justificativaFechamento}
                               onChangeText={(justificativaFechamento) => setJustificativaFechamento(justificativaFechamento)}
                               placeholder=''
-                              editable={(usuario.perfil === "cliente" && fase === "validacao") ? true : false}
+                              editable={(usuario.perfil === "cliente" && fase !== 'concluido') ? true : false}
                               ></TextInput>
                             </View>
                         </View>
