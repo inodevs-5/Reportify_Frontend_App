@@ -59,6 +59,7 @@ const EditaRos = ({route}) => {
     const [situacao, setSituacao] = useState('')
     const [justificativaReclassificacao, setJustificativaReclassificacao] = useState('')
     const [validacaoFechamentoRo, setValidacaoFechamentoRo] = useState('')
+    const [justificativaFechamento, setJustificativaFechamento] = useState('')
     const [usuarios, setUsuarios] = useState()
     const [idcolaboradorIACIT, setIdColaboradorIACIT] = useState()
      
@@ -78,6 +79,9 @@ const EditaRos = ({route}) => {
           setClassDefeito(response.data.classDefeito);
           setDescricaoOcorrencia(response.data.descricaoOcorrencia);
           setValidacaoFechamentoRo(response.data.validacaoFechamentoRo);
+          if (response.data.justificativaFechamento) {
+            setJustificativaFechamento(response.data.justificativaFechamento)
+          }
           if (response.data.classDefeito === "hardware") {
             setEquipamento(response.data.opcoesHardware.equipamento);
             setEquipPosicao(response.data.opcoesHardware.equipPosicao);
@@ -98,9 +102,10 @@ const EditaRos = ({route}) => {
             setOutros(response.data.suporte.outros);
             setJustificativaReclassificacao(response.data.suporte.justificativaReclassificacao);
             if (response.data.suporte.colaboradorIACIT) {
-              setNome(response.data.suporte.colaboradorIACIT.nome);
-              setIdColaboradorIACIT(response.data.suporte.colaboradorIACIT.id);
+              setIdColaboradorIACIT(response.data.suporte.colaboradorIACIT.id._id);
             }
+          } else {
+            setFase('pendente')
           }
           
           setDescricaoOcorrencia(response.data.descricaoOcorrencia);
@@ -149,10 +154,7 @@ const EditaRos = ({route}) => {
         {
             categoria,
             fase, 
-            
             idcolaboradorIACIT,
-            melhoria,
-            classificacao, 
             melhoria,
             classificacao, 
             nome,
@@ -216,7 +218,8 @@ const EditaRos = ({route}) => {
       try{
         const response = await api.patch(`/ro/close/${numer}`,
         {
-          validacaoFechamentoRo
+          validacaoFechamentoRo,
+          justificativaFechamento
           }, );
         Alert.alert(response.data.msg)
         navigation.navigate('Home')
@@ -233,6 +236,42 @@ const EditaRos = ({route}) => {
 
     const dataFormata = dataObj.toLocaleDateString("pt-BR", opcoesData);
     const horaFormatada  = dataObj.toLocaleTimeString("pt-BR", opcoesHora); 
+
+    // rn-fetch-blob
+    async function downloadImage(imageName) {
+      try {
+          // const response = await api.get('/party/download/642722eaeda6f4eb1a078181', {}, {responseType: 'blob'});
+          // const IMAGE_PATH = response.data;
+          const IMAGE_PATH = 'http://10.0.2.2:3000/ro/download/' + imageName;
+
+          let date = new Date();
+          let image_url = IMAGE_PATH;
+          var ext = getExtention(image_url);
+          ext = "." + ext[0];
+          const {config, fs} = RNFetchBlob;
+          let PictureDir = fs.dirs.PictureDir;
+          let options = {
+              fileCache: true,
+              addAndroidDownloads: {
+                  useDownloadManager: true,
+                  notification: true,
+                  path: PictureDir + '/image_' + Math.floor(date.getTime() + date.getSeconds()/2) + ext,
+                  description: 'Image'
+              }
+          }
+          config(options)
+          .fetch('GET', image_url)
+          .then(res => {
+              Alert.alert('Imagem baixada com sucesso');
+          })
+      } catch (error) {
+          console.log(error)
+      }
+    }
+
+    const getExtention = filename => {
+      return (/[.]/.exec(filename)) ? /[^.]+$/.exec(filename) : undefined;
+    }
 
   return (
     <KeyboardAvoidingView
@@ -368,9 +407,11 @@ const EditaRos = ({route}) => {
                               <View style={style.campos}>
                                 <Text style={style.text}>Logs Anexados: </Text>
                                     {logsAnexado && logsAnexado.map(l => (
-                                        <TextInput key={l.idAnexo} defaultValue={l.nomeAnexo} editable={isEditable} style={style.info}
+                                      <TouchableOpacity onPress={() => downloadImage(l.filename)} key={l.idAnexo} >
+                                        <TextInput defaultValue={l.nomeAnexo} editable={isEditable} style={style.info}
                                         onChangeText={logsAnexado => setLogsAnexado(logsAnexado)}
                                         ></TextInput>
+                                      </TouchableOpacity>
                                     ))}
                               </View>
                             </>
@@ -409,7 +450,7 @@ const EditaRos = ({route}) => {
                         <Text style={style.text}>Situação: </Text>
                           <View>
                                 <Picker
-                                  enabled={usuario.perfil === "admin" ? true : false}
+                                  enabled={(usuario.perfil === "admin" && fase !== 'concluido') ? true : false}
                                   style={style.picker}
                                   selectedValue={fase}
                                   onValueChange={(itemValue, itemIndex) =>
@@ -420,13 +461,13 @@ const EditaRos = ({route}) => {
                                         <Picker.Item label="Pendente" value="pendente" />
                                         <Picker.Item label="Em andamento" value="andamento" />
                                         <Picker.Item label="Aguardando validação" value="validacao" />
-                                        <Picker.Item label="Concluido" value="concluido" />
+                                        <Picker.Item label="Concluido" value="concluido" enabled={false} />
                                 </Picker>
                           </View>
                           
                         <Text style={style.text}>Classificação: </Text>
                                   <Picker
-                                      enabled={usuario.perfil === "admin" ? true : false}
+                                      enabled={(usuario.perfil === "admin" && fase !== 'concluido') ? true : false}
                                       style={style.picker}
                                         selectedValue={classificacao}
                                         onValueChange={(itemValue, itemIndex) =>
@@ -442,7 +483,7 @@ const EditaRos = ({route}) => {
                                     <Text style={style.text}>Defeito: </Text>
                                               <View>
                                                     <Picker
-                                                      enabled={usuario.perfil === "admin" ? true : false}
+                                                      enabled={(usuario.perfil === "admin" && fase !== 'concluido') ? true : false}
                                                       style={style.picker}
                                                       selectedValue={defeito}
                                                       onValueChange={(itemValue, itemIndex) =>
@@ -462,15 +503,15 @@ const EditaRos = ({route}) => {
                                   <Text style={style.text}>Melhoria: </Text>
                                         <View>
                                                 <Picker
-                                                  enabled={usuario.perfil === "admin" ? true : false}
+                                                  enabled={(usuario.perfil === "admin" && fase !== 'concluido') ? true : false}
                                                   style={style.picker}
                                                   selectedValue={melhoria}
                                                   onValueChange={(itemValue, itemIndex) =>
                                                   setMelhoria(itemValue)
                                                 }>
                                                         <Picker.Item  label={melhoria} value={melhoria} enabled={false} />
-                                                        <Picker.Item label="Funcinalidade existente" value="funcionalidadeexistente" />
-                                                        <Picker.Item label="Funcionalidade não existente" value="funcionalidadenaoexistente"/>
+                                                        <Picker.Item label="Funcinalidade existente" value="funcionalidade existente" />
+                                                        <Picker.Item label="Funcionalidade não existente" value="funcionalidade nao existente"/>
                                                 </Picker>
                                         </View>
                                   </>
@@ -480,7 +521,7 @@ const EditaRos = ({route}) => {
                                       <Text style={style.text}>Outros: </Text>
                                             <View>
                                                 <Picker
-                                                enabled={usuario.perfil === "admin" ? true : false}
+                                                enabled={(usuario.perfil === "admin" && fase !== 'concluido') ? true : false}
                                                 style={style.picker}
                                                   selectedValue={outros}
                                                   onValueChange={(itemValue, itemIndex) =>
@@ -488,7 +529,7 @@ const EditaRos = ({route}) => {
                                                 }>
                                                         <Picker.Item  label={outros} value={outros} enabled={false} />
                                                         <Picker.Item label="Investigação" value="investigacao" />
-                                                        <Picker.Item label="Causa externa" value="causaexterna" />
+                                                        <Picker.Item label="Causa externa" value="causa externa" />
                                 
                                                 </Picker>
 
@@ -500,18 +541,18 @@ const EditaRos = ({route}) => {
                             <TextInput style={style.input}
                             defaultValue={categoria}
                             onChangeText={categoria => setCategoria(categoria)} 
-                            editable={usuario.perfil === "admin" ? true : false}>
+                            editable={(usuario.perfil === "admin" && fase !== 'concluido') ? true : false}>
                             </TextInput> 
                             
                             <Text style={style.text}>Responsável: </Text>
                             <View>
                               <Picker
-                                enabled={usuario.perfil === "admin" ? true : false}
+                                enabled={(usuario.perfil === "admin" && fase !== 'concluido') ? true : false}
                                 style={style.picker}
                                 selectedValue={idcolaboradorIACIT}
                                 onValueChange={(itemValue, itemIndex) =>{
                                   setIdColaboradorIACIT(itemValue)
-                                  setNome(usuarios[itemIndex-1].nome)
+
                                 }
                               }>
                                 <Picker.Item  label={nome} value={idcolaboradorIACIT} enabled={false} />
@@ -529,23 +570,25 @@ const EditaRos = ({route}) => {
                                     defaultValue={justificativaReclassificacao}
                                     onChangeText={(justificativaReclassificacao) => setJustificativaReclassificacao(justificativaReclassificacao)}
                                     placeholder=''
-                                    editable={usuario.perfil === "admin" ? true : false}
+                                    editable={(usuario.perfil === "admin" && fase !== 'concluido') ? true : false}
                                     ></TextInput>
                               </View>
                       </View>
-                      { fase == "validacao"  && usuario.perfil == "cliente" ? (
+                      { (fase == 'pendente' || fase == 'validacao' || fase == 'andamento') ? (
                       
                           <>
                             <Text style={style.text}>Validação e Fechamento do Ro</Text>
                               <Picker
+                              enabled={usuario.perfil === "cliente" ? true : false}
                               style={style.picker}
                                 selectedValue={validacaoFechamentoRo}
                                 onValueChange={(itemValue, itemIndex) =>
                                   setValidacaoFechamentoRo(itemValue)
                               }>
                                       <Picker.Item  label={validacaoFechamentoRo} value={validacaoFechamentoRo} enabled={false} />
-                                      <Picker.Item label="Encerrar RO" value="Encerrado" />
                                       <Picker.Item label="Aberto" value="Aberto" />
+                                      <Picker.Item label="Encerrado" value="Encerrado" />
+                                      <Picker.Item label="Recusado" value="Recusado" />
                               </Picker>
                            </>
                       ):(
@@ -553,7 +596,22 @@ const EditaRos = ({route}) => {
                       )}
 
                       {
-                         fase == "validacao" && usuario.perfil === "cliente" ? (
+                        validacaoFechamentoRo === "Recusado" &&
+                        <View style={style.campos1}>
+                          <Text style={style.text}>Justificativa da Recusão do RO: </Text>
+                            <View>
+                              <TextInput style={style.input3} 
+                              multiline={true}
+                              defaultValue={justificativaFechamento}
+                              onChangeText={(justificativaFechamento) => setJustificativaFechamento(justificativaFechamento)}
+                              placeholder=''
+                              editable={(usuario.perfil === "cliente" && fase === "validacao") ? true : false}
+                              ></TextInput>
+                            </View>
+                        </View>
+                      }
+                      {
+                         fase === "validacao" && usuario.perfil === "cliente" ? (
                          
                             <View style={style.conatualiza}>
                                 <TouchableOpacity
