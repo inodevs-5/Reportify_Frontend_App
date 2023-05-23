@@ -1,11 +1,14 @@
 /* eslint-disable quotes */
-import React, { useState } from 'react';
-import {StyleSheet,Modal, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {StyleSheet,Modal, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator, Linking, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
 import Icone from 'react-native-vector-icons/FontAwesome';
+import CheckBox from '@react-native-community/checkbox';
+import api from '../../services/api';
+
 export const Home = () =>{
   const { usuario, signOut } = useAuth();
 
@@ -13,6 +16,25 @@ export const Home = () =>{
   const [input, setInput] = useState('');
 
   const [showModal, setShowModal] = useState(false);
+  const [showModalTermo, setShowModalTermo] = useState(false);
+  const [termo, setTermo] = useState();
+
+  useEffect(() => {
+    (async () => {
+      try {
+          setTimeout(async() => {
+            const response = await api.get('/termo/' + usuario._id);
+            
+            if (!response.data.status) {
+              setTermo(response.data.termo)
+              setShowModalTermo(true)
+            }
+          }, 50);
+      } catch (response) {
+        Alert.alert(response.data.msg);
+      }
+    })();
+  }, []);
 
   const sair = () => {
     navigation.navigate('Home')
@@ -22,9 +44,17 @@ export const Home = () =>{
   const handlePress = () => {
     setShowModal(true);
   }
+
+  const acceptTermo = async() => {
+    try {
+      const response = await api.post('/termo/accept', {usuario: usuario._id, versaoTermo: termo._id});
+      setShowModalTermo(false)
+    } catch (response) {
+      Alert.alert(response.data.msg);
+    }
+  }
+
   return (
-    
-   
     <View style={style.container}>
         <Text style={style.title}>Olá, {usuario.nome}!</Text>
         <TouchableOpacity onPress={sair} style={style.exitIcon}>
@@ -52,8 +82,33 @@ export const Home = () =>{
           </Modal>
         </View>
 
+        <Modal visible={showModalTermo} animationType="slide">
+            <View style={style.modalTermo}>
+              <Text style={style.title1}>Termo de Compromisso</Text>
+              <Text style={style.text2}>Uma nova versão {termo && `(${termo._id})`} de termo de compromisso foi adicionada.</Text>
+              {termo &&               
+                <Text style={style.text2}>  
+                <Text
+                    style={style.hyperlinkStyle}
+                    onPress={() => {
+                      Linking.openURL(termo.url);
+                  }}>
+                    Clique aqui
+                  </Text>
+                  , para mais informações.
+                </Text>
+              }
+              <View style={style.check}>
+              <TouchableOpacity style={style.buttonCenter} onPress={acceptTermo}>
+                <Text style={style.closeTermo}>Estou ciente do Termo de Compromisso do app</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={style.buttonCenter} onPress={sair}>
+                <Text style={style.closeTermo}>Sair</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
         
-
         <View style={style.buttons}>
 
           {usuario.perfil === "admin" ? (
@@ -140,6 +195,15 @@ const style = StyleSheet.create({
     marginTop:10,
     marginBottom:10
   },
+  closeTermo: {
+    fontSize: 16,
+    textAlign: 'center',
+    textAlignVertical:'center',
+    width:'75%',
+    borderRadius:300,
+    height: 50,
+    backgroundColor: '#72A2FA',
+  },
   containericone: {
     position: 'absolute',
     top: '3.2%',
@@ -148,10 +212,20 @@ const style = StyleSheet.create({
   },
   modal: {
     flex: 1,
-   
     backgroundColor: 'white',
     padding: 20,
-    
+  },
+  modalTermo: {
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center',
+    backgroundColor: 'white',
+    padding: 20,
+  },
+  buttonCenter: {
+    justifyContent: 'center', 
+    alignItems: 'center',
+    marginTop: 20,
   },
   title1: {
     fontSize: 30,
@@ -165,7 +239,11 @@ const style = StyleSheet.create({
   text: {
     fontSize: 20,
   },
-
+  text2: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginTop: 10
+  },
  buttons:{
     margin:'auto',
     width:300
@@ -295,6 +373,29 @@ const style = StyleSheet.create({
 
   iconchat:{
     color:'white'
+  },
+
+  hyperlinkStyle: {
+    color: '#72A2FA',
+  },
+
+  check:{
+    backgroundColor:'E9EFF7',
+    marginTop: 10,
+  },
+
+  checkbox: {
+    marginTop: 5,
+  },
+
+  paragraph: {
+    margin: 10,
+    paddingBottom: 10,
+    paddingRight: 15,
+    paddingLeft: 5,
+    fontSize:15,
+    fontWeight: 'bold',
+    textAlign: 'left',
   },
 });
 
