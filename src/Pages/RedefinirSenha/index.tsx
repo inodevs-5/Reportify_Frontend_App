@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {StyleSheet, View, Text, TextInput,TouchableOpacity, ActivityIndicator, Alert, Linking} from 'react-native';
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
@@ -25,10 +25,23 @@ export const RedefinirSenha = ({ route }) =>{
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [termo, setTermo] = useState(false);
+  const [termoInfo, setTermoInfo] = useState();
 
   const handleTermoCheck = () => {
     setTermo(!termo);
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+          const response = await api.get('/termo/');
+          
+          setTermoInfo(response.data)
+      } catch (response) {
+        Alert.alert(response.data.msg);
+      }
+    })();
+  }, []);
 
   const salvarSenha = async() => {
     signOut()
@@ -37,6 +50,10 @@ export const RedefinirSenha = ({ route }) =>{
     setLoading(true);
       try {
         if (termo || firstTime === 'false') {
+          if (firstTime === 'true') {
+            await api.post('/termo/accept', {usuario: id, versaoTermo: termoInfo._id});
+          }
+
           const response = await api.patch('/usuario/password/' + id, {senha, confirmarSenha});
 
           Alert.alert(response.data.msg);
@@ -98,15 +115,20 @@ export const RedefinirSenha = ({ route }) =>{
                 value={termo}
                 onValueChange={handleTermoCheck}
               />
-              <Text style={style.paragraph}>Estou ciente do&nbsp;
-                <Text
-                  style={style.hyperlinkStyle}
-                  onPress={() => {
-                    Linking.openURL('https://docs.google.com/document/d/e/2PACX-1vS95FEPOWKp-Kp2GidnxjKPfdNse9LGssZFxurbmqgSw09eIIfwxXjvZUmzr0UwWLLt5XviUjmHXQE8/pub');
-                }}>
-                  Termo de Compromisso do app
+              {
+                termoInfo && <>
+                  <Text style={style.paragraph}>Estou ciente do&nbsp;
+                    <Text
+                      style={style.hyperlinkStyle}
+                      onPress={() => {
+                        Linking.openURL(termoInfo.url);
+                    }}>
+                      Termo de Compromisso do app
+                    </Text>
+                    {` (${termoInfo._id})`}
                 </Text>
-              </Text>
+                </>
+              }
             </View>
             {errorTermoMessage && <Text style={style.error}>{errorTermoMessage}</Text>}
           </View>

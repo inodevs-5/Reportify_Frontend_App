@@ -22,23 +22,21 @@ export const Home = () =>{
   useEffect(() => {
     (async () => {
       try {
-          setTimeout(async() => {
-            const response = await api.get('/termo/' + usuario._id);
-            
-            if (!response.data.status) {
-              setTermo(response.data.termo)
-              setShowModalTermo(true)
-            }
-          }, 50);
+        const response = await api.get('/termo/' + usuario._id);
+        
+        if (!response.data.status) {
+          setTermo(response.data.termo)
+          setShowModalTermo(true)
+        }
       } catch (response) {
         Alert.alert(response.data.msg);
       }
     })();
   }, []);
 
-  const sair = () => {
-    navigation.navigate('Home')
-    signOut()
+  const sair = async() => {
+    await signOut()
+    navigation.navigate('Login')
   }
 
   const handlePress = () => {

@@ -39,8 +39,8 @@ export const AuthProvider = ({children}) => {
         await AsyncStorage.setItem('@Reportify:token', response.data.token);
     }
 
-    function signOut() {
-        AsyncStorage.clear().then(() => {
+    async function signOut() {
+        await AsyncStorage.clear().then(() => {
             setUsuario(null);
         });
     }
