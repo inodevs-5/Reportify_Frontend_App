@@ -78,11 +78,17 @@ export const Home = () =>{
                 <Text style={style.enterButton}>Cadastrar Novo Usuário</Text>
               </TouchableOpacity>
 
+              <TouchableOpacity style={style.buttonAdm}
+                onPress={() => navigation.navigate('Dashboard')}>
+                <Text style={style.enterButton}>Relatórios</Text>
+              </TouchableOpacity>
+
               <TouchableOpacity style={style.buttonChat}
                 onPress={() => 
                   navigation.navigate('Contatos')
                 }>
               <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
+              
           </TouchableOpacity>
             </>
           ) : (

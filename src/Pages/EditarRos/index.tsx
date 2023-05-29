@@ -9,11 +9,12 @@ import {
   TextInput,
   KeyboardAvoidingView, 
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  PermissionsAndroid
 } 
 from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-import Icon from 'react-native-vector-icons/Ionicons'
+import RNFetchBlob from 'rn-fetch-blob';
 import { useNavigation } from '@react-navigation/native';;
 import { Ro } from '../../types/Types';
 import Menu from '../../components/menu';
@@ -237,12 +238,35 @@ const EditaRos = ({route}) => {
     const dataFormata = dataObj.toLocaleDateString("pt-BR", opcoesData);
     const horaFormatada  = dataObj.toLocaleTimeString("pt-BR", opcoesHora); 
 
+    const checkPermission = async(imageName: String) => {
+      if (Platform.OS === 'ios') {
+          downloadImage(imageName);
+      } else {
+          try {
+              const granted = await PermissionsAndroid.request(
+                  PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+              {
+                  title: 'Permissão do armazenamento requerida',
+                  message: 'O aplicativo precisa acessar seu armazenamento para baixar arquivos'
+              })
+              if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                  downloadImage(imageName);
+              } else {
+                  Alert.alert('Permissão de Armazenamento não concedido');
+              }
+          } catch (error) {
+              console.warn(error);
+          }
+      }
+  }
+
     // rn-fetch-blob
-    async function downloadImage(imageName) {
+    async function downloadImage(imageName: String) {
       try {
           // const response = await api.get('/party/download/642722eaeda6f4eb1a078181', {}, {responseType: 'blob'});
           // const IMAGE_PATH = response.data;
-          const IMAGE_PATH = 'http://10.0.2.2:3000/ro/download/' + imageName;
+          const IMAGE_PATH = 'http://10.0.2.2:3000/download/' + imageName;
+          console.log(IMAGE_PATH)
 
           let date = new Date();
           let image_url = IMAGE_PATH;
@@ -407,7 +431,7 @@ const EditaRos = ({route}) => {
                               <View style={style.campos}>
                                 <Text style={style.text}>Logs Anexados: </Text>
                                     {logsAnexado && logsAnexado.map(l => (
-                                      <TouchableOpacity onPress={() => downloadImage(l.filename)} key={l.idAnexo} >
+                                      <TouchableOpacity onPress={() => checkPermission(l.nomeAnexo)} key={l.idAnexo} >
                                         <TextInput defaultValue={l.nomeAnexo} editable={isEditable} style={style.info}
                                         onChangeText={logsAnexado => setLogsAnexado(logsAnexado)}
                                         ></TextInput>
