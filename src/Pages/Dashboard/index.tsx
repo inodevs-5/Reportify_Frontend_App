@@ -1,165 +1,264 @@
-import React, { useState } from 'react';
-import {StyleSheet, View, Text, TextInput,TouchableOpacity, ActivityIndicator, Alert} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {StyleSheet, View, Text, ScrollView,TouchableOpacity, Alert} from 'react-native';
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
-import {
-    PieChart,
-} from "react-native-chart-kit";
+import { VictoryPie, VictoryTooltip } from 'victory-native'
+import { Picker } from '@react-native-picker/picker';
 
 export const Dashboard = () =>{
   const navigation = useNavigation<propsStack>();
 
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('');
+  const [data, setData] = useState([]);
+  const [selected, setSelected] = useState('');
+  const [date, setDate] = useState("Janeiro 2023");
 
-  const data = [
-    {
-      name: "Em andamento",
-      population: 21500000,
-      color: "#2B3467",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 15
-    },
-    {
-      name: "ROs concluídos",
-      population: 2800000,
-      color: "#C3C9D0",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 15
-    },
-    {
-      name: "ROs abertos",
-      population: 8538000,
-      color: "#72A2FA",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 15
-    },
-  ];
-
-  const chartConfig = {
-    backgroundColor: "#e26a00",
-    backgroundGradientFrom: "#fb8c00",
-    backgroundGradientTo: "#ffa726",
-    decimalPlaces: 2, // optional, defaults to 2dp
-    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-    style: {
-      borderRadius: 16
-    },
-    propsForDots: {
-      r: "6",
-      strokeWidth: "2",
-      stroke: "#ffa726"
-    }
+  function clickCard(id: string) {
+    setSelected(prev => prev === id ? "" : id)
   }
 
+  useEffect(() => {
+    setData(allData[date])
+  }, [date])
+
+  const dates = [
+    {label: "Janeiro 2023", value: '0'},
+    {label: "Fevereiro 2023", value: '1'},,
+    {label: "Março 2023", value: '2'},
+  ]
+
+  const allData = {
+    "Janeiro 2023": [
+      {
+        id: "1",
+        label: "Aberto",
+        value: 25,
+        color: '#C3C9D0'
+      },
+      {
+        id: "2",
+        label: "Em andamento",
+        value: 15,
+        color: "#72A2FA"
+      },
+      {
+        id: "3",
+        label: "Resolvido",
+        value: 20,
+        color: "#2B3467"
+      }
+    ],
+    "Fevereiro 2023": [
+      {
+        id: "1",
+        label: "Aberto",
+        value: 20,
+        color: '#C3C9D0'
+      },
+      {
+        id: "2",
+        label: "Em andamento",
+        value: 25,
+        color: "#72A2FA"
+      },
+      {
+        id: "3",
+        label: "Resolvido",
+        value: 40,
+        color: "#2B3467"
+      }
+    ],
+    "Março 2023": [
+      {
+        id: "1",
+        label: "Aberto",
+        value: 10,
+        color: '#C3C9D0'
+      },
+      {
+        id: "2",
+        label: "Em andamento",
+        value: 40,
+        color: "#72A2FA"
+      },
+      {
+        id: "3",
+        label: "Resolvido",
+        value: 30,
+        color: "#2B3467"
+      }
+    ]
+  }
+
+  useEffect(() => {
+
+  })
+
   return (
-
-    <View style={style.container}>
+    <ScrollView>
+      <View style={style.container}>
         <Text style={style.title}>Dashboard</Text>
-        <PieChart
+        <View style={style.picker}>
+          <Text style={style.subtitle}>Data:</Text>
+          <Picker
+            selectedValue={date}
+            onValueChange={(itemValue) => setDate(itemValue)}
+            style={{
+              backgroundColor: '#FFF',
+              height: 50,
+              flex: 1,
+              marginLeft: 50
+            }}
+          >
+            {
+              dates.map(item => (
+                <Picker.Item
+                  key={item.label}
+                  label={item.label}
+                  value={item.label}
+                />
+              ))
+            }
+          </Picker>
+        </View>
+        <View style={style.chart}>
+          <VictoryPie 
             data={data}
-            width={350}
-            height={220}
-            chartConfig={chartConfig}
-            accessor={"population"}
-            backgroundColor={"transparent"}
-            paddingLeft={"15"}
-            center={[10, 0]}
+            x="label"
+            y="value"
+            colorScale={['#C3C9D0', '#72A2FA' , '#2B3467']}
+            innerRadius={75}
+            animate={{
+              duration: 2000,
+              easing: "linear"
+            }}
+            style={{
+                labels: {
+                  fill: 'white'
+                },
+                data: {
+                  fillOpacity: ({datum}) => (datum.id === selected || selected === "") ? 1 : 0.3,
+                  stroke: ({datum}) => (datum.id === selected) ? 'black' : 'none',
+                  strokeWidth: 3,
+                  strokeOpacity: 0.5
+                }
+            }}
+            labelComponent={
+              <VictoryTooltip 
+                renderInPortal={false}
+                flyoutStyle={{
+                  stroke: 0,
+                  fill: ({datum}) => datum.color
+                }}
+              />
+            }
+          />
+          {data[0] &&           
+            <TouchableOpacity style={style.card} onPress={() => clickCard(data[0].id)}>
+              <View style={style.tag1} />
+              <Text style={style.label}>
+                RO's abertos
+              </Text>
+              <Text style={style.value}>
+                {data[0].value}
+              </Text>
+            </TouchableOpacity>
+          }
 
-        />
-    </View>
+          {data[1] &&
+            <TouchableOpacity style={style.card} onPress={() => clickCard(data[1].id)}>
+              <View style={style.tag2} />
+              <Text style={style.label}>
+                RO's em andamento
+              </Text>
+              <Text style={style.value}>
+                {data[1].value}
+              </Text>
+           </TouchableOpacity>
+          }
+
+          {data[2] && 
+            <TouchableOpacity style={style.card} onPress={() => clickCard(data[2].id)}>
+              <View style={style.tag3} />
+              <Text style={style.label}>
+                RO's resolvidos
+              </Text>
+              <Text style={style.value}>
+                {data[2].value}
+              </Text>
+          </TouchableOpacity>
+          }
+        </View>
+      </View>
+    </ScrollView>
   );
 };
 
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: '#E1E1EF',
   },
-  button:{
-    width:160,
-    borderRadius:300,
-    height: 40,
-    backgroundColor: '#72A2FA',
-    marginTop:10,
-    marginBottom:10,
+  title: {
+    fontSize: 24,
+    textAlign: 'center',
+    color: 'black',
+    fontWeight: 'bold',
   },
-  redefinir:{   //texto do botão para redefinir senha
-    textAlign:'center',
-    paddingTop:10,
-    color:'white',
+  chart: {
+    width: '100%',
+    alignItems: 'center'
   },
-  campos:{
+  card: {
+    width: '100%',
+    height: 80,
+    marginBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: '3%',
+    backgroundColor: '#ffffff',
+    overflow: 'hidden'
   },
-  paragraph: {
-    margin: 10,
-    paddingBottom: 10,
-    paddingRight: 15,
-    paddingLeft: 5,
-    fontSize:15,
-    fontWeight: 'bold',
-    textAlign: 'left',
+  tag1: {
+    width: 10,
+    height: 80,
+    marginRight: 16,
+    backgroundColor: '#C3C9D0'
   },
-  contentContainer: {  //Faz parte do estilo da scrollview
-    justifyContent: 'center',
-    paddingBottom: 30,
+  tag2: {
+    width: 10,
+    height: 80,
+    marginRight: 16,
+    backgroundColor: '#72A2FA'
   },
-  title:{ //titulos das divisões dos campos
-    fontSize: 24,
-    marginTop: 30,
-    marginBottom: 20,
-    textAlign: 'center',
-    color: 'black',
-    fontWeight: 'bold',
+  tag3: {
+    width: 10,
+    height: 80,
+    marginRight: 16,
+    backgroundColor: '#2B3467'
   },
-  input: {
+  label: {
     flex: 1,
-    alignItems:'center',
-    flexDirection:'row',
-    backgroundColor: '#ffff',
-    justifyContent:'space-between',
-    margin:'auto',
-    color: 'black',
-    paddingLeft:6,
-    paddingBottom:3,
-    width: 140,
-    height:27,
-    marginBottom: 3,
-    borderRadius:300,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4,
-  },
-  error: {
-    margin: 10,
-    paddingBottom: 10,
-    paddingRight: 15,
-    paddingLeft: 5,
-    fontSize:15,
     fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#ff0000',
+    fontSize: 16
   },
-  text: {
-    margin: 10,
-    paddingBottom: 10,
-    paddingRight: 15,
-    paddingLeft: 5,
-    fontSize:15,
-    fontWeight: 'bold',
-    textAlign: 'center',
+  value: {
+    fontSize: 16,
+    marginRight: 16
   },
+  picker: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 16
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: 'bold'
+  }
 });
 
 export default Dashboard;
