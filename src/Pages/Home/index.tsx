@@ -7,25 +7,26 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
 import Icone from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
+import api from '../../services/api';
 export const Home = () =>{
   const { usuario, signOut } = useAuth();
 
-  const mostrarNotificacoes = () => {
-    const [mostrarNotificacao, setMostrarNotificacao] = useState('');
+  
+  const [mostrarNotificacao, setMostrarNotificacao] = useState('');
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get('https://reportify-backend-a322.onrender.com');
-          const constanteBackend = response.data.mostrarNotificacoes;
-          setMostrarNotificacao(constanteBackend);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchData();
-    }, []);
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get('/notificacao/'+ usuario.id);
+        const constanteBackend = response.data.numeroNotificacoes;
+        setMostrarNotificacao(constanteBackend);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+  
 
   const navigation = useNavigation<propsStack>()
   const [input, setInput] = useState('');
@@ -134,9 +135,9 @@ export const Home = () =>{
             </TouchableOpacity>
 
             <TouchableOpacity style={style.enterButton}>
+            <Text style={style.notificacao}>{mostrarNotificacao}</Text>
               <Icon name='notifications' size={27} style={style.iconNotif}
-                onPress={() => navigation.navigate('Notificacoes')} />
-              <Text style={style.notificacao}>{mostrarNotificacao}</Text>
+                onPress={() => navigation.navigate('Notificacoes')}/>
             </TouchableOpacity>
           </View>
         </View>
@@ -318,7 +319,7 @@ const style = StyleSheet.create({
 
   notificacao:{
     color: 'white',
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
   },
 });
 
