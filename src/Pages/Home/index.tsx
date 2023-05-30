@@ -1,13 +1,31 @@
 /* eslint-disable quotes */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {StyleSheet,Modal, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
 import Icone from 'react-native-vector-icons/FontAwesome';
+import axios from 'axios';
 export const Home = () =>{
   const { usuario, signOut } = useAuth();
+
+  const mostrarNotificacoes = () => {
+    const [mostrarNotificacao, setMostrarNotificacao] = useState('');
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get('https://reportify-backend-a322.onrender.com');
+          const constanteBackend = response.data.mostrarNotificacoes;
+          setMostrarNotificacao(constanteBackend);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchData();
+    }, []);
+  }
 
   const navigation = useNavigation<propsStack>()
   const [input, setInput] = useState('');
@@ -118,6 +136,7 @@ export const Home = () =>{
             <TouchableOpacity style={style.enterButton}>
               <Icon name='notifications' size={27} style={style.iconNotif}
                 onPress={() => navigation.navigate('Notificacoes')} />
+              <Text style={style.notificacao}>{mostrarNotificacao}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -295,6 +314,11 @@ const style = StyleSheet.create({
 
   iconchat:{
     color:'white'
+  },
+
+  notificacao:{
+    color: 'white',
+    backgroundColor: 'red',
   },
 });
 
