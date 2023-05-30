@@ -3,7 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const api = create({
     // baseURL: 'https://reportify-backend-a322.onrender.com',
-    baseURL: 'http://10.0.2.2:3000',
+    // baseURL: 'http://10.0.2.2:3000',
+    baseURL: 'https://numero-notificacao.onrender.com',
 });
 
 api.addResponseTransform(response => { 

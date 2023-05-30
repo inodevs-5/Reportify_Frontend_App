@@ -6,26 +6,38 @@ import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
 import Icone from 'react-native-vector-icons/FontAwesome';
-import axios from 'axios';
 import api from '../../services/api';
 export const Home = () =>{
   const { usuario, signOut } = useAuth();
-
   
   const [mostrarNotificacao, setMostrarNotificacao] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/notificacao/'+ usuario.id);
+        const response = await api.get('/notificacao/'+ usuario._id);
         const constanteBackend = response.data.numeroNotificacoes;
         setMostrarNotificacao(constanteBackend);
       } catch (error) {
         console.error(error);
       }
     };
-    fetchData();
+    const intervalId = setInterval(fetchData, 5000); // Buscar dados a cada 10 segundos
+
+    return () => {
+      clearInterval(intervalId); // Limpar o intervalo quando o componente for desmontado
+    };
   }, []);
+
+  const marcarNotificacao = async () => {
+    try {
+      const response = await api.post('/notificacao/', {id:usuario._id});
+      navigation.navigate('Notificacoes')
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
   
 
   const navigation = useNavigation<propsStack>()
@@ -131,13 +143,13 @@ export const Home = () =>{
           <View style={style.menu}>
             <TouchableOpacity style={style.enterButton}>
               <Icon name='home' size={27} style={style.iconHome}
-                onPress={() => navigation.navigate('Login')} />
+                onPress={() => navigation.navigate('Home')} />
             </TouchableOpacity>
 
             <TouchableOpacity style={style.enterButton}>
             <Text style={style.notificacao}>{mostrarNotificacao}</Text>
               <Icon name='notifications' size={27} style={style.iconNotif}
-                onPress={() => navigation.navigate('Notificacoes')}/>
+                onPress={marcarNotificacao}/>
             </TouchableOpacity>
           </View>
         </View>
