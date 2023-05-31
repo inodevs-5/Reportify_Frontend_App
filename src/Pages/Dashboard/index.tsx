@@ -29,13 +29,19 @@ export const Dashboard = () =>{
     {label: "Março 2023", value: '2'},
   ]
 
+  const usuarios = [
+    {name: "Geral"},
+    {name: "Gustavo"},
+    {name: "Anderson"},,
+  ]
+
   const allData = {
     "Janeiro 2023": [
       {
         id: "1",
         label: "Aberto",
         value: 25,
-        color: '#C3C9D0'
+        color: '#878787'
       },
       {
         id: "2",
@@ -55,7 +61,7 @@ export const Dashboard = () =>{
         id: "1",
         label: "Aberto",
         value: 20,
-        color: '#C3C9D0'
+        color: '#878787'
       },
       {
         id: "2",
@@ -75,7 +81,7 @@ export const Dashboard = () =>{
         id: "1",
         label: "Aberto",
         value: 10,
-        color: '#C3C9D0'
+        color: '#878787'
       },
       {
         id: "2",
@@ -123,12 +129,35 @@ export const Dashboard = () =>{
             }
           </Picker>
         </View>
+        <View style={style.picker}>
+          <Text style={style.subtitle}>Usuário:</Text>
+          <Picker
+            selectedValue={date}
+            onValueChange={(itemValue) => setDate(itemValue)}
+            style={{
+              backgroundColor: '#FFF',
+              height: 50,
+              flex: 1,
+              marginLeft: 28
+            }}
+          >
+            {
+              usuarios.map(item => (
+                <Picker.Item
+                  key={item.name}
+                  label={item.name}
+                  value={item.name}
+                />
+              ))
+            }
+          </Picker>
+        </View>
         <View style={style.chart}>
           <VictoryPie 
             data={data}
             x="label"
             y="value"
-            colorScale={['#C3C9D0', '#72A2FA' , '#2B3467']}
+            colorScale={['#878787', '#72A2FA' , '#2B3467']}
             innerRadius={75}
             animate={{
               duration: 2000,
@@ -225,7 +254,7 @@ const style = StyleSheet.create({
     width: 10,
     height: 80,
     marginRight: 16,
-    backgroundColor: '#C3C9D0'
+    backgroundColor: '#878787'
   },
   tag2: {
     width: 10,
