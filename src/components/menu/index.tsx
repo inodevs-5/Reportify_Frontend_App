@@ -21,7 +21,7 @@ export const Menu = ()  => {
         console.error(error);
       }
     };
-    const intervalId = setInterval(fetchData, 5000); // Buscar dados a cada 10 segundos
+    const intervalId = setInterval(fetchData, 1000); // Buscar dados a cada 10 segundos
 
     return () => {
       clearInterval(intervalId); // Limpar o intervalo quando o componente for desmontado
@@ -46,12 +46,24 @@ export const Menu = ()  => {
         <Icon name='home' size={27} style={style.iconHome}
           onPress={() => navigation.navigate('Home')} />
       </TouchableOpacity>
-
-      <TouchableOpacity style={style.enterButton}>
-      <Text style={style.notificacao}>{mostrarNotificacao}</Text>
-        <Icon name='notifications' size={27} style={style.iconNotif}
-          onPress={marcarNotificacao}/>
-      </TouchableOpacity>
+    {mostrarNotificacao === 0 ?(
+      <>
+        <TouchableOpacity style={style.enterButton}>
+          <Icon name='notifications' size={27} style={style.iconNotif}
+            onPress={marcarNotificacao}/>
+        </TouchableOpacity>
+      </>
+    ) : (
+      <>
+        <TouchableOpacity style={style.enterButton}>
+          <View style={style.notificacao}>
+            <Text style={style.numero}>{mostrarNotificacao}</Text>
+          </View>
+          <Icon name='notifications' size={27} style={style.iconNotif}
+            onPress={marcarNotificacao}/>
+        </TouchableOpacity>
+      </>
+    )}
     </View>
   </View>
     );
@@ -107,8 +119,20 @@ export const Menu = ()  => {
         },
 
         notificacao:{
-          color: 'white',
-          // backgroundColor: 'red',
+          marginLeft: 90,
+          marginBottom: 30,
+          backgroundColor: 'red',
+          position: 'absolute',
+          borderRadius: 30,
+          height: 20,
+          width: 20,
+          alignItems: 'center',
+          justifyContent: 'center',
         },
+
+        numero: {
+          color: 'white',
+        }
+        
     })
 export default Menu;

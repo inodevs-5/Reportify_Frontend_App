@@ -141,7 +141,7 @@ export const Home = () =>{
 
         </View>
 
-        <View style={{position:'absolute',  bottom: 0,}}>
+        <View style={{position:'absolute',  bottom: 10,}}>
           <Menu/>
         </View>
 
@@ -221,9 +221,9 @@ const style = StyleSheet.create({
     ...Platform.select({
       ios: { fontFamily: 'Arial', }, 
       android: { fontFamily: 'Roboto' }}), 
-    // display:'flex',
+    display:'flex',
     justifyContent: 'space-between',
-    // margin:'auto',
+    margin:'auto',
     alignItems: 'center',
     flexDirection: 'column'
   },

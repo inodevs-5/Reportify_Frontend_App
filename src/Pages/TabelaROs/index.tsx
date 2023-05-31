@@ -259,49 +259,49 @@ squareContainer: {
     color: 'white',
   },
 
-  div: {
-    position: 'absolute',
-    flexDirection: 'row',
-    alignItems: 'center',
-    margin:"auto",
-    width: 300,
-    height: 70,
-    backgroundColor: '#2B3467',
-    top: 500,
-    borderRadius: 35,
-  },
+  // div: {
+  //   position: 'absolute',
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   margin:"auto",
+  //   width: 300,
+  //   height: 70,
+  //   backgroundColor: '#2B3467',
+  //   top: 200,
+  //   borderRadius: 35,
+  // },
 
   title:{
     fontSize: 35,
     marginTop: 30,
-    marginRight: 115,
+    marginRight: 15,
     textAlign: 'left',
     color: 'black',
     fontWeight: 'bold',
   },
 
-  input: {
-    flex: 1,
-    alignItems:'center',
-    flexDirection:'row',
-    backgroundColor: '#ffff',
-    justifyContent:'space-between',
-    margin:'auto',
-    color: 'black',
-    paddingLeft:6,
-    width:300,
-    height:40,
-    marginBottom: 10,
-    borderRadius:300,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4,
-  },
+  // input: {
+  //   flex: 1,
+  //   alignItems:'center',
+  //   flexDirection:'row',
+  //   backgroundColor: '#ffff',
+  //   justifyContent:'space-between',
+  //   margin:'auto',
+  //   color: 'black',
+  //   paddingLeft:6,
+  //   width:300,
+  //   height:40,
+  //   marginBottom: 100,
+  //   borderRadius:300,
+  //   shadowColor: "#000",
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 2,
+  //   },
+  //   shadowOpacity: 0.23,
+  //   shadowRadius: 2.62,
+  //   elevation: 4,
+  // },
 
   container: {
     flex: 1,
@@ -355,6 +355,7 @@ squareContainer: {
   groupButtons: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    marginBottom: 180,
   },
   
   enterButton:{
@@ -366,12 +367,12 @@ squareContainer: {
     backgroundColor: '#68696C',
     width: 290,
     height: 2,
-    marginTop: 0
+    // marginTop: 0
   },
   scroll: { 
     marginLeft: 10,
     paddingRight: 10,
-
+    marginTop: -175,
   },
   bold: {
     fontWeight: 'bold',
