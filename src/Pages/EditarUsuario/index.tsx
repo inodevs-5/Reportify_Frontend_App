@@ -280,7 +280,7 @@ const style = StyleSheet.create({
     paddingLeft:6,
     paddingBottom:3,
     width:140,
-    height:27,
+    height:28,
     marginBottom: 3,
     borderRadius:300,
     shadowColor: "#000",

@@ -11,36 +11,37 @@ import Menu from '../../components/menu';
 
 export const Home = () =>{
   const { usuario, signOut } = useAuth();
+
+  const [mensagem, setMensagem] = useState([]);
   
-  const [mostrarNotificacao, setMostrarNotificacao] = useState('');
+  const [mostrarNotificacaoChat, setMostrarNotificacaoChat] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/notificacao/'+ usuario._id);
-        const constanteBackend = response.data.numeroNotificacoes;
-        setMostrarNotificacao(constanteBackend);
+        const response = await api.get('/mensagem/'+ mensagem.destinatario);
+        const constanteBackendChat = response.data.numeroNotificacoesChat;
+        setMostrarNotificacaoChat(constanteBackendChat);
       } catch (error) {
         console.error(error);
       }
     };
-    const intervalId = setInterval(fetchData, 5000); // Buscar dados a cada 10 segundos
+    const intervalId = setInterval(fetchData, 1000); // Buscar dados a cada 10 segundos
 
     return () => {
       clearInterval(intervalId); // Limpar o intervalo quando o componente for desmontado
     };
   }, []);
 
-  const marcarNotificacao = async () => {
+  const marcarNotificacaoChat = async () => {
     try {
-      const response = await api.post('/notificacao/', {id:usuario._id});
-      navigation.navigate('Notificacoes')
+      const response = await api.post('/mensagem/marcar/', {id:mensagem.destinatario});
+      navigation.navigate('Contatos')
 
     } catch (error) {
       console.error(error);
     }
   }
-  
 
   const navigation = useNavigation<propsStack>()
   const [input, setInput] = useState('');
@@ -131,11 +132,12 @@ export const Home = () =>{
               </TouchableOpacity>
 
               <TouchableOpacity style={style.buttonChat2}
-                onPress={() => 
-                  navigation.navigate('Contatos')
-                  }>
-                    <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
+                onPress={marcarNotificacaoChat}>
+                <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
               </TouchableOpacity>
+              <View style={style.mensagem}>
+                  <Text style={style.numero}>{mostrarNotificacaoChat}</Text>
+              </View>
             </>
           )}
 
@@ -299,6 +301,22 @@ const style = StyleSheet.create({
   iconchat:{
     color:'white'
   },
+
+  mensagem:{
+    marginLeft: 90,
+    marginBottom: 30,
+    backgroundColor: 'red',
+    position: 'absolute',
+    borderRadius: 30,
+    height: 20,
+    width: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  numero: {
+    color: 'white',
+  }
 
 });
 
