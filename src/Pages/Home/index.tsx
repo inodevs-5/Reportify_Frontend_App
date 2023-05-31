@@ -1,12 +1,14 @@
 /* eslint-disable quotes */
 import React, { useState, useEffect } from 'react';
-import {StyleSheet,Modal, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator} from 'react-native';
+import {StyleSheet,Modal, View,Text,TextInput,TouchableOpacity,Platform} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
 import Icone from 'react-native-vector-icons/FontAwesome';
 import api from '../../services/api';
+import Menu from '../../components/menu';
+
 export const Home = () =>{
   const { usuario, signOut } = useAuth();
   
@@ -139,19 +141,8 @@ export const Home = () =>{
 
         </View>
 
-        <View>
-          <View style={style.menu}>
-            <TouchableOpacity style={style.enterButton}>
-              <Icon name='home' size={27} style={style.iconHome}
-                onPress={() => navigation.navigate('Home')} />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={style.enterButton}>
-            <Text style={style.notificacao}>{mostrarNotificacao}</Text>
-              <Icon name='notifications' size={27} style={style.iconNotif}
-                onPress={marcarNotificacao}/>
-            </TouchableOpacity>
-          </View>
+        <View style={{position:'absolute',  bottom: 0,}}>
+          <Menu/>
         </View>
 
       </View>
@@ -199,30 +190,10 @@ const style = StyleSheet.create({
   },
 
  buttons:{
-    margin:'auto',
-    width:300
-  },
-  menu:{
-   display:'flex',
-   justifyContent:'space-around',
-   backgroundColor: '#2B3467',
-   alignItems: 'center',
-   flexDirection: 'row',
-   width:300,
-   height:60,
-   borderRadius:20,
-   marginBottom:10
+    // margin:'auto',
+    width:300,
+    marginBottom: 170,
 
-   
-  },
-  
-   iconNotif:{
-    paddingLeft: 70,
-    color: 'white',
-  },
-  
-  iconHome: {
-    color: 'white',
   },
 
   div: {
@@ -250,9 +221,9 @@ const style = StyleSheet.create({
     ...Platform.select({
       ios: { fontFamily: 'Arial', }, 
       android: { fontFamily: 'Roboto' }}), 
-    display:'flex',
+    // display:'flex',
     justifyContent: 'space-between',
-    margin:'auto',
+    // margin:'auto',
     alignItems: 'center',
     flexDirection: 'column'
   },
@@ -329,10 +300,6 @@ const style = StyleSheet.create({
     color:'white'
   },
 
-  notificacao:{
-    color: 'white',
-    // backgroundColor: 'red',
-  },
 });
 
 

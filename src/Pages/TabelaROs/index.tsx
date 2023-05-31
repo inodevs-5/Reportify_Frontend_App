@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import api from '../../services/api';
 import { ScrollView } from 'react-native';
 import { useAuth } from '../../contexts/auth';
+import Menu from '../../components/menu';
 
 export const TabelaROs = () =>{
     const navigation = useNavigation<propsStack>()
@@ -192,23 +193,12 @@ export const TabelaROs = () =>{
           </ScrollView>
         </View>
     {/* <View style={fler}> */}
-        <View >
-          <View style={style.menu}>
-            <TouchableOpacity style={style.enterButton}>
-            <Icon name='home' size={27} style={style.iconHome}
-              onPress={() => 
-                navigation.navigate('Home')
-                }/>
-            </TouchableOpacity>
-      
-            <TouchableOpacity style={style.enterButton}>
-            <Icon name='notifications' size={27} style={style.iconNotif}
-              onPress={() => 
-                navigation.navigate('Notificacoes')
-                }/>
-            </TouchableOpacity>
-          </View>
-          </View>
+    
+    <View style={{position:'absolute',  bottom: 0}}>
+      <Menu/>
+    </View>
+   
+    
           {/* </View> */}
           </View>
         </View>
@@ -217,18 +207,6 @@ export const TabelaROs = () =>{
 };
 
 const style = StyleSheet.create({
-  menu:{
-    display: 'flex',
-    justifyContent:'space-around',
-    backgroundColor: '#2B3467',
-    alignItems: 'center',
-    flexDirection: 'row',
-    width: 300,
-    height: 60,
-    borderRadius: 20,
-    marginBottom: 10,
-    marginLeft: 8,
-   },
   containerbusca:{
     display:'flex',
     flexDirection:'column',
