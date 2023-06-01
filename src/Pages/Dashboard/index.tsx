@@ -7,6 +7,7 @@ import { VictoryPie, VictoryTooltip } from 'victory-native'
 import { Picker } from '@react-native-picker/picker';
 
 export const Dashboard = () =>{
+  
   const navigation = useNavigation<propsStack>();
 
   const [loading, setLoading] = useState(false);
@@ -14,93 +15,44 @@ export const Dashboard = () =>{
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState('');
   const [date, setDate] = useState("Janeiro 2023");
+  const [dates, setDates] = useState([])
+  const [usuario, setUsuario] = useState()
+  const [usuarios, setUsuarios]= useState()
 
   function clickCard(id: string) {
     setSelected(prev => prev === id ? "" : id)
   }
 
   useEffect(() => {
-    setData(allData[date])
-  }, [date])
+    (async () => {
+      try {
+        const response = await api.get('/dashboard/dates');
+        setDates(response.data);
+        setDate(response.data[0])
 
-  const dates = [
-    {label: "Janeiro 2023", value: '0'},
-    {label: "Fevereiro 2023", value: '1'},,
-    {label: "Março 2023", value: '2'},
-  ]
-
-  const usuarios = [
-    {name: "Geral"},
-    {name: "Gustavo"},
-    {name: "Anderson"},,
-  ]
-
-  const allData = {
-    "Janeiro 2023": [
-      {
-        id: "1",
-        label: "Aberto",
-        value: 25,
-        color: '#878787'
-      },
-      {
-        id: "2",
-        label: "Em andamento",
-        value: 15,
-        color: "#72A2FA"
-      },
-      {
-        id: "3",
-        label: "Resolvido",
-        value: 20,
-        color: "#2B3467"
+        const response2 = await api.get('/usuario');
+        setUsuarios(response2.data)
+        setUsuario(response2.data[0])
+        
+        setLoading(false)
+      } catch (response) {
+        Alert.alert(response.data.msg);
       }
-    ],
-    "Fevereiro 2023": [
-      {
-        id: "1",
-        label: "Aberto",
-        value: 20,
-        color: '#878787'
-      },
-      {
-        id: "2",
-        label: "Em andamento",
-        value: 25,
-        color: "#72A2FA"
-      },
-      {
-        id: "3",
-        label: "Resolvido",
-        value: 40,
-        color: "#2B3467"
-      }
-    ],
-    "Março 2023": [
-      {
-        id: "1",
-        label: "Aberto",
-        value: 10,
-        color: '#878787'
-      },
-      {
-        id: "2",
-        label: "Em andamento",
-        value: 40,
-        color: "#72A2FA"
-      },
-      {
-        id: "3",
-        label: "Resolvido",
-        value: 30,
-        color: "#2B3467"
-      }
-    ]
-  }
+    })();
+  }, []);
 
   useEffect(() => {
-
-  })
+    (async () => {
+      try {
+        if (date && usuario) {
+          const response = await api.get('/dashboard/data/' + date + '/' + + usuario._id );
+          setData(response.data);
+        }
+      } catch (response) {
+        Alert.alert(response.data.msg);
+      }
+    })();
+  }, [date, usuario])
 
   return (
     <ScrollView>
@@ -119,11 +71,11 @@ export const Dashboard = () =>{
             }}
           >
             {
-              dates.map(item => (
+              dates && dates.map(item => (
                 <Picker.Item
-                  key={item.label}
-                  label={item.label}
-                  value={item.label}
+                  key={item}
+                  label={item}
+                  value={item}
                 />
               ))
             }
@@ -142,11 +94,11 @@ export const Dashboard = () =>{
             }}
           >
             {
-              usuarios.map(item => (
+              usuarios && usuarios.map(item => (
                 <Picker.Item
-                  key={item.name}
-                  label={item.name}
-                  value={item.name}
+                  key={item._id}
+                  label={item.nome}
+                  value={item._id}
                 />
               ))
             }
@@ -184,38 +136,38 @@ export const Dashboard = () =>{
               />
             }
           />
-          {data[0] &&           
+          {data &&           
             <TouchableOpacity style={style.card} onPress={() => clickCard(data[0].id)}>
               <View style={style.tag1} />
               <Text style={style.label}>
                 RO's abertos
               </Text>
               <Text style={style.value}>
-                {data[0].value}
+                {data.aberto}
               </Text>
             </TouchableOpacity>
           }
 
-          {data[1] &&
+          {data &&
             <TouchableOpacity style={style.card} onPress={() => clickCard(data[1].id)}>
               <View style={style.tag2} />
               <Text style={style.label}>
                 RO's em andamento
               </Text>
               <Text style={style.value}>
-                {data[1].value}
+                {data.andamento}
               </Text>
            </TouchableOpacity>
           }
 
-          {data[2] && 
+          {data && 
             <TouchableOpacity style={style.card} onPress={() => clickCard(data[2].id)}>
               <View style={style.tag3} />
               <Text style={style.label}>
                 RO's resolvidos
               </Text>
               <Text style={style.value}>
-                {data[2].value}
+                {data.fechado}
               </Text>
           </TouchableOpacity>
           }
