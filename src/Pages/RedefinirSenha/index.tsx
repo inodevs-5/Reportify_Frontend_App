@@ -56,6 +56,11 @@ export const RedefinirSenha = ({ route }) =>{
 
     <View style={style.container}>
 
+        <TouchableOpacity style={style.buttonAdm}
+          onPress={() => navigation.navigate('Login')}>
+          <Text style={style.enterButton}>X</Text>
+        </TouchableOpacity>
+
         <Text style={style.title}>Redefinição de Senha</Text>
 
         {errorMessage && <Text style={style.error}>{errorMessage}</Text>}
@@ -136,6 +141,7 @@ const style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   button:{
     width:160,
     borderRadius:300,
@@ -144,23 +150,28 @@ const style = StyleSheet.create({
     marginTop:10,
     marginBottom:10,
   },
+
   redefinir:{   //texto do botão para redefinir senha
     textAlign:'center',
     paddingTop:10,
     color:'white',
   },
+
   check:{
     backgroundColor:'E9EFF7',
     marginTop: 10,
   },
+
   checkbox: {
     marginTop: 5,
   },
+
   campos:{
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: '3%',
   },
+
   paragraph: {
     margin: 10,
     paddingBottom: 10,
@@ -170,10 +181,12 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'left',
   },
+
   contentContainer: {  //Faz parte do estilo da scrollview
     justifyContent: 'center',
     paddingBottom: 30,
   },
+
   title:{ //titulos das divisões dos campos
     fontSize: 24,
     marginTop: 30,
@@ -182,6 +195,7 @@ const style = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
   },
+
   input: {
     flex: 1,
     alignItems:'center',
@@ -201,15 +215,18 @@ const style = StyleSheet.create({
       width: 0,
       height: 2,
     },
+
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
   },
+
   icon:{
     color:'black',
     position: 'absolute',
     right: 5,
   },
+
   error: {
     margin: 10,
     paddingBottom: 10,
@@ -220,9 +237,29 @@ const style = StyleSheet.create({
     textAlign: 'center',
     color: '#ff0000',
   },
+  
   hyperlinkStyle: {
     color: '#72A2FA',
   },
+
+  buttonAdm :{
+    alignItems: 'center',
+    width: 45,
+    height: 45,
+    padding: 10,
+    backgroundColor: '#72A2FA',
+    marginBottom: 0,
+    marginLeft: 300,
+    borderRadius: 40,
+  },
+
+  enterButton:{
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+
 });
 
 export default RedefinirSenha;

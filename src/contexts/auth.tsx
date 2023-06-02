@@ -40,10 +40,12 @@ export const AuthProvider = ({children}) => {
         await AsyncStorage.setItem('@Reportify:token', response.data.token);
     }
 
-    function updateEmail() {
-        setUsuario({...usuario, email_notificacao: !usuario.email_notificacao})
-        console.log(usuario.email_notificacao)
-        console.log({...usuario, email_notificacao: !usuario.email_notificacao})
+    async function updateEmail() {
+        if (usuario) {
+            const updatedUsuario = {...usuario, email_notificacao: !usuario.email_notificacao}
+            await AsyncStorage.setItem('@Reportify:usuario', JSON.stringify(updatedUsuario));
+            setUsuario(updatedUsuario)
+        }
     }
 
     function signOut() {

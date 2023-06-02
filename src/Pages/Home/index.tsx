@@ -87,23 +87,23 @@ export const Home = () =>{
           <Modal visible={showModal} animationType="slide">
             <View style={style.modal}>
               <Text style={style.title1}>Informações de perfil</Text>
-              <Text style={style.text}>Nome:  {usuario.nome}!</Text>
-              <Text style={style.text}>Email:  {usuario.email}!</Text>
-              <Text style={style.text}>Tipo de perfil: {usuario.perfil}!</Text>
-              <Text style={style.text}>Empresa: {usuario.empresa}!</Text>
-              <Text style={style.text}>Contato da Empresa: {usuario.contato_empresa}!</Text>
-              <View style={style.containerbotao}>
-                <TouchableOpacity>                 
-                  <Switch
-                    trackColor={{false: '#767577', true: '#81b0ff'}}
-                    thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={toggleSwitch}
-                    value={isEnabled}
-                  />
-                </TouchableOpacity>
+              <Text style={style.text}>Nome:  {usuario.nome}</Text>
+              <Text style={style.text}>Email:  {usuario.email}</Text>
+              <Text style={style.text}>Tipo de perfil: {usuario.perfil}</Text>
+              <Text style={style.text}>Empresa: {usuario.empresa}</Text>
+              <Text style={style.text}>Contato da Empresa: {usuario.contato_empresa}</Text>
+              <View style={style.containerbotao}>        
+                <Text style={style.text}>Notificação por Email:</Text>        
+                <Switch
+                  trackColor={{false: '#767577', true: '#80d8f4'}}
+                  thumbColor={isEnabled ? '#618fff' : '#f4f3f4'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleSwitch}
+                  value={isEnabled}
+                  style={style.botaozin}
+                />
               </View>
-              <TouchableOpacity onPress={() => setShowModal(false)}>
+              <TouchableOpacity onPress={() => setShowModal(false)} style={style.containerClose}>
                 <Text style={style.close}>Fechar</Text>
               </TouchableOpacity>
             </View>
@@ -203,11 +203,11 @@ const style = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     textAlignVertical:'center',
-    textDecorationLine: 'underline',
     width:130,
     borderRadius:300,
     height: 40,
     backgroundColor: '#72A2FA',
+    color: 'white',
     marginTop:10,
     marginBottom:10
   },
@@ -219,7 +219,6 @@ const style = StyleSheet.create({
   },
   modal: {
     flex: 1,
-   
     backgroundColor: 'white',
     padding: 20,
     
@@ -365,10 +364,21 @@ const style = StyleSheet.create({
   },
 
   containerbotao: {
-    flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    height: 50,
+    width: 275,
+    flexDirection: "row",
+    marginLeft: -5,
   },
+
+  botaozin: {
+    marginBottom: 14,
+    transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }],
+  },
+
+  containerClose: {
+    alignItems: 'center',
+  }
 
 });
 
