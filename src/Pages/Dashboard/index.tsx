@@ -83,7 +83,7 @@ export const Dashboard = () =>{
 
   return (
     <>
-    <ScrollView contentContainerStyle={{flexGrow: 1}}>
+    <ScrollView contentContainerStyle={{flexGrow: 1, height: 1050}}>
       <View style={style.container}>
         <Text style={style.title}>Dashboard</Text>
         {!loading ? <>
@@ -137,7 +137,7 @@ export const Dashboard = () =>{
 
         <View style={style.chart}>
          {chartData &&
-          (chartData[0].value === 0 && chartData[1].value === 0 && chartData[2].value === 0) ? 
+          (totalROs === "0") ? 
             <Text style={style.noChart}>Não há nenhum dado de RO para este gráfico.</Text>
             :
             <VictoryPie 
@@ -256,7 +256,7 @@ export const Dashboard = () =>{
           } */}
         </View>
         </> : 
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{marginTop: 100, justifyContent: 'center', alignItems: 'center'}}>
             <ActivityIndicator size="large" color="#666"/>
           </View>
         }
@@ -291,7 +291,7 @@ const style = StyleSheet.create({
     textAlign: 'center',
     color: 'black',
     fontWeight: 'bold',
-    marginVertical: 100,
+    marginVertical: 300,
   },
   card: {
     width: '100%',
