@@ -1,126 +1,142 @@
 /* eslint-disable quotes */
 import React, { useState } from 'react';
-import {StyleSheet,Modal, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator} from 'react-native';
+import {StyleSheet,Modal, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator, ScrollView, Alert, Linking} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
 import Icone from 'react-native-vector-icons/FontAwesome';
-
-export const Home = () =>{
+import api from '../../services/api';
+export const OpcoesExtras = () =>{
   const { usuario, signOut } = useAuth();
 
   const navigation = useNavigation<propsStack>()
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);// do botão de enviar
 
-  const [showModal, setShowModal] = useState(false);
-
+  
   const sair = () => {
     navigation.navigate('Home')
     signOut()
   }
 
-  const handlePress = () => {
-    setShowModal(true);
+  async function forceBackup() {
+    setLoading(true)
+    console.log('entrou aqui')
+    try {
+      Alert.alert('Backup Iniciado!!');
+      const response = await api.post('/forceBackup');
+
+    } catch (response) {
+      console.log(response.data.msg);
+    }
+    setLoading(false)
   }
+
+  async function forceRestore() {
+    setLoading(true)
+
+    try {
+      Alert.alert('Restauração Iniciada!!');
+
+      const response = await api.post('/forceRestore');
+
+    } catch (response) {
+      Alert.alert(response.data.msg);
+    }
+    setLoading(false)
+  }
+
+
   return (
-    
-   
+
     <View style={style.container}>
-        <Text style={style.title}>Olá, {usuario.nome}!</Text>
+      <ScrollView >
+        <Text style={style.describe_top}>
+          Este site foi desenvolvido para criar o backup do banco de dados de mês em mês automaticamente.
+          Porém, o botão abaixo força a criação de um arquivo de backup do banco de dados atual.
+        </Text>
         <TouchableOpacity onPress={sair} style={style.exitIcon}>
           <Icon name='exit-outline' size={30} />
         </TouchableOpacity>
-        
-
-        <View style={style.containericone}>
-          <TouchableOpacity onPress={handlePress} style={style.userIcon}>
-            
-            <Icone name='user-circle' size={30}  />
-          </TouchableOpacity>
-          <Modal visible={showModal} animationType="slide">
-            <View style={style.modal}>
-              <Text style={style.title1}>Informações de perfil</Text>
-              <Text style={style.text}>Nome:  {usuario.nome}!</Text>
-              <Text style={style.text}>Email:  {usuario.email}!</Text>
-              <Text style={style.text}>Tipo de perfil: {usuario.perfil}!</Text>
-              <Text style={style.text}>Empresa: {usuario.empresa}!</Text>
-              <Text style={style.text}>Contato da Empresa: {usuario.contato_empresa}!</Text>
-              <TouchableOpacity onPress={() => setShowModal(false)}>
-                <Text style={style.close}>Fechar</Text>
-              </TouchableOpacity>
-            </View>
-          </Modal>
-        </View>
-
-        
 
         <View style={style.buttons}>
-
           {usuario.perfil === "admin" ? (
             <>
-              <TouchableOpacity style={style.buttonAdm}
-                onPress={() => navigation.navigate('TabelaROs')}>
-                <Text style={style.enterButton}>Registro de Ocorrência</Text>
-              </TouchableOpacity>
 
               <TouchableOpacity style={style.buttonAdm}
-                onPress={() => navigation.navigate('MembroSuporte')}>
-                <Text style={style.enterButton}>Membros do Suporte</Text>
+                onPress={forceBackup}>
+                <Text style={style.enterButton}>Forçar Backup</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={style.buttonAdm}
-                onPress={() => navigation.navigate('CadastroRO')}>
-                <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={style.buttonAdm}
-                onPress={() => navigation.navigate('CadastroUsuario')}>
-                <Text style={style.enterButton}>Cadastrar Novo Usuário</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={style.buttonChat}
-                onPress={() => 
-                  navigation.navigate('Contatos')
-                }>
-              <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={style.buttonAdm}
-                onPress={() => navigation.navigate('OpcoesExtras')}>
-                <Text style={style.enterButton}>Opções Extras</Text>
-              </TouchableOpacity>
-
-            
             </>
           ) : (
             <>
-              <TouchableOpacity style={style.buttonClt}
-                onPress={() => navigation.navigate('CadastroRO')}>
-                <Text style={style.enterButton}>Novo Registro de Ocorrência</Text>
-              </TouchableOpacity>
 
               <TouchableOpacity style={style.buttonClt2}
-                onPress={() => navigation.navigate('TabelaROs')}>
-                <Text style={style.enterButton}>Acompanhar Meus Registros de Ocorrência</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={style.buttonChat2}
-                onPress={() => 
-                  navigation.navigate('Contatos')
-                  }>
-                    <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={style.buttonAdm}
-                onPress={() => navigation.navigate('OpcoesExtras')}>
-                <Text style={style.enterButton}>Opções Extras</Text>
+                onPress={forceBackup}>
+                <Text style={style.enterButton}>Forçar Backup</Text>
               </TouchableOpacity>
 
             </>
           )}
-
         </View>
+
+
+        <Text style={style.describe}>
+          O botão abaixo proporciona a opção de restauração do banco de dados utilizando o último arquivo de backup criado.
+        </Text>
+
+        <View style={style.buttons}>
+          {usuario.perfil === "admin" ? (
+            <>
+
+              <TouchableOpacity style={style.buttonAdm}
+                onPress={forceRestore}>
+                <Text style={style.enterButton}>Restaurar Backup</Text>
+              </TouchableOpacity>
+
+            </>
+          ) : (
+            <>
+
+              <TouchableOpacity style={style.buttonClt2}
+                onPress={forceRestore}>
+                <Text style={style.enterButton}>Restaurar Backup</Text>
+              </TouchableOpacity>
+
+            </>
+          )}
+        </View>
+
+
+        <Text style={style.describe}>
+          Tratando-se de segurança de dados dos usuários, nossa empresa se responsabiliza pela utilização
+          de tais, tendo portanto um arquivo com termos de compromisso que temos aos nossos clientes
+        </Text>
+
+        <View style={style.buttons}>
+          {usuario.perfil === "admin" ? (
+            <>
+
+              <TouchableOpacity style={style.buttonAdm}
+                onPress={() => Linking.openURL('https://docs.google.com/document/d/e/2PACX-1vS95FEPOWKp-Kp2GidnxjKPfdNse9LGssZFxurbmqgSw09eIIfwxXjvZUmzr0UwWLLt5XviUjmHXQE8/pub')}>
+                <Text style={style.enterButton}>Termos de Compromisso</Text>
+              </TouchableOpacity>
+
+            </>
+          ) : (
+            <>
+
+              <TouchableOpacity style={style.buttonClt2}
+                onPress={() => Linking.openURL('https://docs.google.com/document/d/e/2PACX-1vS95FEPOWKp-Kp2GidnxjKPfdNse9LGssZFxurbmqgSw09eIIfwxXjvZUmzr0UwWLLt5XviUjmHXQE8/pub')}>
+                <Text style={style.enterButton}>Termos de Compromisso</Text>
+              </TouchableOpacity>
+
+            </>
+          )}
+        </View>
+      </ScrollView>
 
         <View>
           <View style={style.menu}>
@@ -181,8 +197,9 @@ const style = StyleSheet.create({
   },
 
  buttons:{
-    margin:'auto',
-    width:300
+    margin: 10,
+    width:300,
+    marginLeft: 45
   },
   menu:{
    display:'flex',
@@ -218,10 +235,20 @@ const style = StyleSheet.create({
     borderRadius: 35,
   },
 
-  title:{
-    fontSize: 35,
-    marginTop: 30,
-    marginRight: 115,
+  describe_top:{
+    fontSize: 19,
+    marginTop: 80,
+    margin: 10,
+    textAlign: 'left',
+    color: 'black',
+    fontWeight: 'bold',
+  },
+
+  describe:{
+    fontSize: 19,
+    marginTop: 15,
+    marginBottom: 10,
+    margin: 10,
     textAlign: 'left',
     color: 'black',
     fontWeight: 'bold',
@@ -313,4 +340,8 @@ const style = StyleSheet.create({
 });
 
 
-export default Home;
+export default OpcoesExtras;
+
+function setLoading(arg0: boolean) {
+  throw new Error('Function not implemented.');
+}
