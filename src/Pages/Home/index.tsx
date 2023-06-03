@@ -9,6 +9,7 @@ import Icone from 'react-native-vector-icons/FontAwesome';
 import api from '../../services/api';
 import Menu from '../../components/menu';
 
+
 export const Home = () =>{
   const { usuario, updateEmail , signOut } = useAuth();
   
