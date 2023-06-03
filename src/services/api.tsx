@@ -6,7 +6,7 @@ const api = create({
     baseURL: 'http://10.0.2.2:3001',
 });
 
-api.addResponseTransform(response => {
+api.addResponseTransform(response => { 
     if (!response.ok) throw response;
 })
 

@@ -8,6 +8,7 @@ interface AuthContextData {
     signIn(email: string, password: string): Promise<void>,
     signOut(): void;
     loading: boolean;
+    updateEmail(): void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -39,6 +40,14 @@ export const AuthProvider = ({children}) => {
         await AsyncStorage.setItem('@Reportify:token', response.data.token);
     }
 
+    async function updateEmail() {
+        if (usuario) {
+            const updatedUsuario = {...usuario, email_notificacao: !usuario.email_notificacao}
+            await AsyncStorage.setItem('@Reportify:usuario', JSON.stringify(updatedUsuario));
+            setUsuario(updatedUsuario)
+        }
+    }
+
     function signOut() {
         AsyncStorage.clear().then(() => {
             setUsuario(null);
@@ -46,7 +55,7 @@ export const AuthProvider = ({children}) => {
     }
 
     return (
-    <AuthContext.Provider value={{signed: !!usuario, usuario, signIn, signOut, loading}}>
+    <AuthContext.Provider value={{signed: !!usuario, usuario, signIn, signOut, loading, updateEmail}}>
         {children}
     </AuthContext.Provider>
     )
