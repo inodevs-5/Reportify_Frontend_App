@@ -41,10 +41,20 @@ export const Home = () =>{
     }
   }
 
+  const accept = async () => {
+    try {
+      const response = await api.post('/notificacao/accept/', {id:usuario._id});
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const [isEnabled, setIsEnabled] = useState(usuario.email_notificacao);
   const toggleSwitch = async () => {
     try {
       const response = await api.patch('/notificacao/email', {id:usuario._id});
+      accept()
 
       updateEmail()
 
@@ -103,8 +113,8 @@ export const Home = () =>{
                   style={style.botaozin}
                 />
               </View>
-              <TouchableOpacity onPress={() => setShowModal(false)} style={style.containerClose}>
-                <Text style={style.close}>Fechar</Text>
+              <TouchableOpacity onPress={() => setShowModal(false) } style={style.containerClose}>
+                <Text style={style.close} >Fechar</Text>
               </TouchableOpacity>
             </View>
           </Modal>
