@@ -9,6 +9,7 @@ import DocumentPicker from 'react-native-document-picker';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/auth';
 import {Picker} from '@react-native-picker/picker';
+import Menu from '../../components/menu';
 
 export const CadastroRO = () =>{
   const navigation = useNavigation<propsStack>();
@@ -390,21 +391,9 @@ export const CadastroRO = () =>{
     {/* Fim da parte de rolagem */}
 
     <View >
-      <View style={style.menu}>
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='home' size={27} style={style.iconHome}
-          onPress={() => 
-            navigation.navigate('Home')
-            }/>
-        </TouchableOpacity>
-   
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='notifications' size={27} style={style.iconNotif}
-          onPress={() => 
-            navigation.navigate('Home')
-            }/>
-        </TouchableOpacity>
-      </View>
+        <View style={{position:'absolute',  bottom: 0, marginLeft: -150}}>
+          <Menu/>
+        </View>
       </View>
     </View>
   );
@@ -503,7 +492,7 @@ const style = StyleSheet.create({
     textAlign: 'left',
   },
   scrollView: {
-    height: '20%',
+    // height: '-10%',
     width: '90%',
     marginTop:'1%',
     alignSelf: 'center',
@@ -513,9 +502,8 @@ const style = StyleSheet.create({
   },
   contentContainer: {  //Faz parte do estilo da scrollview
     justifyContent: 'center',
-    
     backgroundColor: '#C3C9D0',
-    paddingBottom: 30,
+    paddingBottom: 80,
    
   },
 

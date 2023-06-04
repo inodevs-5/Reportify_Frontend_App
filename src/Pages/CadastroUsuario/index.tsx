@@ -7,6 +7,7 @@ import DocumentPicker from 'react-native-document-picker';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/auth';
 import {Picker} from '@react-native-picker/picker';
+import Menu from '../../components/menu';
 
 interface Perfil { // para o picker (select)
   label: string;
@@ -155,25 +156,11 @@ export const CadastroUsuario = () =>{
         </View>
       </ScrollView>
       {/* Fim da parte de rolagem */}
-
-      <View >
-        <View style={style.menu}>
-          <TouchableOpacity style={style.enterButton}>
-          <Icon name='home' size={27} style={style.iconHome}
-            onPress={() => 
-              navigation.navigate('Home')
-              }/>
-          </TouchableOpacity>
-    
-          <TouchableOpacity style={style.enterButton}>
-          <Icon name='notifications' size={27} style={style.iconNotif}
-            onPress={() => 
-              navigation.navigate('Home')
-              }/>
-          </TouchableOpacity>
-        </View>
-        </View>
       </View>
+        <View style={{position:'absolute',  bottom: 20, marginLeft: 45 }}>
+          <Menu/>
+        </View>
+      
 
       </KeyboardAvoidingView>
   );
@@ -195,7 +182,7 @@ const style = StyleSheet.create({
 
   button:{
     
-    width:160,
+    width:100,
     borderRadius:300,
     height: 40,
     backgroundColor: '#72A2FA',
@@ -269,16 +256,6 @@ const style = StyleSheet.create({
   enterButton:{
     color: 'white',
     fontSize: 20,
-  },
-
-  iconNotif:{
-    paddingLeft: 70,
-    color: 'white',
-  },
-  
-  iconHome: {
-    // paddingLeft: 90,
-    color: 'white',
   },
 
   div: { //estilo e alinhamento dos botões e menu
@@ -365,18 +342,6 @@ const style = StyleSheet.create({
     shadowRadius: 2.62,
     elevation: 4,
   },
- 
- menu:{
-    display:'flex',
-    justifyContent:'space-around',
-    backgroundColor: '#2B3467',
-    alignItems: 'center',
-    flexDirection: 'row',
-    width:300,
-    height:60,
-    borderRadius:20,
-    marginBottom: 10,
-   },
 });
 
 

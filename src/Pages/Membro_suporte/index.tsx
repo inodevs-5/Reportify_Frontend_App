@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
 import api from '../../services/api';
 import { ScrollView } from 'react-native-gesture-handler';
+import Menu from '../../components/menu';
 
 export const Membro_suporte = () =>{
   const { signOut } = useAuth();
@@ -81,7 +82,7 @@ export const Membro_suporte = () =>{
           contentContainerStyle={{ flexGrow: 1, marginTop: 10 }} 
           keyboardShouldPersistTaps="always"
         >
-        {/* {usuarios && !loading && usuarios.length < 1 && <Text style={{marginTop: 20}}>Não há nenhum usuario cadastrado.</Text>} */}
+        {usuarios && !loading && usuarios.length < 1 && <Text style={{marginTop: 20}}>Não há nenhum usuario cadastrado.</Text>}
         { 
           usuarios && !loading ? usuarios.map(usuario => (
         <View style={style.buttons} key={usuario._id}>
@@ -99,23 +100,10 @@ export const Membro_suporte = () =>{
         }
       </ScrollView>
 
-      <View >
-      <View style={style.menu}>
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='home' size={27} style={style.iconHome}
-          onPress={() => 
-            navigation.navigate('Home')
-            }/>
-        </TouchableOpacity>
-   
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='notifications' size={27} style={style.iconNotif}
-          onPress={() => 
-            navigation.navigate('Notificacoes')
-            }/>
-        </TouchableOpacity>
-      </View>
-      </View>
+    <View style={{position:'absolute',  bottom: 0}}>
+      <Menu/>
+    </View>
+    
        {/* </View> */}
       </View>
   );
