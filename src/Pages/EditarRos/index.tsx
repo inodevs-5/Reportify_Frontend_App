@@ -20,7 +20,9 @@ import { Ro } from '../../types/Types';
 import Menu from '../../components/menu';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/auth';
-
+import RNFetchBlob from 'rn-fetch-blob';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/Fontisto';
 
 const EditaRos = ({route}) => {
   const { usuario } = useAuth(); 
@@ -230,13 +232,40 @@ const EditaRos = ({route}) => {
       setLoading(false);
     }
 
-    const dataObj = new Date(dataRegistro)
+    function formatarData(dataInput: String){
+      const data = new Date(dataInput)
+      const dia  = data.getDate().toString()
+      const diaF = (dia.length == 1) ? '0' + dia : dia
+      const mes  = (data.getMonth() + 1).toString()
+      const mesF = (mes.length == 1) ? '0' + mes : mes
+      const anoF = data.getFullYear()
+      const hora = data.getHours()
+      const minuto = data.getMinutes()
+      const segundo = data.getSeconds()
+      return diaF + "/" + mesF + "/" + anoF + " às " + hora + ":" + minuto + ":" + segundo
+    }
 
-    const opcoesData = { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric" };
-    const opcoesHora = { timeZone: "UTC", hour: "2-digit", minute: "2-digit", second: "2-digit" };
-
-    const dataFormata = dataObj.toLocaleDateString("pt-BR", opcoesData);
-    const horaFormatada  = dataObj.toLocaleTimeString("pt-BR", opcoesHora); 
+    const checkPermission = async(filename: String) => {
+      if (Platform.OS === 'ios') {
+          downloadImage(filename);
+      } else {
+          try {
+              const granted = await PermissionsAndroid.request(
+                  PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+              {
+                  title: 'Permissão do armazenamento requerida',
+                  message: 'O aplicativo precisa acessar seu armazenamento para baixar arquivos'
+              })
+              if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                  downloadImage(filename);
+              } else {
+                  Alert.alert('Permissão de Armazenamento não concedido');
+              }
+          } catch (error) {
+              console.warn(error);
+          }
+      }
+    }
 
     const checkPermission = async(imageName: String) => {
       if (Platform.OS === 'ios') {
@@ -263,10 +292,10 @@ const EditaRos = ({route}) => {
     // rn-fetch-blob
     async function downloadImage(imageName: String) {
       try {
-          // const response = await api.get('/party/download/642722eaeda6f4eb1a078181', {}, {responseType: 'blob'});
-          // const IMAGE_PATH = response.data;
-          const IMAGE_PATH = 'http://10.0.2.2:3000/download/' + imageName;
-          console.log(IMAGE_PATH)
+          const response = await api.get('/ro/image/' + imageName)
+          const imageInfo = response.data
+
+          const IMAGE_PATH = 'http://10.0.2.2:3000/ro/download/' + imageName;
 
           let date = new Date();
           let image_url = IMAGE_PATH;
@@ -274,17 +303,22 @@ const EditaRos = ({route}) => {
           ext = "." + ext[0];
           const {config, fs} = RNFetchBlob;
           let PictureDir = fs.dirs.PictureDir;
+
+          const token = await AsyncStorage.getItem('@Reportify:token');
           let options = {
               fileCache: true,
               addAndroidDownloads: {
                   useDownloadManager: true,
                   notification: true,
                   path: PictureDir + '/image_' + Math.floor(date.getTime() + date.getSeconds()/2) + ext,
-                  description: 'Image'
+                  description: 'Image',
+                  mime: imageInfo.contentType
               }
           }
           config(options)
-          .fetch('GET', image_url)
+          .fetch('GET', image_url, {
+            Authorization: 'Baerer ' + token
+          })
           .then(res => {
               Alert.alert('Imagem baixada com sucesso');
           })
@@ -345,7 +379,7 @@ const EditaRos = ({route}) => {
                   </View>
                   <View style={style.campos1}>
                     <Text style={style.text}>Data e horário: </Text>
-                            <TextInput defaultValue={dataRegistro} editable={false} style={style.info1}
+                            <TextInput defaultValue={formatarData(dataRegistro)} editable={false} style={style.info1}
                             onChangeText={dataRegistro => setDataRegistro(dataRegistro)}
                             >
                             </TextInput>
@@ -428,15 +462,16 @@ const EditaRos = ({route}) => {
                                     onChangeText={versaoSoftware => setVersaoSoftware(versaoSoftware)}
                                     ></TextInput>
                               </View>
-                              <View style={style.campos}>
+                              <View style={style.campos1}>
                                 <Text style={style.text}>Logs Anexados: </Text>
-                                    {logsAnexado && logsAnexado.map(l => (
-                                      <TouchableOpacity onPress={() => checkPermission(l.nomeAnexo)} key={l.idAnexo} >
-                                        <TextInput defaultValue={l.nomeAnexo} editable={isEditable} style={style.info}
-                                        onChangeText={logsAnexado => setLogsAnexado(logsAnexado)}
-                                        ></TextInput>
-                                      </TouchableOpacity>
-                                    ))}
+                              {logsAnexado && logsAnexado.map(l => (
+                                  <TouchableOpacity onPress={() => checkPermission(l.nomeAnexo)} key={l.idAnexo} >
+                                    <Icon name='paperclip' size={15} style={style.iconClip}/>
+                                    <TextInput defaultValue={l.nomeAnexo} editable={isEditable} style={style.info2}
+                                    onChangeText={logsAnexado => setLogsAnexado(logsAnexado)}
+                                    ></TextInput>
+                                  </TouchableOpacity>
+                              ))}
                               </View>
                             </>
                           )}
@@ -663,9 +698,9 @@ const EditaRos = ({route}) => {
                         )} 
               </ScrollView>
           </View>
-                <View style={{position:'absolute',  bottom: 0,}}>
-                  <Menu/>
-                </View>
+        <View style={{position:'absolute',  bottom: 0}}>
+          <Menu/>
+        </View>
         </View>
     </View> 
   </ScrollView>
@@ -737,13 +772,11 @@ display: 'none'
     flexDirection:'row',
     justifyContent:'flex-start',
     paddingVertical:3,
-    alignItems:'flex-end'
-
+    alignItems:'flex-end',
   },
   campos1:{
     flexDirection:'column',
     paddingVertical:2,
-
   },
   barra:{
     backgroundColor:'black',
@@ -820,7 +853,29 @@ display: 'none'
     shadowRadius: 2.62,
     elevation: 4,
   },
-
+  info2: {
+    flex: 1,
+    alignItems:'center',
+    flexDirection:'row',
+    backgroundColor: '#ffff',
+    justifyContent:'space-between',
+    margin:'auto',
+    color: 'black',
+    paddingLeft:6,
+    paddingBottom:3,
+    width:"90%",
+    height:27,
+    marginBottom: 3,
+    borderRadius:300,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+  },
   text:{
     color:"black",
     fontWeight:"700",
@@ -846,6 +901,11 @@ display: 'none'
   },
   icon:{
     color:'#000000'
+  },
+  iconClip: {
+    position: 'absolute',
+    top: 8,
+    right: 10
   },
   container_ro:{
     alignItems:'center',

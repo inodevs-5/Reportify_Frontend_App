@@ -14,6 +14,7 @@ import Contatos from "../../Pages/Contatos";
 import RedefinirSenha from "../../Pages/RedefinirSenha";
 import EmailRedefinicao from "../../Pages/EmailRedenificao";
 import Dashboard from "../../Pages/Dashboard";
+import OpcoesExtras from "../../Pages/OpcoesExtras";
 
 
 const { Navigator, Screen } = createNativeStackNavigator<propsNavigationStack>()
@@ -35,6 +36,7 @@ export default function AdminRoutes () {
             <Screen name="RedefinirSenha" component={RedefinirSenha}/>
             <Screen name="EmailRedefinicao" component={EmailRedefinicao}/>
             <Screen name="Dashboard" component={Dashboard} />
+            <Screen name="OpcoesExtras" component={OpcoesExtras}/>
         </Navigator>
     )
 }
