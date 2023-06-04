@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import React, { useEffect, useState } from 'react';
-import {StyleSheet,Modal, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator, Linking, Alert} from 'react-native';
+import {StyleSheet,Modal, View,Text,TextInput,TouchableOpacity,Platform, ActivityIndicator, Linking, Alert, Switch} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
@@ -350,6 +350,7 @@ const style = StyleSheet.create({
     fontSize: 35,
     marginTop: 30,
     marginRight: 115,
+    marginBottom:20,
     textAlign: 'left',
     color: 'black',
     fontWeight: 'bold',
