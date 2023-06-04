@@ -123,6 +123,13 @@ export const TabelaROs = () =>{
       navigation.navigate('EditaRos' , {_id})
     }
 
+    const fases = {
+      'pendente': 'Pendente',
+      'andamento': 'Em andamento',
+      'validacao': 'Aguardando validação',
+      'concluido': 'Concluído'
+    }
+
   return (
 
       <ScrollView 
@@ -172,7 +179,7 @@ export const TabelaROs = () =>{
               <TouchableOpacity onPress={() => handlePress(ro._id)}>
               <Text style={style.square}> <Text style={style.bold}>#{ro._id} </Text>
                   {'\n'} <Text style={style.bold}>Título: </Text>{ro.tituloOcorrencia}
-                  {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? ro.suporte.fase : "Pendente"}
+                  {'\n'} <Text style={style.bold}>Status: </Text>{ro.suporte ? fases[ro.suporte.fase] : "Pendente"}
                   
                   {!selectedFirstButton ? (
                     <>{'\n'} <Text style={style.bold}>Atribuído para: </Text> {ro.suporte && ro.suporte.colaboradorIACIT && ro.suporte.colaboradorIACIT.id ? ro.suporte.colaboradorIACIT.id.nome : "A definir"}</>

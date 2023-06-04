@@ -82,7 +82,7 @@ export const Membro_suporte = () =>{
           contentContainerStyle={{ flexGrow: 1, marginTop: 10 }} 
           keyboardShouldPersistTaps="always"
         >
-        {/* {usuarios && !loading && usuarios.length < 1 && <Text style={{marginTop: 20}}>Não há nenhum usuario cadastrado.</Text>} */}
+        {usuarios && !loading && usuarios.length < 1 && <Text style={{marginTop: 20}}>Não há nenhum usuario cadastrado.</Text>}
         { 
           usuarios && !loading ? usuarios.map(usuario => (
         <View style={style.buttons} key={usuario._id}>
