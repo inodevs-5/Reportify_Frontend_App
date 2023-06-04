@@ -14,6 +14,7 @@ import {
 } 
 from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import RNFetchBlob from 'rn-fetch-blob';
 import { useNavigation } from '@react-navigation/native';;
 import { Ro } from '../../types/Types';
 import Menu from '../../components/menu';
@@ -265,6 +266,28 @@ const EditaRos = ({route}) => {
           }
       }
     }
+
+    const checkPermission = async(imageName: String) => {
+      if (Platform.OS === 'ios') {
+          downloadImage(imageName);
+      } else {
+          try {
+              const granted = await PermissionsAndroid.request(
+                  PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+              {
+                  title: 'Permissão do armazenamento requerida',
+                  message: 'O aplicativo precisa acessar seu armazenamento para baixar arquivos'
+              })
+              if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                  downloadImage(imageName);
+              } else {
+                  Alert.alert('Permissão de Armazenamento não concedido');
+              }
+          } catch (error) {
+              console.warn(error);
+          }
+      }
+  }
 
     // rn-fetch-blob
     async function downloadImage(imageName: String) {

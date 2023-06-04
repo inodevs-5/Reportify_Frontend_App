@@ -196,6 +196,12 @@ export const Home = () =>{
                 onPress={() => navigation.navigate('CadastroUsuario')}>
                 <Text style={style.enterButton}>Cadastrar Novo Usuário</Text>
               </TouchableOpacity>
+
+              <TouchableOpacity style={style.buttonAdm}
+                onPress={() => navigation.navigate('Dashboard')}>
+                <Text style={style.enterButton}>Relatórios</Text>
+              </TouchableOpacity>
+
             {mostrarNotificacaoChat === 0 ? (
               <>
                 <TouchableOpacity style={style.buttonChat2}
@@ -214,6 +220,7 @@ export const Home = () =>{
                 </TouchableOpacity>
                 </>
             )}
+
             </>
           ) : (
             <>
