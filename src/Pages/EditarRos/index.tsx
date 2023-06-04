@@ -675,9 +675,9 @@ const EditaRos = ({route}) => {
                         )} 
               </ScrollView>
           </View>
-                <View style={{position:'absolute',  bottom: 0,}}>
-                  <Menu/>
-                </View>
+        <View style={{position:'absolute',  bottom: 0}}>
+          <Menu/>
+        </View>
         </View>
     </View> 
   </ScrollView>

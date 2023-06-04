@@ -5,7 +5,7 @@ import { propsStack } from '../../Routes/Stack/Models';
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 import {Picker} from '@react-native-picker/picker';
-
+import Menu from '../../components/menu';
 
 interface Perfil {
   label: string;
@@ -156,23 +156,10 @@ export const EditarUsuario = ({route}) =>{
     </ScrollView>
     {/* Fim da parte de rolagem */}
 
-    <View >
-      <View style={style.menu}>
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='home' size={27} style={style.iconHome}
-          onPress={() => 
-            navigation.navigate('Home')
-            }/>
-        </TouchableOpacity>
-   
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='notifications' size={27} style={style.iconNotif}
-          onPress={() => 
-            navigation.navigate('Home')
-            }/>
-        </TouchableOpacity>
-      </View>
-      </View>
+    <View style={{position:'absolute',  bottom: 0}}>
+      <Menu/>
+    </View>
+    
     </View>
     :
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -293,7 +280,7 @@ const style = StyleSheet.create({
     paddingLeft:6,
     paddingBottom:3,
     width:140,
-    height:27,
+    height:28,
     marginBottom: 3,
     borderRadius:300,
     shadowColor: "#000",

@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
 import api from '../../services/api';
 import { ScrollView } from 'react-native-gesture-handler';
+import Menu from '../../components/menu';
 
 export const Membro_suporte = () =>{
   const { signOut } = useAuth();
@@ -99,23 +100,10 @@ export const Membro_suporte = () =>{
         }
       </ScrollView>
 
-      <View >
-      <View style={style.menu}>
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='home' size={27} style={style.iconHome}
-          onPress={() => 
-            navigation.navigate('Home')
-            }/>
-        </TouchableOpacity>
-   
-        <TouchableOpacity style={style.enterButton}>
-        <Icon name='notifications' size={27} style={style.iconNotif}
-          onPress={() => 
-            navigation.navigate('Notificacoes')
-            }/>
-        </TouchableOpacity>
-      </View>
-      </View>
+    <View style={{position:'absolute',  bottom: 0}}>
+      <Menu/>
+    </View>
+    
        {/* </View> */}
       </View>
   );
