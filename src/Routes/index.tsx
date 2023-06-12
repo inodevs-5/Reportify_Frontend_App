@@ -25,10 +25,11 @@ export default function () {
                     path: ""
                 },
                 RedefinirSenha: {
-                    path: "senha/:id/:firstTime",
+                    path: "senha/:id/:firstTime/:token",
                     parse: {
                         id: (id) => `${id}`,
-                        firstTime: (firstTime) => `${firstTime}`
+                        firstTime: (firstTime) => `${firstTime}`,
+                        token: (token) => `${token}`
                     }
                 }
             }

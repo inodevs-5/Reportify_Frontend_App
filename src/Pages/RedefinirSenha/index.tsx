@@ -9,8 +9,7 @@ import { useAuth } from '../../contexts/auth';
 
 
 export const RedefinirSenha = ({ route }) =>{
-  const { id } = route.params;
-  const { firstTime } = route.params;
+  const { id, firstTime, token } = route.params;
   
   const { signOut } = useAuth()
 
@@ -54,7 +53,7 @@ export const RedefinirSenha = ({ route }) =>{
             await api.post('/termo/accept', {usuario: id, versaoTermo: termoInfo._id});
           }
 
-          const response = await api.patch('/usuario/password/' + id, {senha, confirmarSenha});
+          const response = await api.patch('/usuario/password/' + id, {senha, confirmarSenha, token});
 
           Alert.alert(response.data.msg);
           setSenha('')
@@ -69,12 +68,17 @@ export const RedefinirSenha = ({ route }) =>{
     setLoading(false);
   };
 
+  async function voltar() {
+    await signOut()
+    navigation.navigate('Login')
+  }
+
   return (
 
     <View style={style.container}>
 
         <TouchableOpacity style={style.buttonAdm}
-          onPress={() => navigation.navigate('Login')}>
+          onPress={voltar}>
           <Text style={style.enterButton}>X</Text>
         </TouchableOpacity>
 

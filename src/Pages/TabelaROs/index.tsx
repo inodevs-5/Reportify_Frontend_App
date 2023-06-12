@@ -170,7 +170,7 @@ export const TabelaROs = () =>{
 
 
         <View style={style.squareContainer}>
-        <View style={usuario.perfil == 'cliente' ? {height: 520} : {height: 460}}>
+        <View style={usuario.perfil == 'cliente' ? {height: 340} : {height: 280}}>
           {errorMessage && <Text style={{color: 'red', textAlign: 'center'}}>{errorMessage}</Text>}
           <ScrollView style={style.scroll}>
           {
@@ -201,7 +201,7 @@ export const TabelaROs = () =>{
         </View>
     {/* <View style={fler}> */}
     
-    <View style={{position:'absolute',  bottom: 0}}>
+    <View style={{marginTop: 10, marginLeft: 10}}>
       <Menu/>
     </View>
    

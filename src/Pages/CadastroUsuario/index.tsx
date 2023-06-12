@@ -47,7 +47,7 @@ export const CadastroUsuario = () =>{
 
         Alert.alert(response.data.msg)
 
-        navigation.navigate('Home')
+        navigation.navigate('TabelaROs')
       } catch (response) {
         Alert.alert(response.data.msg);
       }

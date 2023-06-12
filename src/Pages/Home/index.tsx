@@ -113,7 +113,10 @@ export const Home = () =>{
         <TouchableOpacity onPress={sair} style={style.exitIcon}>
           <Icon name='exit-outline' size={30} />
         </TouchableOpacity>
-        
+
+        <TouchableOpacity onPress={() => navigation.navigate('OpcoesExtras')} style={style.settingsIcon}>
+          <Icon name='settings-outline' size={30} />
+        </TouchableOpacity>
 
         <View style={style.containericone}>
           <TouchableOpacity onPress={handlePress} style={style.userIcon}>
@@ -204,7 +207,7 @@ export const Home = () =>{
 
             {mostrarNotificacaoChat === 0 ? (
               <>
-                <TouchableOpacity style={style.buttonChat2}
+                <TouchableOpacity style={style.buttonChat}
                   onPress={marcarNotificacaoChat}>
                   <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
                 </TouchableOpacity>
@@ -243,7 +246,7 @@ export const Home = () =>{
               </>
             ) : (
               <>
-                <TouchableOpacity style={style.buttonChat}
+                <TouchableOpacity style={style.buttonChat2}
                 onPress={marcarNotificacaoChat}>
                   <Text style={style.enterButton}>Meus Chats</Text><Icon style={style.iconchat} name='ios-chatbubbles' size={30} color={'black'} ></Icon>
                   <View style={style.mensagem}>
@@ -407,7 +410,13 @@ const style = StyleSheet.create({
   
   exitIcon: {
     position: 'absolute',
-    right: 60,
+    right: 86,
+    top: 30
+  },
+
+  settingsIcon: {
+    position: 'absolute',
+    right: 53,
     top: 30
   },
 
@@ -433,7 +442,7 @@ const style = StyleSheet.create({
     padding: 15,
     marginBottom: 20,
     borderRadius: 7,
-    height: 70,
+    height: 100,
 },
 
   iconchat:{

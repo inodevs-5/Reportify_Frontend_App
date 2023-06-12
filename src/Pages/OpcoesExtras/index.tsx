@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
 import Icone from 'react-native-vector-icons/FontAwesome';
 import api from '../../services/api';
+import Menu from '../../components/menu';
 export const OpcoesExtras = () =>{
   const { usuario, signOut } = useAuth();
 
@@ -52,62 +53,41 @@ export const OpcoesExtras = () =>{
 
     <View style={style.container}>
       <ScrollView >
-        <Text style={style.describe_top}>
-          Este site foi desenvolvido para criar o backup do banco de dados de mês em mês automaticamente.
-          Porém, o botão abaixo força a criação de um arquivo de backup do banco de dados atual.
-        </Text>
-        <TouchableOpacity onPress={sair} style={style.exitIcon}>
-          <Icon name='exit-outline' size={30} />
-        </TouchableOpacity>
 
-        <View style={style.buttons}>
-          {usuario.perfil === "admin" ? (
+          {usuario.perfil === "admin" && (
             <>
 
-              <TouchableOpacity style={style.buttonAdm}
-                onPress={forceBackup}>
-                <Text style={style.enterButton}>Forçar Backup</Text>
-              </TouchableOpacity>
+              <Text style={style.describe_top}>
+                Este site foi desenvolvido para criar o backup do banco de dados de mês em mês automaticamente.
+                Porém, o botão abaixo força a criação de um arquivo de backup do banco de dados atual.
+              </Text>
 
-            </>
-          ) : (
-            <>
-
-              <TouchableOpacity style={style.buttonClt2}
-                onPress={forceBackup}>
-                <Text style={style.enterButton}>Forçar Backup</Text>
-              </TouchableOpacity>
+              <View style={style.buttons}>
+                <TouchableOpacity style={style.buttonAdm}
+                  onPress={forceBackup}>
+                  <Text style={style.enterButton}>Forçar Backup</Text>
+                </TouchableOpacity>
+              </View>
 
             </>
           )}
-        </View>
 
 
-        <Text style={style.describe}>
-          O botão abaixo proporciona a opção de restauração do banco de dados utilizando o último arquivo de backup criado.
-        </Text>
 
-        <View style={style.buttons}>
-          {usuario.perfil === "admin" ? (
+
+          {usuario.perfil === "admin" && (
             <>
-
-              <TouchableOpacity style={style.buttonAdm}
-                onPress={forceRestore}>
-                <Text style={style.enterButton}>Restaurar Backup</Text>
-              </TouchableOpacity>
-
-            </>
-          ) : (
-            <>
-
-              <TouchableOpacity style={style.buttonClt2}
-                onPress={forceRestore}>
-                <Text style={style.enterButton}>Restaurar Backup</Text>
-              </TouchableOpacity>
-
+              <Text style={style.describe}>
+                O botão abaixo proporciona a opção de restauração do banco de dados utilizando o último arquivo de backup criado.
+              </Text>
+              <View style={style.buttons}>
+                <TouchableOpacity style={style.buttonAdm}
+                  onPress={forceRestore}>
+                  <Text style={style.enterButton}>Restaurar Backup</Text>
+                </TouchableOpacity>
+              </View>
             </>
           )}
-        </View>
 
 
         <Text style={style.describe}>
@@ -116,7 +96,7 @@ export const OpcoesExtras = () =>{
         </Text>
 
         <View style={style.buttons}>
-          {usuario.perfil === "admin" ? (
+
             <>
 
               <TouchableOpacity style={style.buttonAdm}
@@ -125,32 +105,10 @@ export const OpcoesExtras = () =>{
               </TouchableOpacity>
 
             </>
-          ) : (
-            <>
-
-              <TouchableOpacity style={style.buttonClt2}
-                onPress={() => Linking.openURL('https://docs.google.com/document/d/e/2PACX-1vS95FEPOWKp-Kp2GidnxjKPfdNse9LGssZFxurbmqgSw09eIIfwxXjvZUmzr0UwWLLt5XviUjmHXQE8/pub')}>
-                <Text style={style.enterButton}>Termos de Compromisso</Text>
-              </TouchableOpacity>
-
-            </>
-          )}
         </View>
       </ScrollView>
 
-        <View>
-          <View style={style.menu}>
-            <TouchableOpacity style={style.enterButton}>
-              <Icon name='home' size={27} style={style.iconHome}
-                onPress={() => navigation.navigate('Login')} />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={style.enterButton}>
-              <Icon name='notifications' size={27} style={style.iconNotif}
-                onPress={() => navigation.navigate('Notificacoes')} />
-            </TouchableOpacity>
-          </View>
-        </View>
+      <Menu />
 
       </View>
   );

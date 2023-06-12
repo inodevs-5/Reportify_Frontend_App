@@ -48,8 +48,8 @@ export const AuthProvider = ({children}) => {
         }
     }
 
-    function signOut() {
-        AsyncStorage.clear().then(() => {
+    async function signOut() {
+        await AsyncStorage.clear().then(() => {
             setUsuario(null);
         });
     }
